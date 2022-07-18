@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+    - name: airbyte
+      database: tree_aid
+      schema: airbyte
+      tables:
+        - name: surveys
+        - name: survey_definitions
+        - name: core_questions
+        - name: rhomis_indicators_legacy
+
+    - name: onadata
+      database: tree_aid
+      schema: onadata
+      tables: 
+        - name: registry
+        - name: ta_rho_mis_bb6_oct-dec21
+
+    - name: temp
+      database: tree_aid
+      schema: temp
+      tables:
+        - name: mc1_perimeter_land_use_survey_oct_dec21
+        - name: bb6_land_restoration_survey_apr_jun22
