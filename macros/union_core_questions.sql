@@ -1,41 +1,51 @@
----for form in forms
 
--- create this table
-{% set questions_query %}
-select 
-    s.form_id, 
-    sd.question_name, 
-    cq.name as core_question_name,
-    s.form_id_string
-from {{ref('stg_survey_master')}} s
-left join {{ref('stg_survey_definitions_master')}} sd  on s.form_id = sd.form_id and sd.core_question_id is not null
-left join {{ref('stg_core_questions_master')}} cq on sd.core_question_id = cq.id
-where s.type ='Land survey' --turn into argument
-and s.form_id::int = 662617 -- to loop over
-{% endset %}
+-- create list of forms
+{% set forms = dbt_utils.get_column_values(table=ref('stg_core_questions_land_survey'), column='form_id') %}
 
-{% set results = run_query(questions_query) %}
+-- create list of fields
+{% set corefields = dbt_utils.get_column_values(table=ref('stg_core_questions_master'), column='name', where='is_land_survey=TRUE') %}
 
-{% if execute %}
-{% set form_id  = results.columns[0].values() %}
-{% set question_name = results.columns[1].values() %}
-{% set core_question_name = results.columns[2].values() %}
-{% set form_id_name = results.columns[3].values() %} 
 
-{% else %}
-{% set results_list = [] %}
+{% for form in forms %}
+{% set schemaname = dbt_utils.get_column_values(table=ref('stg_core_questions_land_survey'), column='schemaname', where='is_land_survey=TRUE') %}
+{% set tablename = dbt_utils.get_column_values(table=ref('stg_core_questions_master'), column='name', where='is_land_survey=TRUE') %}
+
+-- for each form, loop through all the core fields, select the field with the appropriate name if present
+    select 
+    {{form}} as form_id, 
+
+    {%- set formfields_query -%}
+    select question_name, core_question_name
+    from {{ref('stg_core_questions_land_survey')}}
+    where form_id = {{form}}
+    {%- endset -%}
+
+    {%- set question_names = run_query(formfields_query).columns[0].values() | list -%}
+    {%- set core_questions_names = run_query(formfields_query).columns[1].values() | list -%}
+   
+    {% for core_field in corefields %}
+        {%- if core_field in core_questions_names %}
+        {%- set indexvalue = core_questions_names.index(core_field) -%} 
+            {# finds the item of the list that correspond to a rule #}
+        {{question_names[indexvalue]}}
+        {%- else %}
+        NULL 
+        {% endif -%} 
+        as {{core_field}}
+        {%- if not loop.last -%}
+        ,
+        {%- endif -%}
+    {% endfor %}
+--find the appropriate table to join based on information in 'stg_core_questions_land_survey'
+from 
+
+{% if not loop.last %}
+    union all
 {% endif %}
 
+{% endfor %}
 
-    select 
-    {{form_id[0]}} as form_id,
-{%- for  i in range(0, form_id|length) %}
-    {{question_name[i]}} as {{core_question_name[i]}}
-    {%- if not loop.last -%}
-      , 
-    {%- endif %}
-{%- endfor %}
-    from airbyte.{{form_id_name[0]|lower}}
-
-
-
+-- for each form: 
+    -- for each field in field list
+    -- select field if exists, select NULL as field
+    -- if not loop.last union all
