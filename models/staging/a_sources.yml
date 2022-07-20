@@ -6,16 +6,67 @@ sources:
       schema: airbyte
       tables:
         - name: surveys
+          description: List of all Tree Aid forms and projects
+          columns:
+          - name: form_id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null 
         - name: survey_definitions
+          description: List of questions for the different survey types
         - name: core_questions
+          description: List of relevant questions for indicator mapping
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null 
         - name: rhomis_indicators_legacy
+          description: Indicators worksheet for old Rhomis projects dataset
 
     - name: onadata
       database: tree_aid
       schema: onadata
       tables: 
         - name: registry
+          description: List of choice labels in Json format
         - name: ta_rho_mis_bb6_oct-dec21
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+        - name: ta_rho_mis_gb8_endline_jan-mar2021
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+        - name: tree_aid_rhomis_na6_endline
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+        - name: gb8_vte_edp_survey_apr-jun2022
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+        - name: mb6_vte_edp_survey_apr-jun2022
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
 
     - name: temp
       database: tree_aid
