@@ -1,4 +1,2 @@
-select 
-*
- from 
-{{ref('int_land_surveys')}}
+
+{{survey_type_table('Land survey')}}
