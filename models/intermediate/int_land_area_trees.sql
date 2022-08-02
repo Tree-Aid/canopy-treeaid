@@ -15,5 +15,5 @@ select
         number_planted,
         number_regenerated,
         geoshape
-        from dbt.land_surveys
+        from {{ ref('land_surveys') }}
         where test='n'

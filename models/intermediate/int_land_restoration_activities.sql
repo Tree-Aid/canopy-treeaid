@@ -22,7 +22,7 @@
         soil_water_cons_proportion,
         gully_methods,
         gully_proportion
-    from dbt.land_surveys ls
+    from {{ ref('land_surveys') }}
  ),
  nrm_category as
  (
