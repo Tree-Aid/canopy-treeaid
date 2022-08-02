@@ -7,7 +7,8 @@ select
     sd.question_name, 
     cq.name as core_question_name,
     s.form_id_string,
-    s.type
+    s.type,
+    s.timing
 from {{ref('stg_survey_master')}} s 
 inner join pg_catalog.pg_tables pt on replace(lower(s.form_id_string), '-', '_') = lower(pt.tablename) 
     and pt.schemaname in ('onadata', 'temp') and pt.tableowner = 'tree_aid'
