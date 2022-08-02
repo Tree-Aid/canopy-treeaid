@@ -77,5 +77,6 @@ select * from gully
         ra.technique
         from restoration_activities ra
         left join land_data on ra.submission_id=land_data.submission_id
+        where land_data.test='n'
 
 
