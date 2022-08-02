@@ -29,6 +29,8 @@ where type = '{{survey_type}}'
 -- for each form, loop through all the core fields, select the field with the appropriate name if present
     select 
     {{form}}::varchar as form_id, 
+    id as submission_id, 
+--    submission_time as submitted_at,
     {%- set formfields_query -%}
     select question_name, core_question_name
     from  {{ref('stg_core_questions_union')}} 
@@ -68,6 +70,25 @@ where type = '{{survey_type}}'
     {%- endif -%}
 
 {%- endfor -%}
+{% endmacro %}
 
+-- Macro #2. Takes the unioned data but joins it back to the original survey definition table to get all relevant fields  
+{% macro survey_type_table(survey_type) %} 
+with core_questions as 
+(
+{{union_core_questions(survey_type)}}
+)
+select 
+s.form_name,
+s.type,
+s.timing,
+s.country,
+s.project_code,
+cq.*
+from {{ref('stg_survey_master')}} s 
+left join core_questions cq on s.form_id::int = cq.form_id::int 
+where s.type = '{{survey_type}}'
 
 {% endmacro %}
+
+
