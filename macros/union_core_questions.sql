@@ -1,8 +1,8 @@
-{% macro union_core_questions(survey_type) %} 
+{% macro union_core_questions(survey_type) %}   {#add a `repeat=NULL` parameter. IF not null, pass that to the forms list   #}
 
 {% set query %}
 select * from   {{ref('stg_core_questions_union')}}
-where type = '{{survey_type}}'
+where type = '{{survey_type}}'   {# add an if condition based on 'repeat' argument. If null, then 'repeat_group_name=NULL' else 'repeat_group_name=repeat' #}
 {% endset %}
 
 {% set results = run_query(query) -%}
@@ -17,6 +17,7 @@ where type = '{{survey_type}}'
 -- create list of fields
 {% set corefields_query  %}
     select name from {{ref('stg_core_questions_master')}} where is_{{survey_type | lower | replace(' ', '_')}} 
+    {# need to add a condition based on the 'repeat' argument. needs a different set of core fields #}
 {% endset %}
 
 {% if execute -%}

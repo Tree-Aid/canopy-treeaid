@@ -1,0 +1,1 @@
+{{survey_type_table('Land survey')}} --add the 'repeat' argument. then left join with the land_surveys survey and join only the relevant fields (disaggregation)
