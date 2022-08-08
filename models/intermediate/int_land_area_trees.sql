@@ -11,9 +11,9 @@ select
         date_assessment,
         gps_shape_area,
         test,
-        species,
-        number_planted,
-        number_regenerated,
+        -- species,
+        -- number_planted,
+        -- number_regenerated,
         geoshape
         from {{ ref('land_surveys') }}
-        where test='n'
+        where test !='y'

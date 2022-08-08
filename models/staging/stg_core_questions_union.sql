@@ -1,4 +1,5 @@
--- creates a view of all the core questions for all surveys that have data in the database
+-- Creates a view of all the core questions for all surveys that have data in the database. 
+-- Computes first the calculations for the non-repeat-group core questions, then for the repeat group ones. 
 
 select 
     s.form_id::int,
@@ -6,15 +7,33 @@ select
     pt.tablename,
     sd.question_name, 
     cq.name as core_question_name,
+    cq.repeat_group_name,
     s.form_id_string,
     s.type,
     s.timing
 from {{ref('stg_survey_master')}} s 
-inner join pg_catalog.pg_tables pt on replace(lower(s.form_id_string), '-', '_') = lower(pt.tablename) 
+inner join pg_catalog.pg_tables pt on replace(lower(s.form_id_string), '-', '_') = replace(lower(pt.tablename), '-', '_')  
     and pt.schemaname in ('onadata', 'temp') and pt.tableowner = 'tree_aid'
 left join {{ref('stg_survey_definitions_master')}} sd  on s.form_id::int = sd.form_id::int and sd.core_question_id is not null
-left join {{ref('stg_core_questions_master')}} cq on sd.core_question_id = cq.id
+inner join {{ref('stg_core_questions_master')}} cq on sd.core_question_id = cq.id and cq.repeat_group_name is null 
 
+union 
 
-{# add conditions for different core questions that are in repeat groups #}
+select 
+    s.form_id::int,
+    pt.schemaname, 
+    pt.tablename,
+    sd.question_name, 
+    cq.name as core_question_name,
+    cq.repeat_group_name,
+    s.form_id_string,
+    s.type,
+    s.timing
+from {{ref('stg_survey_master')}} s 
+left join {{ref('stg_survey_definitions_master')}} sd  on s.form_id::int = sd.form_id::int and sd.core_question_id is not null
+inner join {{ref('stg_core_questions_master')}} cq on sd.core_question_id = cq.id and repeat_group_name is not null 
+inner join pg_catalog.pg_tables pt on 
+    position( replace(lower(s.form_id_string), '-', '_') in replace(lower(pt.tablename), '-', '_') ) >0  --messy matching. Checking if the tablename contains the 'form_id_string' but also the 'repeat_group_name'
+    and pt.schemaname in ('onadata', 'temp') and pt.tableowner = 'tree_aid'
+    and right(tablename, length(tablename) - position ('_repeat' in tablename) - 7 ) = cq.repeat_group_name
 
