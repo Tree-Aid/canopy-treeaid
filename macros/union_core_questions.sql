@@ -1,13 +1,18 @@
-{% macro union_core_questions(survey_type) %} 
+{% macro union_core_questions(survey_type, repeat) %}   
 
 {% set query %}
 select * from   {{ref('stg_core_questions_union')}}
-where type = '{{survey_type}}'
+where type = '{{survey_type}}'   
+    {% if repeat -%}
+    and repeat_group_name = '{{repeat}}'
+    {% else -%}
+    and repeat_group_name is null 
+    {% endif %}
 {% endset %}
 
 {% set results = run_query(query) -%}
 
--- create list of forms
+-- create list of forms. 
 {% if execute %}
     {% set forms = (results.select(['form_id']).columns[0].values()) | unique | list %}
 {% else %}
@@ -16,7 +21,12 @@ where type = '{{survey_type}}'
 
 -- create list of fields
 {% set corefields_query  %}
-    select name from {{ref('stg_core_questions_master')}} where is_{{survey_type | lower | replace(' ', '_')}} 
+    select name from {{ref('stg_core_questions_master')}} where is_{{survey_type | lower | replace(' ', '_')}}  
+    {% if repeat  -%}
+        and repeat_group_name = '{{repeat}}'  
+        {%- else -%}
+        and repeat_group_name is null 
+        {% endif -%}
 {% endset %}
 
 {% if execute -%}
@@ -59,7 +69,7 @@ where type = '{{survey_type}}'
         {%- set indexvalue = (results.select(['form_id']).columns[0].values()  | list).index(form) -%}
         {%- set schemaname = (results.select(['schemaname']).columns[0].values()  | list)[indexvalue] -%}
         {%- set tablename = (results.select(['tablename']).columns[0].values()  | list)[indexvalue] -%}
-        {{schemaname}}.{{tablename}}
+        {{schemaname}}."{{tablename}}"
     {%- else -%}
         {% set forms = [] %}
         {% set schemaname = [] %}
@@ -73,10 +83,11 @@ where type = '{{survey_type}}'
 {% endmacro %}
 
 -- Macro #2. Takes the unioned data but joins it back to the original survey definition table to get all relevant fields  
-{% macro survey_type_table(survey_type) %} 
+{% macro survey_type_table(survey_type, repeat=NULL) %} 
+
 with core_questions as 
 (
-{{union_core_questions(survey_type)}}
+{{union_core_questions(survey_type, repeat)}}
 )
 select 
 s.form_name,
