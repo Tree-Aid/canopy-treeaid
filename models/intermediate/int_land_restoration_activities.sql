@@ -6,21 +6,16 @@
         project_code,
         form_id,
         submission_id,
-        region,
-        province,
-        commune,
+        initcap(replace(region,'_',' ')) as region,
+        initcap(replace(province,'_',' ')) as province,
+        initcap(replace(commune,'_',' ')) as commune,
         date_assessment,
-        gps_shape_area,
         test,
-        species,
-        number_planted,
-        number_regenerated,
-        geoshape,
-        nrm_category,
+        initcap(regexp_replace(nrm_category,'[^a-zA-Z,,_]','','g')) as nrm_category,
         biological_proportion,
-        soil_water_cons,
+        initcap(regexp_replace(soil_water_cons,'[^a-zA-Z,,_]','','g')) as soil_water_cons,
         soil_water_cons_proportion,
-        gully_methods,
+        initcap(regexp_replace(gully_methods,'[^a-zA-Z,,_]','','g')) as gully_methods,
         gully_proportion
     from {{ ref('land_surveys') }}
  ),
@@ -30,7 +25,7 @@
     submission_id,
     biological_proportion as proportion,
     'Biological methods' as category,
-    unnest(string_to_array(nrm_category,' ')) as technique
+    unnest(string_to_array(nrm_category,',')) as technique
     from land_data
  ),
  soil_water as 
@@ -39,7 +34,7 @@
     submission_id,
     soil_water_cons_proportion as proportion,
     'Soil and water conservation' as category,
-    unnest(string_to_array(soil_water_cons,' ')) as technique
+    unnest(string_to_array(soil_water_cons,',')) as technique
     from land_data 
  ),
  gully as 
@@ -48,7 +43,7 @@
     submission_id,
     gully_proportion as proportion,
     'Gully control' as category,
-    unnest(string_to_array(gully_methods,' ')) as technique
+    unnest(string_to_array(gully_methods,',')) as technique
     from land_data   
  ),
  restoration_activities as 
@@ -70,13 +65,11 @@ select * from gully
         commune,
         date_assessment,
         extract('Year' from date_assessment::date) as assessment_year,
-        gps_shape_area as gps_shape_area_m2,
-        {{area_in_hectares('gps_shape_area::FLOAT')}} as gps_shape_area_ha,
         ra.category,
         ra.proportion,
-        ra.technique
+        replace(ra.technique,'_', ' ') as technique
         from restoration_activities ra
         left join land_data on ra.submission_id=land_data.submission_id
-        where land_data.test='n'
+        where land_data.test<>'y'
 
 
