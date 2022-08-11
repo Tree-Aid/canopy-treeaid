@@ -39,7 +39,7 @@ where type = '{{survey_type}}'
 -- for each form, loop through all the core fields, select the field with the appropriate name if present
     select 
     {{form}}::varchar as form_id, 
-    id as submission_id, 
+     id as submission_id, 
 --    submission_time as submitted_at,
     {%- set formfields_query -%}
     select question_name, core_question_name
