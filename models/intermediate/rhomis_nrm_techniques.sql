@@ -30,7 +30,7 @@ with rhomis as
  (
     select 
     submission_id,
-    'Biological methods' as category,
+    'Biological' as category,
     unnest(string_to_array(nrm_category,',')) as technique
     from rhomis
  ),
