@@ -20,7 +20,8 @@ select
  sales_turn_over_local_income,
  sales_turn_over_national_income,
  sales_turn_over_international_income,
- coalesce(sales_turn_over_local_income::INTEGER,0) + coalesce(sales_turn_over_national_income::INTEGER,0) + coalesce(sales_turn_over_international_income::INTEGER,0) as total_income,
+ coalesce(sales_turn_over_local_income::INTEGER,0) + coalesce(sales_turn_over_national_income::INTEGER,0) + 
+    coalesce(sales_turn_over_international_income::INTEGER,0) as total_income,
  test,
  group_costs_amount
  from enterprise_surveys es
