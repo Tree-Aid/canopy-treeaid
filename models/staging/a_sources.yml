@@ -74,3 +74,9 @@ sources:
       tables:
         - name: mc1_perimeter_land_use_survey_oct_dec21
         - name: bb6_land_restoration_survey_apr_jun22
+
+    - name: csv
+      database: tree_aid
+      schema: csv
+      tables:
+        - name: rhomis_indicators
