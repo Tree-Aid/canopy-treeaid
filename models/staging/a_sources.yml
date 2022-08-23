@@ -67,7 +67,7 @@ sources:
             tests:
                 - unique
                 - not_null
-
+        - name: beneficiary_list
     - name: temp
       database: tree_aid
       schema: temp
