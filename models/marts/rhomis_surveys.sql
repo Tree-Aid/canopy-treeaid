@@ -48,6 +48,6 @@ select
     +
   {%- endif -%}
 {% endfor %}
- / 21.0 as vcc_score,
+  as vcc_score,
 null::int as disability_score {#2022.08.17 AP  this is missing because we do not have examples yet#}
 from rhomis_data
