@@ -5,6 +5,8 @@
 'choice_hh_decisions','choice_hh_income_women','choice_comm_market','choice_comm_committee','control_hh_farm_land','control_hh_comm_land','control_hh_assets','control_hh_livestock',
 'control_hh_trees','control_hh_savings','control_comm_resources','control_comm_leadership','control_comm_by_laws'] -%}
 
+{%- set disability_fields= ['seeing','hearing','walking','memory','self_care','language'] -%}
+
 with rhomis_data as 
 (select * 
 from {{ref('stg_rhomis_data')}} rd 
@@ -26,6 +28,7 @@ select
     case when 
       length(nrm_category) + length(gully_methods) + length(soil_water_cons) >0 then true else false end
       as uses_nrm_techniques, 
+ (     
 {% for field in forest_governance_fields %}
   case 
   when {{field}} in ('Y', 'equal_access', 'very_well', 'yes','completely') then 3
@@ -36,18 +39,35 @@ select
     +
   {%- endif -%}
 {% endfor %}
- / 21.0 as governance_score, 
+ )/ 21.0 as governance_score,
+ ( 
 {% for field in vcc_fields %}
   case 
-  when respondentsex in ('F','female') and {{field}} = 'none' then 1
-  when respondentsex in ('F','female') and {{field}} = 'little' then 2
-  when respondentsex in ('F','female') and {{field}} = 'moderate' then 3 
-  when respondentsex in ('F','female') and {{field}} = 'more_than' then 4 
+  when respondentsex in ('F','female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
+  when respondentsex in ('F','female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
+  when respondentsex in ('F','female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
+  when respondentsex in ('F','female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
   else null end   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
   {% if not loop.last -%}
     +
   {%- endif -%}
 {% endfor %}
-  as vcc_score,
-null::int as disability_score {#2022.08.17 AP  this is missing because we do not have examples yet#}
+  ) / 21.0 as vcc_score,
+{% for field in disability_fields %}  
+case 
+  when {{field}} in ('no_difficulty', 'some_difficulty', 'lot_difficulty', 'impossible') then 1
+  else null end
+{% if not loop.last -%}
+    +
+  {%- endif -%}
+{% endfor %}  as disability_score,
+{% for field in disability_fields %}  
+case 
+  when {{field}} in ('lot_difficulty', 'impossible') then 1
+  else null end
+{% if not loop.last -%}
+    +
+  {%- endif -%}
+{% endfor %}  as severely_disabled
+
 from rhomis_data
