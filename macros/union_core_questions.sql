@@ -103,7 +103,7 @@ s.project_code,
 cq.*
 from {{ref('stg_survey_master')}} s 
 left join core_questions cq on s.form_id::int = cq.form_id::int 
-where s.type = '{{survey_type}}' and test <> 'yes'
+where s.type = '{{survey_type}}'
 
 {% endmacro %}
 

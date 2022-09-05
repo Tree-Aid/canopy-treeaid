@@ -25,4 +25,4 @@ select
  test,
  group_costs_amount
  from enterprise_surveys es
- where form_id is not null
+ where form_id is not null and test not in ('y', 'Y','yes','Yes')
