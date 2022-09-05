@@ -19,5 +19,5 @@ d.number_planted,
 d.number_regenerated
 from data d
 inner join {{ ref('land_surveys') }} ls on d.submission_id=ls.submission_id
-where test not in ('y', 'Y','yes','Yes')
+where ls.test not in ('y', 'Y','yes','Yes')
 
