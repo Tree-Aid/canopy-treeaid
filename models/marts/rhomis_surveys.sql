@@ -71,3 +71,4 @@ case
 {% endfor %}  as severely_disabled
 
 from rhomis_data
+where test not in ('y', 'Y','yes','Yes')

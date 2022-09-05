@@ -21,4 +21,4 @@ select
         initcap(replace(regexp_replace(soil_water_cons,'[^a-zA-Z,,_]','','g'),'_',' ')) as soil_water_cons,
         initcap(replace(regexp_replace(gully_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as gully_methods
     from land_survey
-    where test <> 'y'
+    where test not in ('y', 'Y','yes','Yes')
