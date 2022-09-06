@@ -71,4 +71,5 @@ case
 {% endfor %}  as severely_disabled
 
 from rhomis_data
-where test not in ('y', 'Y','yes','Yes')
+where form_id is not null -- filters forms that don't have survey definitions yet
+and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
