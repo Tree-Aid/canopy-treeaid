@@ -7,7 +7,7 @@
     select 
     submission_id,
     'Biological methods' as category,
-    unnest(string_to_array(nrm_category,',')) as technique
+    unnest(string_to_array(biological_methods,',')) as technique
     from land_data
  ),
  soil_water as 

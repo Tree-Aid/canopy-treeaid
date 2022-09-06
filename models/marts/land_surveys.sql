@@ -17,8 +17,9 @@ select
         {{area_in_hectares('gps_shape_area::FLOAT')}} as gps_shape_area_ha,
         test,
         geoshape,
-        initcap(replace(regexp_replace(nrm_category,'[^a-zA-Z,,_]','','g'),'_',' ')) as nrm_category,
+        initcap(replace(regexp_replace(biological_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as biological_methods,
         initcap(replace(regexp_replace(soil_water_cons,'[^a-zA-Z,,_]','','g'),'_',' ')) as soil_water_cons,
         initcap(replace(regexp_replace(gully_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as gully_methods
     from land_survey
-    where test not in ('y', 'Y','yes','Yes')
+    where form_id is not null -- filters forms that don't have survey definitions yet
+    and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )

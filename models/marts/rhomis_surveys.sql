@@ -26,7 +26,7 @@ select
     when fies_score < 10 then 'SeverelyFI'
     else null end ) as food_insecurity_status,
     case when 
-      length(nrm_category) + length(gully_methods) + length(soil_water_cons) >0 then true else false end
+      length(biological_methods) + length(gully_methods) + length(soil_water_cons) >0 then true else false end
       as uses_nrm_techniques, 
  (     
 {% for field in forest_governance_fields %}
