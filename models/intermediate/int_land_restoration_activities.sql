@@ -46,7 +46,7 @@ select * from gully
         date_assessment,
         assessment_year,
         ra.category,
-        replace(ra.technique,'_', ' ') as technique
+        replace(replace(replace(ra.technique,'_', ' '),'Biological',''),'Swc','') as technique
         from restoration_activities ra
         left join land_data on ra.submission_id=land_data.submission_id
    
