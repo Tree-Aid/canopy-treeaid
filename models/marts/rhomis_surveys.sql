@@ -14,7 +14,7 @@ left join {{ref('stg_rhomis_indicators')}} ri on rd.form_id::int = ri.id_rhomis_
 )
 select 
 *,
-  case when total_income_lcu_per_year + ntfp_income / (hh_size_mae * 365) <= 1.90 then true else false end as extreme_poverty, 
+  case when total_income_lcu_per_year + ntfp_income / nullif((hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty, 
   case when foodavailability / (hh_size_mae * 365) < 2500 then true else false end as below_calline, 
     ntfp_consumed_calories_kcal_per_hh_per_year / 
     greatest((farm_products_consumed_calories_kcal_per_hh_per_year::float + ntfp_consumed_calories_kcal_per_hh_per_year),1)
