@@ -17,7 +17,7 @@ select
         {{area_in_hectares('gps_shape_area::FLOAT')}} as gps_shape_area_ha,
         test,
         geoshape,
-        initcap(replace(regexp_replace(biological_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as biological_methods,
+        initcap(replace((replace(regexp_replace(biological_methods,'[^a-zA-Z,,_]','','g'),'_',' ')),'Biological','')) as biological_methods,
         initcap(replace(regexp_replace(soil_water_cons,'[^a-zA-Z,,_]','','g'),'_',' ')) as soil_water_cons,
         initcap(replace(regexp_replace(gully_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as gully_methods
     from land_survey
