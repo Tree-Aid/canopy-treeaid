@@ -53,7 +53,7 @@ select
   case when total_income_lcu_per_year + ntfp_income / nullif((hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty, 
   case when foodavailability / (hh_size_mae * 365) < 2500 then true else false end as below_calline, 
     ntfp_consumed_calories_kcal_per_hh_per_year / 
-    greatest((farm_products_consumed_calories_kcal_per_hh_per_year::float + ntfp_consumed_calories_kcal_per_hh_per_year),1)
+    nullif(coalesce(farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
     as proportion_ntfp_in_diet,
   coalesce (hfias_status , 
   case when fies_score < 2 then 'FoodSecure'
@@ -110,4 +110,4 @@ array_length(regexp_split_to_array(replace(replace(replace(replace(soil_water_co
 array_length(regexp_split_to_array(replace(replace(replace(replace(gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count
 from rhomis_data
 where form_id is not null -- filters forms that don't have survey definitions yet
-and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) ) and soil_water_cons is not null
+and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
