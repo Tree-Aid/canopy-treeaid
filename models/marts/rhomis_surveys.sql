@@ -8,7 +8,43 @@
 {%- set disability_fields= ['seeing','hearing','walking','memory','self_care','language'] -%}
 
 with rhomis_data as 
-(select * 
+(select 
+row_id,	
+form_name,
+type,
+timing,
+country,
+project_code,
+form_id,
+submission_id,
+region,
+province,
+commune,
+date_assessment,
+biological_methods,
+population_needs_met,
+voice_hh_food,
+voice_hh_spending,
+voice_hh_crops,
+voice_hh_confidence,
+voice_comm_speaking,
+voice_comm_meetings,
+voice_comm_activities,
+seeing,
+seeing_others,
+hearing,hearing_others,
+walking,walking_others,
+memory,memory_others,
+self_care,self_care_others,
+language,language_others,
+test,access_equality,management_member,
+access_permission,village_engagement,
+soil_water_cons,gully_methods,choice_hh_income_women,
+control_hh_farm_land,control_hh_comm_land,
+control_hh_assets,control_hh_livestock,
+control_hh_trees,control_hh_savings,control_comm_resources,
+choice_comm_market,choice_comm_committee,control_comm_leadership,control_comm_by_laws,forest_management_tools_yn,protection_actions_yn,village_protection,respondentsex,choice_hh_training,choice_hh_decisions,respondent_ntfp,beneficiary_control,
+ri.* 
 from {{ref('stg_rhomis_data')}} rd 
 left join {{ref('stg_rhomis_indicators')}} ri on rd.form_id::int = ri.id_rhomis_dataset::int and rd.row_id = ri.id_hh
 )
@@ -68,8 +104,10 @@ case
 {% if not loop.last -%}
     +
   {%- endif -%}
-{% endfor %}  as severely_disabled
-
+{% endfor %}  as severely_disabled,
+array_length(regexp_split_to_array(replace(replace(replace(replace(biological_methods,'[',''),']',''),'"',''),',',''),' '),1) as biological_methods_count,
+array_length(regexp_split_to_array(replace(replace(replace(replace(soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count,
+array_length(regexp_split_to_array(replace(replace(replace(replace(gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count
 from rhomis_data
 where form_id is not null -- filters forms that don't have survey definitions yet
-and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
+and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) ) and soil_water_cons is not null
