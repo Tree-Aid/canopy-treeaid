@@ -7,8 +7,10 @@
 
 {%- set disability_fields= ['seeing','hearing','walking','memory','self_care','language'] -%}
 
+-- Step 1: get rhomis data and join rhomis indicators
 with rhomis_data as 
 (select 
+--star macro
 row_id,	
 form_name,
 type,
@@ -48,6 +50,7 @@ ri.*
 from {{ref('stg_rhomis_data')}} rd 
 left join {{ref('stg_rhomis_indicators')}} ri on rd.form_id::int = ri.id_rhomis_dataset::int and rd.row_id = ri.id_hh
 )
+-- Step 2: calculate new fields for indicators
 select 
 *,
   case when (total_income_lcu_per_year*currency_conversion_lcu_to_ppp) + (ntfp_income*currency_conversion_lcu_to_ppp) / nullif((hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty, 
@@ -109,5 +112,6 @@ array_length(regexp_split_to_array(replace(replace(replace(replace(biological_me
 array_length(regexp_split_to_array(replace(replace(replace(replace(soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count,
 array_length(regexp_split_to_array(replace(replace(replace(replace(gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count
 from rhomis_data
+-- Step 3: select relevant fields and apply outlier rules
 where form_id is not null -- filters forms that don't have survey definitions yet
 and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) ) and no_of_months_food_insecure<=12
