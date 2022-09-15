@@ -1,5 +1,2 @@
-{#
-{{survey_type_table('Enterprise survey', repeat='derivative')}} 
-#} 
-
-select 1
+--{{survey_type_table('Enterprise survey', repeat='derivative')}} 
+ 
