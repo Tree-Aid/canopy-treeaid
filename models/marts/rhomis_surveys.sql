@@ -50,7 +50,7 @@ left join {{ref('stg_rhomis_indicators')}} ri on rd.form_id::int = ri.id_rhomis_
 )
 select 
 *,
-  case when total_income_lcu_per_year + ntfp_income / nullif((hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty, 
+  case when (total_income_lcu_per_year*currency_conversion_lcu_to_ppp) + (ntfp_income*currency_conversion_lcu_to_ppp) / nullif((hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty, 
   case when foodavailability / (hh_size_mae * 365) < 2500 then true else false end as below_calline, 
     ntfp_consumed_calories_kcal_per_hh_per_year / 
     nullif(coalesce(farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
@@ -110,4 +110,4 @@ array_length(regexp_split_to_array(replace(replace(replace(replace(soil_water_co
 array_length(regexp_split_to_array(replace(replace(replace(replace(gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count
 from rhomis_data
 where form_id is not null -- filters forms that don't have survey definitions yet
-and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
+and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) ) and no_of_months_food_insecure<=12
