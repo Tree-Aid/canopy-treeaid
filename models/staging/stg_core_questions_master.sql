@@ -1,5 +1,5 @@
 select 
-    id,
+    id::int,
     name, 
     description, 
     is_rhomis::bool,

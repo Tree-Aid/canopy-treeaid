@@ -40,10 +40,11 @@ where type = '{{survey_type}}'
     select 
     {{form}}::varchar as form_id, 
     {% if repeat  -%}
-        id as id, 
-        parent_id  as submission_id, 
+        id as id,    --check if in the list of form fields we have id or _id and select that one. 
+        parent_id  as submission_id,    --check if parent_id in the list of form fields, if there, select it otherwise null
+        NULL::int  as parent_index,  ----check if parent_index in the list of form fields, if there, select it otherwise null
         {%- else -%}
-        id as submission_id, 
+        id as submission_id,   -- check if in the list of form fields we have id or _id and select that one
     {% endif %}
 --    submission_time as submitted_at,
     {%- set formfields_query -%}
