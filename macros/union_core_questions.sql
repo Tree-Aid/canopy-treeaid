@@ -130,6 +130,7 @@ s.type,
 s.timing,
 s.country,
 s.project_code,
+s.type_2,
 cq.*
 from {{ref('stg_survey_master')}} s 
 left join core_questions cq on s.form_id::int = cq.form_id::int   
