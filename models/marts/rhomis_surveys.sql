@@ -7,53 +7,26 @@
 
 {%- set disability_fields= ['seeing','hearing','walking','memory','self_care','language'] -%}
 
--- Step 1: get rhomis data and join rhomis indicators
+--  Joining rhomis data with already calculated rhomis indicators
 with rhomis_data as 
 (select 
---star macro
-row_id,	
-form_name,
-type,
-timing,
-country,
-project_code,
-form_id,
-submission_id,
-region,
-province,
-commune,
-date_assessment,
-biological_methods,
-population_needs_met,
-voice_hh_food,
-voice_hh_spending,
-voice_hh_crops,
-voice_hh_confidence,
-voice_comm_speaking,
-voice_comm_meetings,
-voice_comm_activities,
-seeing,
-seeing_others,
-hearing,hearing_others,
-walking,walking_others,
-memory,memory_others,
-self_care,self_care_others,
-language,language_others,
-test,access_equality,management_member,
-access_permission,village_engagement,
-soil_water_cons,gully_methods,choice_hh_income_women,
-control_hh_farm_land,control_hh_comm_land,
-control_hh_assets,control_hh_livestock,
-control_hh_trees,control_hh_savings,control_comm_resources,
-choice_comm_market,choice_comm_committee,control_comm_leadership,control_comm_by_laws,forest_management_tools_yn,protection_actions_yn,village_protection,respondentsex,choice_hh_training,choice_hh_decisions,respondent_ntfp,beneficiary_control,
-ri.* 
+*
 from {{ref('stg_rhomis_data')}} rd 
 left join {{ref('stg_rhomis_indicators')}} ri on rd.form_id::int = ri.id_rhomis_dataset::int and rd.row_id = ri.id_hh
-)
--- Step 2: calculate new fields for indicators
-select 
-*,
-  case when total_income_lcu_per_year + ntfp_income / nullif((hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty, 
+),
+
+----Calculating the fields relevant for indicator building
+calculated_fields as 
+(
+select
+*, 
+   (total_income_lcu_per_year*currency_conversion_lcu_to_ppp) as total_income_per_year,
+  ((total_income_lcu_per_year*currency_conversion_lcu_to_ppp) + (ntfp_income*currency_conversion_lcu_to_ppp)) as total_income_with_ntfp_per_year,
+  (ntfp_income*currency_conversion_lcu_to_ppp) as ntfp_income_per_year,
+  (crop_income_lcu_per_year*currency_conversion_lcu_to_ppp) as crop_income_per_year,
+  (livestock_income_lcu_per_year*currency_conversion_lcu_to_ppp) as livestock_income_per_year,
+  (off_farm_income_lcu_per_year*currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
+  case when (total_income_lcu_per_year*currency_conversion_lcu_to_ppp) + (ntfp_income*currency_conversion_lcu_to_ppp) / nullif((hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty, 
   case when foodavailability / (hh_size_mae * 365) < 2500 then true else false end as below_calline, 
     ntfp_consumed_calories_kcal_per_hh_per_year / 
     nullif(coalesce(farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
@@ -82,16 +55,17 @@ select
  ( 
 {% for field in vcc_fields %}
   case 
-  when respondentsex in ('F','female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
-  when respondentsex in ('F','female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
-  when respondentsex in ('F','female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
-  when respondentsex in ('F','female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
+  when respondentsex in ('F','female','f','Female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
+  when respondentsex in ('F','female','f','Female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
+  when respondentsex in ('F','female','f','Female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
+  when respondentsex in ('F','female','f','Female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
   else null end   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
   {% if not loop.last -%}
     +
   {%- endif -%}
 {% endfor %}
   ) / 21.0 as vcc_score,
+
 {% for field in disability_fields %}  
 case 
   when {{field}} in ('no_difficulty', 'some_difficulty', 'lot_difficulty', 'impossible') then 1
@@ -100,6 +74,7 @@ case
     +
   {%- endif -%}
 {% endfor %}  as disability_score,
+
 {% for field in disability_fields %}  
 case 
   when {{field}} in ('lot_difficulty', 'impossible') then 1
@@ -109,9 +84,62 @@ case
   {%- endif -%}
 {% endfor %}  as severely_disabled,
 array_length(regexp_split_to_array(replace(replace(replace(replace(biological_methods,'[',''),']',''),'"',''),',',''),' '),1) as biological_methods_count,
-array_length(regexp_split_to_array(replace(replace(replace(replace(soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count,
-array_length(regexp_split_to_array(replace(replace(replace(replace(gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count
+array_length(regexp_split_to_array(replace(replace(replace(replace(gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count,
+array_length(regexp_split_to_array(replace(replace(replace(replace(soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count
 from rhomis_data
--- Step 3: select relevant fields and apply outlier rules
+)
+---Selecting the relevant fields
+select 
+row_id,	
+form_name,
+timing,
+year,
+country,
+iso_country_code,
+project_code,
+form_id,
+submission_id,
+initcap(replace(region,'_',' ')) as region,
+initcap(replace(province,'_',' ')) as province,
+initcap(replace(commune,'_',' ')) as commune,
+date_assessment,
+biological_methods,
+biological_methods_count,
+gully_methods,
+gully_methods_count,
+soil_water_cons,
+soil_water_cons_count,
+respondentsex,
+respondent_ntfp,
+beneficiary_control,
+hdds_good_season,
+total_income_per_year,
+total_income_with_ntfp_per_year,
+ntfp_income_per_year,
+crop_income_per_year,
+livestock_income_per_year,
+off_farm_income_per_year,
+value_crop_consumed_lcu_per_hh_per_year,
+value_livestock_products_consumed_lcu_per_hh_per_year,
+value_farm_products_consumed_lcu_per_hh_per_year,
+crop_consumed_calories_kcal_per_hh_per_year,
+farm_products_consumed_calories_kcal_per_hh_per_year,
+value_ntfp_consumed,
+ntfp_consumed_calories_kcal_per_hh_per_year,
+firewood_consumed_kgs_per_hh_per_day,
+no_of_months_food_insecure,
+extreme_poverty,	
+below_calline,
+proportion_ntfp_in_diet,
+food_insecurity_status,
+uses_nrm_techniques,
+governance_score,
+vcc_score,
+disability_score,
+severely_disabled
+from calculated_fields
 where form_id is not null -- filters forms that don't have survey definitions yet
-and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
+and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) ) 
+and no_of_months_food_insecure <='12' and total_income_with_ntfp_per_year <='50000' 
+and hdds_good_season <='12'
+---and firewood_consumed_kgs_per_hh_per_day <='25'
