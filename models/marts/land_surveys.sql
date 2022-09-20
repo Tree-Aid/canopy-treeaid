@@ -19,7 +19,8 @@ select
         geoshape,
         initcap(replace((replace(regexp_replace(biological_methods,'[^a-zA-Z,,_]','','g'),'_',' ')),'Biological','')) as biological_methods,
         initcap(replace(regexp_replace(soil_water_cons,'[^a-zA-Z,,_]','','g'),'_',' ')) as soil_water_cons,
-        initcap(replace(regexp_replace(gully_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as gully_methods
+        initcap(replace(regexp_replace(gully_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as gully_methods,
+        type_2
     from land_survey
     where form_id is not null -- filters forms that don't have survey definitions yet
     and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
