@@ -10,6 +10,7 @@ select
  project_code,
  form_id,
  submission_id,
+ submission_index, 
  initcap(replace(region,'_',' ')) as region,
  initcap(replace(province,'_',' ')) as province,
  initcap(replace(commune,'_',' ')) as commune,	
@@ -25,4 +26,5 @@ select
  test,
  group_costs_amount
  from enterprise_surveys es
- where form_id is not null and test not in ('y', 'Y','yes','Yes')
+ where form_id is not null and 
+ ((test is null) Or (test not in ('y', 'Y','yes','Yes')))

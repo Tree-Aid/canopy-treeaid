@@ -2,6 +2,7 @@ with data as
 (
 {{survey_type_table('Land survey', repeat='planted')}} 
 )
+-- set of fields from all  table
 select
 d.form_name,
 d.country,
@@ -14,6 +15,7 @@ ls.province,
 ls.commune,
 ls.date_assessment,
 extract('Year' from ls.date_assessment::date) as assessment_year,
+-- set of fields from child table
 d.species,
 d.number_planted,
 d.number_regenerated,
