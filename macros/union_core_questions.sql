@@ -49,20 +49,19 @@ group by 1,2,3
     {%- set schemaname = schemalist[0] %}
     {%- set tablename = tablelist[0] %}
 
+    {%- set fieldsquery -%}
+        select * 
+        from  {{schemaname}}."{{tablename}}" 
+        limit 1 
+    {%- endset -%}
+
+    {%- set fields = dbt_utils.get_query_results_as_dict(fieldsquery)  -%}
+
     -- loop through all the core fields, select the field with the appropriate name if present
     select 
     {{form}}::varchar as form_id, 
-
     -- if we are in a repeat group, check the actual names of fields in the repeat group to see if we have the parent submission_id or only the parent_index
     {% if repeat  -%}
-        {%- set fieldsquery -%}
-            select * 
-            from  {{schemaname}}."{{tablename}}" 
-            limit 1 
-        {%- endset -%}
-
-        {%- set fields = dbt_utils.get_query_results_as_dict(fieldsquery)  -%}
-
         id as id,  
         {%- if 'parent_index' in fields %}
             null as submission_id,
@@ -71,11 +70,16 @@ group by 1,2,3
             {{fields['parent_id'][0]}} as submission_id,
             null::bigint as parent_index,
         {%- endif %}
-
     {% else %}
-    id as submission_id,
+        id as submission_id,
+        -- if _index in the actual table, add index if not add null
+        {% if '_index' in fields %}
+                _index::int as submission_index,
+            {% else -%}
+                NULL::int as submission_index,
+            {%- endif %}
     {% endif %}
-    
+
     -- loop through all the core fields, select the field with the appropriate name if present
     {%- set formfields_query -%}
         select question_name, core_question_name
