@@ -3,24 +3,24 @@ with land_survey as
 {{survey_type_table('Land survey')}}
 )
 select 
-        form_name,
-        country,
-        project_code,
-        form_id,
-        submission_id,
-        initcap(replace(region,'_',' ')) as region,
-        initcap(replace(province,'_',' ')) as province,
-        initcap(replace(commune,'_',' ')) as commune,
-        date_assessment,
-        extract('Year' from date_assessment::date) as assessment_year,
-        gps_shape_area as gps_shape_area_m2,
+        ls.form_name,
+        ls.country,
+        ls.project_code,
+        ls.form_id,
+        ls.submission_id,
+        initcap(replace(ls.region,'_',' ')) as region,
+        initcap(replace(ls.province,'_',' ')) as province,
+        initcap(replace(ls.commune,'_',' ')) as commune,
+        ls.date_assessment,
+        extract('Year' from ls.date_assessment::date) as assessment_year,
+        ls.gps_shape_area as gps_shape_area_m2,
         {{area_in_hectares('gps_shape_area::FLOAT')}} as gps_shape_area_ha,
-        test,
-        geoshape,
-        initcap(replace((replace(regexp_replace(biological_methods,'[^a-zA-Z,,_]','','g'),'_',' ')),'Biological','')) as biological_methods,
-        initcap(replace(regexp_replace(soil_water_cons,'[^a-zA-Z,,_]','','g'),'_',' ')) as soil_water_cons,
-        initcap(replace(regexp_replace(gully_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as gully_methods,
-        type_2
-    from land_survey
-    where form_id is not null -- filters forms that don't have survey definitions yet
-    and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
+        ls.test,
+        ls.geoshape,
+        initcap(replace((replace(regexp_replace(ls.biological_methods,'[^a-zA-Z,,_]','','g'),'_',' ')),'Biological','')) as biological_methods,
+        initcap(replace(regexp_replace(ls.soil_water_cons,'[^a-zA-Z,,_]','','g'),'_',' ')) as soil_water_cons,
+        initcap(replace(regexp_replace(ls.gully_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as gully_methods,
+        ls.type_2
+    from land_survey ls
+    where ls.form_id is not null -- filters forms that don't have survey definitions yet
+    and ((ls.test is null ) or (ls.test not in ('y', 'Y','yes','Yes')) )
