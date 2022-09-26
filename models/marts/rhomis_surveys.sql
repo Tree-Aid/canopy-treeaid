@@ -20,25 +20,25 @@ calculated_fields as
 (
 select
 *, 
-   (total_income_lcu_per_year*currency_conversion_lcu_to_ppp) as total_income_per_year,
-  ((total_income_lcu_per_year*currency_conversion_lcu_to_ppp) + (ntfp_income*currency_conversion_lcu_to_ppp)) as total_income_with_ntfp_per_year,
-  (ntfp_income*currency_conversion_lcu_to_ppp) as ntfp_income_per_year,
-  (crop_income_lcu_per_year*currency_conversion_lcu_to_ppp) as crop_income_per_year,
-  (livestock_income_lcu_per_year*currency_conversion_lcu_to_ppp) as livestock_income_per_year,
-  (off_farm_income_lcu_per_year*currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
-  case when (total_income_lcu_per_year*currency_conversion_lcu_to_ppp) + (ntfp_income*currency_conversion_lcu_to_ppp) / nullif((hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty, 
-  case when foodavailability / (hh_size_mae * 365) < 2500 then true else false end as below_calline, 
-    ntfp_consumed_calories_kcal_per_hh_per_year / 
-    nullif(coalesce(farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
+   (rd.total_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) as total_income_per_year,
+  ((rd.total_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income*rd.currency_conversion_lcu_to_ppp)) as total_income_with_ntfp_per_year,
+  (rd.ntfp_income*rd.currency_conversion_lcu_to_ppp) as ntfp_income_per_year,
+  (rd.crop_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) as crop_income_per_year,
+  (rd.livestock_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) as livestock_income_per_year,
+  (rd.off_farm_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
+  case when (rd.total_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income*rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty, 
+  case when rd.foodavailability / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline, 
+    rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
+    nullif(coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
     as proportion_ntfp_in_diet,
-  coalesce (hfias_status , 
-  case when fies_score < 2 then 'FoodSecure'
-    when fies_score < 4 then 'MildlyFI'
-    when fies_score < 6 then 'ModeratlyFI'
-    when fies_score < 10 then 'SeverelyFI'
+  coalesce (rd.hfias_status , 
+  case when rd.fies_score < 2 then 'FoodSecure'
+    when rd.fies_score < 4 then 'MildlyFI'
+    when rd.fies_score < 6 then 'ModeratlyFI'
+    when rd.fies_score < 10 then 'SeverelyFI'
     else null end ) as food_insecurity_status,
     case when 
-      length(biological_methods) + length(gully_methods) + length(soil_water_cons) >0 then true else false end
+      length(rd.biological_methods) + length(rd.gully_methods) + length(rd.soil_water_cons) >0 then true else false end
       as uses_nrm_techniques, 
  (     
 {% for field in forest_governance_fields %}
@@ -55,10 +55,10 @@ select
  ( 
 {% for field in vcc_fields %}
   case 
-  when respondentsex in ('F','female','f','Female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
-  when respondentsex in ('F','female','f','Female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
-  when respondentsex in ('F','female','f','Female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
-  when respondentsex in ('F','female','f','Female') or respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
+  when rd.respondentsex in ('F','female','f','Female') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
+  when rd.respondentsex in ('F','female','f','Female') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
+  when rd.respondentsex in ('F','female','f','Female') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
+  when rd.respondentsex in ('F','female','f','Female') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
   else null end   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
   {% if not loop.last -%}
     +
@@ -83,63 +83,63 @@ case
     +
   {%- endif -%}
 {% endfor %}  as severely_disabled,
-array_length(regexp_split_to_array(replace(replace(replace(replace(biological_methods,'[',''),']',''),'"',''),',',''),' '),1) as biological_methods_count,
-array_length(regexp_split_to_array(replace(replace(replace(replace(gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count,
-array_length(regexp_split_to_array(replace(replace(replace(replace(soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count
-from rhomis_data
+array_length(regexp_split_to_array(replace(replace(replace(replace(rd.biological_methods,'[',''),']',''),'"',''),',',''),' '),1) as biological_methods_count,
+array_length(regexp_split_to_array(replace(replace(replace(replace(rd.gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count,
+array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count
+from rhomis_data rd
 )
 ---Selecting the relevant fields
 select 
-row_id,	
-form_name,
-timing,
-year,
-country,
-iso_country_code,
-project_code,
-form_id,
-submission_id,
-initcap(replace(region,'_',' ')) as region,
-initcap(replace(province,'_',' ')) as province,
-initcap(replace(commune,'_',' ')) as commune,
-date_assessment,
-biological_methods,
-biological_methods_count,
-gully_methods,
-gully_methods_count,
-soil_water_cons,
-soil_water_cons_count,
-respondentsex,
-respondent_ntfp,
-beneficiary_control,
-hdds_good_season,
-total_income_per_year,
-total_income_with_ntfp_per_year,
-ntfp_income_per_year,
-crop_income_per_year,
-livestock_income_per_year,
-off_farm_income_per_year,
-value_crop_consumed_lcu_per_hh_per_year,
-value_livestock_products_consumed_lcu_per_hh_per_year,
-value_farm_products_consumed_lcu_per_hh_per_year,
-crop_consumed_calories_kcal_per_hh_per_year,
-farm_products_consumed_calories_kcal_per_hh_per_year,
-value_ntfp_consumed,
-ntfp_consumed_calories_kcal_per_hh_per_year,
-firewood_consumed_kgs_per_hh_per_day,
-no_of_months_food_insecure,
-extreme_poverty,	
-below_calline,
-proportion_ntfp_in_diet,
-food_insecurity_status,
-uses_nrm_techniques,
-governance_score,
-vcc_score,
-disability_score,
-severely_disabled
-from calculated_fields
-where form_id is not null -- filters forms that don't have survey definitions yet
-and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) ) 
-and no_of_months_food_insecure <='12' and total_income_with_ntfp_per_year <='50000' 
-and hdds_good_season <='12'
+cf.row_id,	
+cf.form_name,
+cf.timing,
+cf.year,
+cf.country,
+cf.iso_country_code,
+cf.project_code,
+cf.form_id,
+cf.submission_id,
+initcap(replace(cf.region,'_',' ')) as region,
+initcap(replace(cf.province,'_',' ')) as province,
+initcap(replace(cf.commune,'_',' ')) as commune,
+cf.date_assessment,
+cf.biological_methods,
+cf.biological_methods_count,
+cf.gully_methods,
+cf.gully_methods_count,
+cf.soil_water_cons,
+cf.soil_water_cons_count,
+cf.respondentsex,
+cf.respondent_ntfp,
+cf.beneficiary_control,
+cf.hdds_good_season,
+cf.total_income_per_year,
+cf.total_income_with_ntfp_per_year,
+cf.ntfp_income_per_year,
+cf.crop_income_per_year,
+cf.livestock_income_per_year,
+cf.off_farm_income_per_year,
+cf.value_crop_consumed_lcu_per_hh_per_year,
+cf.value_livestock_products_consumed_lcu_per_hh_per_year,
+cf.value_farm_products_consumed_lcu_per_hh_per_year,
+cf.crop_consumed_calories_kcal_per_hh_per_year,
+cf.farm_products_consumed_calories_kcal_per_hh_per_year,
+cf.value_ntfp_consumed,
+cf.ntfp_consumed_calories_kcal_per_hh_per_year,
+cf.firewood_consumed_kgs_per_hh_per_day,
+cf.no_of_months_food_insecure,
+cf.extreme_poverty,	
+cf.below_calline,
+cf.proportion_ntfp_in_diet,
+cf.food_insecurity_status,
+cf.uses_nrm_techniques,
+cf.governance_score,
+cf.vcc_score,
+cf.disability_score,
+cf.severely_disabled
+from calculated_fields cf
+where cf.form_id is not null -- filters forms that don't have survey definitions yet
+and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) 
+and cf.no_of_months_food_insecure <='12' and cf.total_income_with_ntfp_per_year <='50000' 
+and cf.hdds_good_season <='12'
 ---and firewood_consumed_kgs_per_hh_per_day <='25'

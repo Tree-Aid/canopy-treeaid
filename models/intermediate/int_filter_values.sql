@@ -1,5 +1,4 @@
-
- with filter_values as
+with filter_values as
 (
 select distinct country, project_code, assessment_year from {{ ref('enterprise_surveys') }}
 union
