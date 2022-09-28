@@ -4,17 +4,7 @@ with data as
 )
 -- set of fields from all  table
 select
-d.form_name,
-d.country,
-d.project_code,
-d.form_id,
-d.id,
-d.submission_id,
-ls.region,
-ls.province,
-ls.commune,
-ls.date_assessment,
-extract('Year' from ls.date_assessment::date) as assessment_year,
+{{get_standard_columns('d','ls')}},
 -- set of fields from child table
 d.species,
 d.number_planted,
