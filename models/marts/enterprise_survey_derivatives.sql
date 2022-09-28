@@ -2,6 +2,7 @@ with repeat_group_data as
 (
 {{survey_type_table('Enterprise survey', repeat='derivatives')}} 
 ),
+-- this should be refactored to look a bit neater
 easy_joining_data as 
 (
 select
