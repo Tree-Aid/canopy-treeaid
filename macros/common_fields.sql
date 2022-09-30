@@ -9,5 +9,6 @@
         commune,
         date_assessment,
         assessment_year,
-        assessment_year_date
+        assessment_year_date,
+        beneficiary_control
 {% endmacro %}

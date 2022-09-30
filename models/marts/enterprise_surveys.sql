@@ -25,7 +25,8 @@ select
  coalesce(es.sales_turn_over_local_income::INTEGER,0) + coalesce(es.sales_turn_over_national_income::INTEGER,0) + 
     coalesce(es.sales_turn_over_international_income::INTEGER,0) as total_income,
  es.test,
- es.group_costs_amount
+ es.group_costs_amount,
+ 'Yes' as beneficiary_control
  from enterprise_surveys es
  where es.form_id is not null and 
  ((es.test is null) Or (es.test not in ('y', 'Y','yes','Yes')))

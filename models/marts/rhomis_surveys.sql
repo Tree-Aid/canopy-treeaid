@@ -82,7 +82,7 @@ case
 {% if not loop.last -%}
     +
   {%- endif -%}
-{% endfor %}  as severely_disabled,
+{% endfor %}  as severely_disabled,   
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.biological_methods,'[',''),']',''),'"',''),',',''),' '),1) as biological_methods_count,
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count,
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count
@@ -111,7 +111,10 @@ cf.soil_water_cons,
 cf.soil_water_cons_count,
 cf.respondentsex,
 cf.respondent_ntfp,
-cf.beneficiary_control,
+case 
+  when beneficiary_control in ('Y','yes','y','Yes') then 'Yes'
+  when beneficiary_control in ('N','no','n','No') then 'No'
+else 'Yes' end as beneficiary_control,
 cf.hdds_good_season,
 cf.total_income_per_year,
 cf.total_income_with_ntfp_per_year,
