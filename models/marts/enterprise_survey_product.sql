@@ -11,7 +11,9 @@ select
 se.product_element,
 se.sales_local_income,
 se.sales_national_income,
-se.sales_international_income
+se.sales_international_income,
+es.group_costs_amount,
+es.group_vte
 from sales_elements se
 inner join {{ ref('enterprise_surveys') }} es on se.submission_id=es.submission_id
 where se.submission_id is not null and 
@@ -25,7 +27,9 @@ select
 se.product_element,
 se.sales_local_income,
 se.sales_national_income,
-se.sales_international_income
+se.sales_international_income,
+es.group_costs_amount,
+es.group_vte
 from sales_elements se
 left join {{ ref('enterprise_surveys') }} es on  
     se.form_id::int = es.form_id::int and  se.parent_index =es.submission_index 
