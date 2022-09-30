@@ -16,6 +16,7 @@ select
  initcap(replace(es.commune,'_',' ')) as commune,	
  es.date_assessment::date,
  extract('Year' from es.date_assessment::date) as assessment_year,
+ date_trunc('year',es.date_assessment::date) as assessment_year_date,
  es.group_vte,
  es.product_primary,
  es.sales_turn_over_local_income,

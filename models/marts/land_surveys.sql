@@ -13,6 +13,7 @@ select
         initcap(replace(ls.commune,'_',' ')) as commune,
         ls.date_assessment,
         extract('Year' from ls.date_assessment::date) as assessment_year,
+        date_trunc('year',ls.date_assessment::date) as assessment_year_date,
         ls.gps_shape_area as gps_shape_area_m2,
         {{area_in_hectares('gps_shape_area::FLOAT')}} as gps_shape_area_ha,
         ls.test,

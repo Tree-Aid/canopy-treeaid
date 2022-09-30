@@ -9,7 +9,8 @@
 "{{alias2}}".province,
 "{{alias2}}".commune,
 "{{alias2}}".date_assessment,
-extract('Year' from "{{alias2}}".date_assessment::date) as assessment_year
+extract('Year' from "{{alias2}}".date_assessment::date) as assessment_year,
+"{{alias2}}".assessment_year_date
 {% endmacro %}
 
 
@@ -24,5 +25,6 @@ extract('Year' from "{{alias2}}".date_assessment::date) as assessment_year
 "{{alias2}}".province,
 "{{alias2}}".commune,
 "{{alias2}}".date_assessment,
-extract('Year' from "{{alias2}}".date_assessment::date) as assessment_year
+extract('Year' from "{{alias2}}".date_assessment::date) as assessment_year,
+"{{alias2}}".assessment_year_date
 {% endmacro %}
