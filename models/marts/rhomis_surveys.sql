@@ -130,7 +130,7 @@ cf.farm_products_consumed_calories_kcal_per_hh_per_year,
 cf.value_ntfp_consumed,
 cf.ntfp_consumed_calories_kcal_per_hh_per_year,
 cf.firewood_consumed_kgs_per_hh_per_day,
-cf.no_of_months_food_insecure,
+cf.nr_months_food_shortage,
 cf.extreme_poverty,	
 cf.below_calline,
 cf.proportion_ntfp_in_diet,
@@ -145,6 +145,6 @@ date_trunc('year',cf.date_assessment::date) as assessment_year_date
 from calculated_fields cf
 where cf.form_id is not null -- filters forms that don't have survey definitions yet
 and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) 
-and cf.no_of_months_food_insecure <='12' and cf.total_income_with_ntfp_per_year <='50000' 
+and cf.nr_months_food_shortage <='12' and cf.total_income_with_ntfp_per_year <='50000' 
 and cf.hdds_good_season <='12'
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
