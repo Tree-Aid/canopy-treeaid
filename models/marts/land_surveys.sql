@@ -21,7 +21,8 @@ select
         initcap(replace((replace(regexp_replace(ls.biological_methods,'[^a-zA-Z,,_]','','g'),'_',' ')),'Biological','')) as biological_methods,
         initcap(replace(regexp_replace(ls.soil_water_cons,'[^a-zA-Z,,_]','','g'),'_',' ')) as soil_water_cons,
         initcap(replace(regexp_replace(ls.gully_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as gully_methods,
-        ls.type_2
+        ls.type_2,
+        'Yes' as beneficiary_control
     from land_survey ls
     where ls.form_id is not null -- filters forms that don't have survey definitions yet
     and ((ls.test is null ) or (ls.test not in ('y', 'Y','yes','Yes')) )

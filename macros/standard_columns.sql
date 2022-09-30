@@ -10,7 +10,8 @@
 "{{alias2}}".commune,
 "{{alias2}}".date_assessment,
 extract('Year' from "{{alias2}}".date_assessment::date) as assessment_year,
-"{{alias2}}".assessment_year_date
+"{{alias2}}".assessment_year_date,
+"{{alias2}}".beneficiary_control
 {% endmacro %}
 
 
@@ -26,5 +27,6 @@ extract('Year' from "{{alias2}}".date_assessment::date) as assessment_year,
 "{{alias2}}".commune,
 "{{alias2}}".date_assessment,
 extract('Year' from "{{alias2}}".date_assessment::date) as assessment_year,
-"{{alias2}}".assessment_year_date
+"{{alias2}}".assessment_year_date,
+"{{alias2}}".beneficiary_control
 {% endmacro %}
