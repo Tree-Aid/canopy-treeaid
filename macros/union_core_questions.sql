@@ -94,67 +94,69 @@ group by 1,2,3
     {%- set question_names = run_query(formfields_query).columns[0].values() | list -%}
     {%- set core_questions_names = run_query(formfields_query).columns[1].values() | list -%} 
 
-    {%for val in range(uniquelist| length) %}
-        --loop through all the fields in dict
+    {% if uniquelist| length >0%}
+        {%for val in range(uniquelist| length) %}
+            --loop through all the fields in dict
 
-        select 
-        {{form}}::varchar as form_id, 
-        -- if we are in a repeat group, check the actual names of fields in the repeat group to see if we have the parent submission_id or only the parent_index
-            {% if repeat|length > 0  -%}
-                id as id,  
-                {%- if 'parent_index' in fields %}
-                    null as submission_id,
-                    parent_index::bigint as parent_index,
-                {% else -%}
-                    {{uniquelist[loop.index0]}} as submission_id,                    
-                    null::bigint as parent_index,
-                {%- endif %}
-            {% else %}
-                id as submission_id,
-                -- if _index in the actual table, add index if not add null
-                {% if '_index' in fields %}
-                    _index::int as submission_index,
-                {% else -%}
-                    NULL::int as submission_index,
-                {%- endif %}
-            {% endif %}
-            -- loop through all the core fields, select the field with the appropriate name if present
-            {% for core_field in corefields %}
-                {%- if core_field in core_questions_names %}
-                {%- set indexvalue = core_questions_names.index(core_field) -%} 
-                    {# finds the item of the list that correspond to a rule #}
-                {{question_names[indexvalue]}}::varchar
-                {%- else %}
-                NULL::varchar 
-                {% endif %} 
-                as {{core_field}} 
-                {%- if not loop.last -%}
-                ,
-                {%- endif -%}
-                
-            {% endfor %}
-        
-            --find the appropriate table to join based on information in 'stg_core_questions_land_survey'
-            from 
-            {% if execute -%}
-                {{schemaname}}."{{tablename}}"
+            select 
+            {{form}}::varchar as form_id, 
+            -- if we are in a repeat group, check the actual names of fields in the repeat group to see if we have the parent submission_id or only the parent_index
                 {% if repeat|length > 0  -%}
-                    {%- if 'parent_index' not in fields %}
-                            where parent_id={{uniquelist[loop.index0]}}
+                    id as id,  
+                    {%- if 'parent_index' in fields %}
+                        null as submission_id,
+                        parent_index::bigint as parent_index,
+                    {% else -%}
+                        {{uniquelist[loop.index0]}} as submission_id,                    
+                        null::bigint as parent_index,
                     {%- endif %}
-                {%else%}
-                    where id= {{uniquelist[loop.index0]}}
-                {%endif%}
-                
-            {%- endif -%}
-            {% if not loop.last %}
-                union all
-            {%- endif -%}
-    {% endfor %} 
-        
-    {% if not loop.last %}
-                union all
-            {%- endif -%}
+                {% else %}
+                    id as submission_id,
+                    -- if _index in the actual table, add index if not add null
+                    {% if '_index' in fields %}
+                        _index::int as submission_index,
+                    {% else -%}
+                        NULL::int as submission_index,
+                    {%- endif %}
+                {% endif %}
+                -- loop through all the core fields, select the field with the appropriate name if present
+                {% for core_field in corefields %}
+                    {%- if core_field in core_questions_names %}
+                    {%- set indexvalue = core_questions_names.index(core_field) -%} 
+                        {# finds the item of the list that correspond to a rule #}
+                    {{question_names[indexvalue]}}::varchar
+                    {%- else %}
+                    NULL::varchar 
+                    {% endif %} 
+                    as {{core_field}} 
+                    {%- if not loop.last -%}
+                    ,
+                    {%- endif -%}
+                    
+                {% endfor %}
+            
+                --find the appropriate table to join based on information in 'stg_core_questions_land_survey'
+                from 
+                {% if execute -%}
+                    {{schemaname}}."{{tablename}}"
+                    {% if repeat|length > 0  -%}
+                        {%- if 'parent_index' not in fields %}
+                                where parent_id={{uniquelist[loop.index0]}}
+                        {%- endif %}
+                    {%else%}
+                        where id= {{uniquelist[loop.index0]}}
+                    {%endif%}
+                    
+                {%- endif -%}
+                {% if not loop.last %}
+                    union all
+                {%- endif -%}
+        {% endfor %} 
+            
+        {% if not loop.last %}
+            union all
+        {%- endif -%}
+    {%- endif -%}
 {%- endfor -%}
 {% endmacro %}
 
