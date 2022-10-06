@@ -13,7 +13,7 @@ select
     s.timing,
     s.type_2
 from {{ref('stg_survey_master')}} s 
-inner join pg_catalog.pg_tables pt on replace(lower(s.form_id_string), '-', '_') = replace(lower(pt.tablename), '-', '_')  
+left join pg_catalog.pg_tables pt on trim(replace(lower(s.form_id_string), '-', '_')) = trim(replace(lower(pt.tablename), '-', '_'))  
     and pt.schemaname in ('onadata', 'temp', 'csv') and pt.tableowner = 'tree_aid'
 left join {{ref('stg_survey_definitions_master')}} sd  on s.form_id::int = sd.form_id::int and sd.core_question_id is not null
 inner join {{ref('stg_core_questions_master')}} cq on sd.core_question_id = cq.id and cq.repeat_group_name is null 
