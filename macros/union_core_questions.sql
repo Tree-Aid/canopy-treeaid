@@ -59,7 +59,6 @@ group by 1,2,3
     {%- set fields = dbt_utils.get_query_results_as_dict(fieldsquery)  -%}
     {% set fields_query = run_query(fieldsquery).columns[0].values()|list -%} 
     
-    fields['parent_id']
     {% if repeat|length > 0  -%}
         {%- if 'parent_index' in fields %}
             {%for val in fields['parent_index'] %}
@@ -142,6 +141,8 @@ group by 1,2,3
                     {% if repeat|length > 0  -%}
                         {%- if 'parent_index' not in fields %}
                                 where parent_id={{uniquelist[loop.index0]}}
+                            {%else%}
+                                where parent_index={{uniquelist[loop.index0]}}
                         {%- endif %}
                     {%else%}
                         where id= {{uniquelist[loop.index0]}}
