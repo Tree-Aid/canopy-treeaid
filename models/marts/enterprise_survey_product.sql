@@ -17,7 +17,7 @@ es.group_vte
 from sales_elements se
 inner join {{ ref('enterprise_surveys') }} es on se.submission_id=es.submission_id
 where se.submission_id is not null and 
-se.product_element is not null 
+se.product_element is not null and (es.test is null or es.test not in ('y', 'Y','yes','Yes'))
 ),
 harder_joining_data as 
 (
@@ -34,7 +34,7 @@ from sales_elements se
 left join {{ ref('enterprise_surveys') }} es on  
     se.form_id::int = es.form_id::int and  se.parent_index =es.submission_index 
 where se.submission_id is null and 
-se.product_element is not null
+se.product_element is not null and (es.test is null or es.test not in ('y', 'Y','yes','Yes'))
 )
 select * from easy_joining_data
 union all
