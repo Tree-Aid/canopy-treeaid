@@ -23,8 +23,6 @@ sources:
             tests:
                 - unique
                 - not_null 
-        - name: rhomis_indicators_legacy
-          description: Indicators worksheet for old Rhomis projects dataset
 
     - name: onadata
       database: tree_aid
@@ -32,13 +30,6 @@ sources:
       tables: 
         - name: registry
           description: List of choice labels in Json format
-        - name: ta_rho_mis_bb6_oct-dec21
-          columns:
-          - name: id
-            description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
         - name: ta_rho_mis_gb8_endline_jan-mar2021
           columns:
           - name: id
@@ -80,3 +71,4 @@ sources:
       schema: csv
       tables:
         - name: rhomis_indicators
+          description: Indicators worksheet for old Rhomis projects dataset
