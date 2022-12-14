@@ -9,9 +9,14 @@ select
 d.species,
 d.number_planted,
 d.number_regenerated,
-ls.type_2
+ls.type_2,
+TRUE as odk_source 
 from data d
 inner join {{ ref('land_surveys') }} ls on d.submission_id=ls.submission_id
 where ls.test not in ('y', 'Y','yes','Yes') or ls.test is null
 
 
+-- Gemma to add union to new sources once they have been created (e.g. trees_planted_legacy, using dbt union)
+-- select * , FALSE as odk_source
+--from {{scr('trees_planted_legacy')}}
+--
