@@ -14,4 +14,5 @@ from data d
 inner join {{ ref('land_surveys') }} ls on d.submission_id=ls.submission_id
 where ls.test not in ('y', 'Y','yes','Yes') or ls.test is null
 
-
+-- union select * from {{src('trees_planted_legacy')}}
+union select country, project_code, assessment_year, beneficiary_control, species, number_planted, number_regenerated, type_2 from {{ source('airbyte', 'trees_planted_legacy') }}
