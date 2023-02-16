@@ -15,5 +15,3 @@ inner join {{ ref('land_surveys') }} ls on d.submission_id=ls.submission_id
 where ls.test not in ('y', 'Y','yes','Yes') or ls.test is null
 union all
 select form_name, country, project_code, form_id, id::bigint, legacy_id::int, region, province, commune, date_assessment, assessment_year::int,to_timestamp(assessment_year_date,'YYYY-MM-DD HH:MI:SS'), beneficiary_control, species, number_planted, number_regenerated, type_2 from {{ source('airbyte', 'trees_planted_legacy') }}
-
-union select * from {{source('airbyte', 'trees_planted_legacy')}}

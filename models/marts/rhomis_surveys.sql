@@ -117,6 +117,7 @@ case
   when beneficiary_control in ('N','no','n','No') then 'No'
 else 'Yes' end as beneficiary_control,
 cf.hdds_good_season,
+cf.hdds_bad_season,
 cf.total_income_per_year,
 cf.total_income_with_ntfp_per_year,
 cf.ntfp_income_per_year,
