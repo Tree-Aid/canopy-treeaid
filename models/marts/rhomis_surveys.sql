@@ -56,10 +56,11 @@ select
  ( 
 {% for field in vcc_fields %}
   case 
-  when rd.respondentsex in ('F','female','f','Female') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
+  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
+  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
+  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 2
+  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'equal' then 3 
+  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
   else null end   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
   {% if not loop.last -%}
     +
