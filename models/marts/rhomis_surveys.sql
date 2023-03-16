@@ -153,7 +153,8 @@ cf.vcc_score,
 cf.disability_score,
 cf.severely_disabled,
 extract('Year' from cf.date_assessment::date) as assessment_year,
-date_trunc('year',cf.date_assessment::date) as assessment_year_date
+date_trunc('year',cf.date_assessment::date) as assessment_year_date,
+cf.hdds_bad_season
 from calculated_fields cf
 where cf.form_id is not null -- filters forms that don't have survey definitions yet
 and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) 
