@@ -38,9 +38,14 @@ select
     when rd.fies_score < 6 then 'ModeratlyFI'
     when rd.fies_score < 10 then 'SeverelyFI'
     else null end ) as food_insecurity_status,
-    case when 
-      length(rd.biological_methods) + length(rd.gully_methods) + length(rd.soil_water_cons) >0 then true else false end
-      as uses_nrm_techniques, 
+    case when (case when biological_methods is null or biological_methods in ('None') then 0 else length(biological_methods) end) + (case when gully_methods is null or gully_methods in ('None') then 0 else length(gully_methods) end) + (case when soil_water_cons is null or soil_water_cons in ('None') then 0 else length(soil_water_cons) end) >0 then true else false end
+      as uses_nrm_techniques,
+    case when (case when biological_methods is null or biological_methods in ('None') then 0 else length(biological_methods) end) >0 then true else false end
+      as uses_bio_techniques,
+    case when (case when soil_water_cons is null or soil_water_cons in ('None') then 0 else length(soil_water_cons) end) >0 then true else false end
+      as uses_swc_techniques,
+    case when (case when gully_methods is null or gully_methods in ('None') then 0 else length(gully_methods) end) >0 then true else false end
+      as uses_gully_techniques, 
  (     
 {% for field in forest_governance_fields %}
   case 
@@ -70,7 +75,7 @@ select
 
 {% for field in disability_fields %}  
 case 
-  when {{field}} in ('no_difficulty', 'some_difficulty', 'lot_difficulty', 'impossible') then 1
+  when {{field}} in ('some_difficulty', 'lot_difficulty', 'impossible') then 1 -- removed 'no_difficulty' from list of character strings
   else null end
 {% if not loop.last -%}
     +
@@ -135,11 +140,14 @@ cf.ntfp_consumed_calories_kcal_per_hh_per_year,
 cf.firewood_consumed_kgs_per_hh_per_day,
 cf.nr_months_food_shortage,
 cf.extreme_poverty,
-cf.extreme_poverty_TVA_incl,	
+cf.extreme_poverty_TVA_incl, -- GN added	
 cf.below_calline,
 cf.proportion_ntfp_in_diet,
 cf.food_insecurity_status,
 cf.uses_nrm_techniques,
+cf.uses_bio_techniques, -- GN added
+cf.uses_swc_techniques, -- GN added 
+cf.uses_gully_techniques, -- GN added
 cf.governance_score,
 cf.vcc_score,
 cf.disability_score,
