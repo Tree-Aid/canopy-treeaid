@@ -32,27 +32,23 @@ select
     rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
     nullif(coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
     as proportion_ntfp_in_diet,
-  coalesce (rd.hfias_status , 
-  case when rd.fies_score < 2 then 'FoodSecure'
-    when rd.fies_score < 4 then 'MildlyFI'
-    when rd.fies_score < 6 then 'ModeratlyFI'
-    when rd.fies_score < 10 then 'SeverelyFI'
-    else null end ) as food_insecurity_status,
-    case when (case when biological_methods is null or biological_methods in ('None') then 0 else length(biological_methods) end) + (case when gully_methods is null or gully_methods in ('None') then 0 else length(gully_methods) end) + (case when soil_water_cons is null or soil_water_cons in ('None') then 0 else length(soil_water_cons) end) >0 then true else false end
+  coalesce ((case when rd.hfias_status='' then null else rd.hfias_status end), 
+  (case when rd.fies_score::float >= 0 and rd.fies_score::float <=1 then 'FoodSecure'
+    when rd.fies_score::float > 1 and rd.fies_score::float <=3 then 'MildlyFI'
+    when rd.fies_score::float >3 and rd.fies_score::float <=5 then 'ModeratelyFI'
+    when rd.fies_score::float >5 and rd.fies_score::float <=8 then 'SeverelyFI'
+    else null end)) as food_insecurity_status,
+    case when 
+      length(rd.biological_methods) + length(rd.gully_methods) + length(rd.soil_water_cons) >0 then true else false end
       as uses_nrm_techniques,
-    case when (case when biological_methods is null or biological_methods in ('None') then 0 else length(biological_methods) end) >0 then true else false end
-      as uses_bio_techniques,
-    case when (case when soil_water_cons is null or soil_water_cons in ('None') then 0 else length(soil_water_cons) end) >0 then true else false end
-      as uses_swc_techniques,
-    case when (case when gully_methods is null or gully_methods in ('None') then 0 else length(gully_methods) end) >0 then true else false end
-      as uses_gully_techniques, 
  (     
 {% for field in forest_governance_fields %}
+  coalesce(
   case 
   when {{field}} in ('Y', 'equal_access', 'very_well', 'yes','completely') then 3
   when {{field}} in ('little_access', 'moderate', 'lot' ) then 2
   when {{field}} in ('little', 'N','no', 'no_access', 'do_not_know', 'not') then 1  {# assumes not know = 1 #}
-  else null end   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
+  else null end,0)   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
   {% if not loop.last -%}
     +
   {%- endif -%}
@@ -60,13 +56,13 @@ select
  )/ 21.0 as governance_score,
  ( 
 {% for field in vcc_fields %}
-  case 
-  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
-  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
-  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 2
-  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'equal' then 3 
-  when (rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person')) or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
-  else null end   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
+  coalesce(
+  case
+  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
+  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
+  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
+  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
+  else null end,0)   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
   {% if not loop.last -%}
     +
   {%- endif -%}
@@ -74,18 +70,20 @@ select
   ) / 21.0 as vcc_score,
 
 {% for field in disability_fields %}  
+coalesce(
 case 
-  when {{field}} in ('some_difficulty', 'lot_difficulty', 'impossible') then 1 -- removed 'no_difficulty' from list of character strings
-  else null end
+  when {{field}} in ('some_difficulty', 'lot_difficulty', 'impossible') then 1
+  else null end,0)
 {% if not loop.last -%}
     +
   {%- endif -%}
 {% endfor %}  as disability_score,
 
 {% for field in disability_fields %}  
+coalesce(
 case 
   when {{field}} in ('lot_difficulty', 'impossible') then 1
-  else null end
+  else null end,0)
 {% if not loop.last -%}
     +
   {%- endif -%}
