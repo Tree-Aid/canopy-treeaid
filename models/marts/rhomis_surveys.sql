@@ -156,6 +156,6 @@ cf.hdds_bad_season
 from calculated_fields cf
 where cf.form_id is not null -- filters forms that don't have survey definitions yet
 and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) 
-and cf.nr_months_food_shortage <='12' and cf.total_income_with_ntfp_per_year <='50000' 
-and cf.hdds_good_season <='12'
+and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
+and (cf.hdds_good_season <='12' or cf.hdds_good_season is null)
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
