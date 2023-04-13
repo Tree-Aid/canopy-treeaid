@@ -38,9 +38,17 @@ select
     when rd.fies_score::float >3 and rd.fies_score::float <=5 then 'ModeratelyFI'
     when rd.fies_score::float >5 and rd.fies_score::float <=8 then 'SeverelyFI'
     else null end)) as food_insecurity_status,
-    case when 
-      length(rd.biological_methods) + length(rd.gully_methods) + length(rd.soil_water_cons) >0 then true else false end
+--    case when 
+--      length(rd.biological_methods) + length(rd.gully_methods) + length(rd.soil_water_cons) >0 then true else false end
+--      as uses_nrm_techniques,
+    case when (case when biological_methods is null or biological_methods in ('None') then 0 else length(biological_methods) end) + (case when gully_methods is null or gully_methods in ('None') then 0 else length(gully_methods) end) + (case when soil_water_cons is null or soil_water_cons in ('None') then 0 else length(soil_water_cons) end) >0 then true else false end
       as uses_nrm_techniques,
+    case when (case when biological_methods is null or biological_methods in ('None') then 0 else length(biological_methods) end) >0 then true else false end
+      as uses_bio_techniques,
+    case when (case when soil_water_cons is null or soil_water_cons in ('None') then 0 else length(soil_water_cons) end) >0 then true else false end
+      as uses_swc_techniques,
+    case when (case when gully_methods is null or gully_methods in ('None') then 0 else length(gully_methods) end) >0 then true else false end
+      as uses_gully_techniques,
  (     
 {% for field in forest_governance_fields %}
   coalesce(
@@ -121,7 +129,7 @@ case
   when beneficiary_control in ('N','no','n','No') then 'No'
 else 'Yes' end as beneficiary_control,
 cf.hdds_good_season,
-cf.hdds_bad_season,
+--cf.hdds_bad_season,
 cf.total_income_per_year,
 cf.total_income_with_ntfp_per_year,
 cf.ntfp_income_per_year,
