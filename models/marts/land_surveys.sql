@@ -27,4 +27,4 @@ select
     where ls.form_id is not null -- filters forms that don't have survey definitions yet
     and ((ls.test is null ) or (ls.test not in ('y', 'Y','yes','Yes')) )
     union all
-    select form_name, country, project_code, form_id, legacy_id::int, region, province, commune, date_assessment, assessment_year::int,to_timestamp(assessment_year_date,'YYYY-MM-DD HH:MI:SS'), gps_shape_area_m2, gps_shape_area_ha::FLOAT, test, geoshape, biological_methods, soil_water_cons, gully_methods, type_2, beneficiary_control from {{ source('airbyte', 'land_area_legacy') }}
+    select form_name, country, project_code, form_id, legacy_id::int, region, province, commune, date_assessment, assessment_year::int,to_timestamp(assessment_year_date,'YYYY-MM-DD HH:MI:SS'), gps_shape_area_m2, gps_shape_area_ha::int, test, geoshape, biological_methods, soil_water_cons, gully_methods, type_2, beneficiary_control from {{ source('airbyte', 'land_area_legacy') }}
