@@ -20,14 +20,14 @@ calculated_fields as
 (
 select
 *, 
-   (rd.total_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) as total_income_per_year,
-  ((rd.total_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income*rd.currency_conversion_lcu_to_ppp)) as total_income_with_ntfp_per_year,
-  (rd.ntfp_income*rd.currency_conversion_lcu_to_ppp) as ntfp_income_per_year,
-  (rd.crop_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) as crop_income_per_year,
-  (rd.livestock_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) as livestock_income_per_year,
-  (rd.off_farm_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
-  case when (rd.total_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income*rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty,
-  case when (rd.total_income_lcu_per_year*rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income*rd.currency_conversion_lcu_to_ppp) + (rd.value_crop_consumed_lcu_per_hh_per_year*rd.currency_conversion_lcu_to_ppp) + (rd.value_livestock_products_consumed_lcu_per_hh_per_year*rd.currency_conversion_lcu_to_ppp) + (rd.value_farm_products_consumed_lcu_per_hh_per_year*rd.currency_conversion_lcu_to_ppp) + (rd.value_ntfp_consumed*rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty_TVA_incl, 
+   (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as total_income_per_year,
+  ((rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp)) as total_income_with_ntfp_per_year,
+  (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) as ntfp_income_per_year,
+  (rd.crop_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as crop_income_per_year,
+  (rd.livestock_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as livestock_income_per_year,
+  (rd.off_farm_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
+  case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty,
+  case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) + (rd.value_crop_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_livestock_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_farm_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_ntfp_consumed/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty_TVA_incl, 
   case when rd.foodavailability / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline, 
     rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
     nullif(coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
