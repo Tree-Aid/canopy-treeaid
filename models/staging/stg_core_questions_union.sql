@@ -14,7 +14,7 @@ select
     s.type_2
 from {{ref('stg_survey_master')}} s 
 inner join pg_catalog.pg_tables pt on trim(replace(lower(s.form_id_string), '-', '_')) = trim(replace(lower(pt.tablename), '-', '_'))  
-    and pt.schemaname in ('onadata', 'temp', 'csv') and pt.tableowner = 'tree_aid'
+    and pt.schemaname in ('onadata','airbyte') and pt.tableowner = 'tree_aid'
 left join {{ref('stg_survey_definitions_master')}} sd  on s.form_id::int = sd.form_id::int and sd.core_question_id is not null
 inner join {{ref('stg_core_questions_master')}} cq on sd.core_question_id = cq.id and cq.repeat_group_name is null 
 
@@ -36,6 +36,6 @@ left join {{ref('stg_survey_definitions_master')}} sd  on s.form_id::int = sd.fo
 inner join {{ref('stg_core_questions_master')}} cq on sd.core_question_id = cq.id and repeat_group_name is not null 
 inner join pg_catalog.pg_tables pt on 
     position( replace(lower(s.form_id_string), '-', '_') in replace(lower(pt.tablename), '-', '_') ) >0  --messy matching. Checking if the tablename contains the 'form_id_string' but also the 'repeat_group_name'
-    and pt.schemaname in ('onadata', 'temp') and pt.tableowner = 'tree_aid'
+    and pt.schemaname in ('onadata','airbyte') and pt.tableowner = 'tree_aid'
     and right(tablename, length(tablename) - position ('_repeat' in tablename) - 7 ) = cq.repeat_group_name
 

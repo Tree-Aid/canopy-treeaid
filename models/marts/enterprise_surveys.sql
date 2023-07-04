@@ -29,4 +29,4 @@ select
  'Yes' as beneficiary_control
  from enterprise_surveys es
  where es.form_id is not null and 
- ((es.test is null) Or (es.test not in ('y', 'Y','yes','Yes')))
+ ((es.test is null) or (es.test not in ('y', 'Y','yes','Yes')))
