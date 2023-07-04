@@ -23,6 +23,13 @@ sources:
             tests:
                 - unique
                 - not_null 
+        - name: projects
+        - name: trees_planted_legacy
+        - name: country_hh_size
+        - name: vte_groups_legacy
+        - name: land_area_legacy   
+        - name: beneficiaries_list    
+        - name: sbm_beneficiary_list_1       
 
     - name: onadata
       database: tree_aid
