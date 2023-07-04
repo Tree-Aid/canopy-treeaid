@@ -1,37 +1,40 @@
 {% macro union_core_questions(survey_type, repeat) %}   
 
--- create list of forms.
-{% set query %}
+-- create list of forms.   -- if 'rhomis' create list that are not in extended.rhomis . And either way, up to 5
+{%- set query -%}
 select form_id, schemaname, tablename from  {{ref('stg_core_questions_union')}}
 where type = '{{survey_type}}'   
     {% if repeat|length > 0  -%}
     and repeat_group_name = '{{repeat}}'
     {% else -%}
     and repeat_group_name is null 
-    {% endif %}
+    {%- endif %}
 group by 1,2,3
-{% endset %}
+    {% if '{{survey_type}}' == 'Rhomis'  -%}  
+    limit 5
+    {% endif -%}
+{%- endset -%}
 
 -- create list of fields
-{% set corefields_query  %}
+{%- set corefields_query  -%}
     select name from {{ref('stg_core_questions_master')}} where is_{{survey_type | lower | replace(' ', '_')}}  
     {% if repeat|length > 0   -%}
         and repeat_group_name = '{{repeat}}'  
         {%- else -%}
         and repeat_group_name is null 
         {% endif -%}
-{% endset %}
+{%- endset -%}
 
 -- start actual macro 
-{% set results = run_query(query) -%}
+{%- set results = run_query(query) -%}
 
-{% if execute %}
+{%- if execute -%}
     {% set forms = (results.select(['form_id']).columns[0].values()) | unique | list %}
     {% set corefields = run_query(corefields_query).columns[0].values() | list %} 
-{% else %}
+{%- else -%}
     {% set forms = [] %}
     {% set corefields = [] %}
-{% endif %}
+{%- endif -%}
  
 -- for each form
 {% for form in forms %}
@@ -53,7 +56,6 @@ group by 1,2,3
     {%- set fieldsquery -%}
         select * 
         from  {{schemaname}}."{{tablename}}" 
-        --limit 1 
     {%- endset -%}
 
     {%- set fields = dbt_utils.get_query_results_as_dict(fieldsquery)  -%}
@@ -89,14 +91,12 @@ group by 1,2,3
         where form_id = {{form}}
     {%- endset -%}
 
-
     {%- set question_names = run_query(formfields_query).columns[0].values() | list -%}
     {%- set core_questions_names = run_query(formfields_query).columns[1].values() | list -%} 
 
     {% if uniquelist| length >0%}
         {%for val in range(uniquelist| length) %}
             --loop through all the fields in dict
-
             select 
             {{form}}::varchar as form_id, 
             -- if we are in a repeat group, check the actual names of fields in the repeat group to see if we have the parent submission_id or only the parent_index
