@@ -1,7 +1,17 @@
-{% macro union_core_questions(survey_type, repeat) %}   
+{#TODO: -- if 'rhomis' create list that are not in extended.rhomis . And either way, up to 5  #}
 
--- create list of forms.   -- if 'rhomis' create list that are not in extended.rhomis . And either way, up to 5
-{%- set query -%}
+{# method: You can use a dot (.) to access attributes of a variable in addition to the standard Python __getitem__ “subscript” syntax ([]).
+Other reference documentation: https://jinja.palletsprojects.com/en/2.10.x/templates/#filters
+https://agate.readthedocs.io/en/1.7.1/api/columns_and_rows.html
+--source: https://stackoverflow.com/questions/63478564/dbt-macro-to-iterate-over-item-in-list-within-a-sql-call
+run_query returns agate.Table (https://agate.readthedocs.io/en/1.6.1/api/table.html)
+
+#}   
+
+-- Returns a table of forms with their corresponding schema and table names.   
+{% macro forms_location_table(survey_type, repeat=[]) %}   
+
+{% set formtable  %}
 select form_id, schemaname, tablename from  {{ref('stg_core_questions_union')}}
 where type = '{{survey_type}}'   
     {% if repeat|length > 0  -%}
@@ -10,12 +20,18 @@ where type = '{{survey_type}}'
     and repeat_group_name is null 
     {%- endif %}
 group by 1,2,3
-    {% if '{{survey_type}}' == 'Rhomis'  -%}  
-    limit 5
-    {% endif -%}
 {%- endset -%}
 
--- create list of fields
+{%- set results = run_query(formtable)  -%}
+
+{{return(results)}}
+
+{% endmacro%}
+
+
+--Returns a list of all the core-fields expected by a survey type, as specified in the 'core_questions_master'. 
+{% macro find_corefields(survey_type, repeat = []) %}
+
 {%- set corefields_query  -%}
     select name from {{ref('stg_core_questions_master')}} where is_{{survey_type | lower | replace(' ', '_')}}  
     {% if repeat|length > 0   -%}
@@ -25,159 +41,125 @@ group by 1,2,3
         {% endif -%}
 {%- endset -%}
 
--- start actual macro 
-{%- set results = run_query(query) -%}
+{% if execute %}
+    {% set core_fields = run_query(corefields_query).columns['name'].values()  %} 
+{% else %}
+    {% set core_fields = [] %}
+{% endif %}
 
-{%- if execute -%}
-    {% set forms = (results.select(['form_id']).columns[0].values()) | unique | list %}
-    {% set corefields = run_query(corefields_query).columns[0].values() | list %} 
-{%- else -%}
-    {% set forms = [] %}
-    {% set corefields = [] %}
-{%- endif -%}
- 
--- for each form
-{% for form in forms %}
-    --finds schemaname and tablename for the db table associated to the form
-    {%- set schemalist = []  -%}
-    {%- set tablelist = []  -%}
-    {%- set uniquelist = []  -%}
+{{return(core_fields)}}
 
-    {%- for row in results -%}  
-        {%- if row['form_id'] == form -%}
-            {%- do schemalist.append(row['schemaname'])  -%}
-            {%- do tablelist.append(row['tablename'])  -%}
-        {%- endif -%}
-    {%- endfor %}
+{% endmacro %}
 
-    {%- set schemaname = schemalist[0] %}
-    {%- set tablename = tablelist[0] %}
 
+--find fields in the form
+{% macro fields(schemaname, tablename) %}
     {%- set fieldsquery -%}
-        select * 
-        from  {{schemaname}}."{{tablename}}" 
+    select column_name from 
+        information_schema.columns
+        where table_schema = '{{schemaname}}'
+    and table_name = '{{tablename}}'
     {%- endset -%}
 
     {%- set fields = dbt_utils.get_query_results_as_dict(fieldsquery)  -%}
-    {% set fields_query = run_query(fieldsquery).columns[0].values()|list -%} 
-    
-    {% if repeat|length > 0  -%}
-        {%- if 'parent_index' in fields %}
-            {%for val in fields['parent_index'] %}
-                {%if val not in uniquelist%}
-                    {%- do uniquelist.append(val)  -%}
-                {%endif%}
-            {%endfor%}
-        {% else -%}
-            {%for val in fields['parent_id'] %}
-                {%if val not in uniquelist%}
-                    {%- do uniquelist.append(val) -%}
-                {%endif%}
-            {%endfor%}
-        {%endif%}
-    {%else%}
-        {%for val in fields['id'] %}
-                {%if val not in uniquelist%}
-                    {%- do uniquelist.append(val) -%}
-                {%endif%}
-        {%endfor%}
-    {%endif%}  
 
-    -- loop through all the core fields, select the field with the appropriate name if present
+    {{return(fields['column_name'])}}
 
-     {%- set formfields_query -%}
-        select question_name, core_question_name
-        from  {{ref('stg_core_questions_union')}} 
-        where form_id = {{form}}
-    {%- endset -%}
-
-    {%- set question_names = run_query(formfields_query).columns[0].values() | list -%}
-    {%- set core_questions_names = run_query(formfields_query).columns[1].values() | list -%} 
-
-    {% if uniquelist| length >0%}
-        {%for val in range(uniquelist| length) %}
-            --loop through all the fields in dict
-            select 
-            {{form}}::varchar as form_id, 
-            -- if we are in a repeat group, check the actual names of fields in the repeat group to see if we have the parent submission_id or only the parent_index
-                {% if repeat|length > 0  -%}
-                    id as id,  
-                    {%- if 'parent_index' in fields %}
-                        null as submission_id,
-                        parent_index::bigint as parent_index,
-                    {% else -%}
-                        {{uniquelist[loop.index0]}} as submission_id,                    
-                        null::bigint as parent_index,
-                    {%- endif %}
-                {% else %}
-                    id as submission_id,
-                    -- if _index in the actual table, add index if not add null
-                    {% if '_index' in fields %}
-                        _index::int as submission_index,
-                    {% else -%}
-                        NULL::int as submission_index,
-                    {%- endif %}
-                {% endif %}
-                -- loop through all the core fields, select the field with the appropriate name if present
-                {% for core_field in corefields %}
-                    {%- if core_field in core_questions_names %}
-                    {%- set indexvalue = core_questions_names.index(core_field) -%} 
-                        {# finds the item of the list that correspond to a rule #}
-                    {{question_names[indexvalue]}}::varchar
-                    {%- else %}
-                    NULL::varchar 
-                    {% endif %} 
-                    as {{core_field}} 
-                    {%- if not loop.last -%}
-                    ,
-                    {%- endif -%}
-                    
-                {% endfor %}
-            
-                --find the appropriate table to join based on information in 'stg_core_questions_land_survey'
-                from 
-                {% if execute -%}
-                    {{schemaname}}."{{tablename}}"
-                    {% if repeat|length > 0  -%}
-                        {%- if 'parent_index' not in fields %}
-                                where parent_id={{uniquelist[loop.index0]}}
-                            {%else%}
-                                where parent_index={{uniquelist[loop.index0]}}
-                        {%- endif %}
-                    {%else%}
-                        where id= {{uniquelist[loop.index0]}}
-                    {%endif%}
-                    
-                {%- endif -%}
-                {% if not loop.last %}
-                    union all
-                {%- endif -%}
-        {% endfor %} 
-            
-        {% if not loop.last %}
-            union all
-        {%- endif -%}
-    {%- endif -%}
-{%- endfor -%}
 {% endmacro %}
 
--- Macro #2. Takes the unioned data but joins it back to the original survey definition table to get all relevant fields  
-{% macro survey_type_table(survey_type, repeat=NULL) %} 
+-- loop through all the core fields, select the field with the appropriate name if present
+{% macro form_core_fields_names(form_id) %}
 
-with core_questions as 
-(
-{{union_core_questions(survey_type, repeat)}}
-)
+    {%- set formfields_query -%}
+        select question_name, core_question_name
+        from  {{ref('stg_core_questions_union')}} 
+        where form_id = '{{form_id}}'
+    {%- endset -%}
+
+
+    {% if execute %}
+        {%- set results =  dbt_utils.get_query_results_as_dict(formfields_query) -%}   
+    {% else %}
+        {% set results = [] %}
+    {% endif %}
+
+    {{ return(results) }}
+    
+{% endmacro %}
+
+-- Returns a query unioning all the relevant forms for a surey type
+-- For each forms, returns the list of core questions and, if any question is present, selects that question
+{# TODO: work with repeats#}
+{% macro union_core_questions(survey_type, repeat = []) %}
+
+--find all the expected core fields for that form type    
+{% set corefields = find_corefields(survey_type) %}
+
+--For all forms for a selected survey type
+{% for row in forms_location_table(survey_type) %}
+{{ log("Starting analysis for form: " ~ row['form_id'], True) }}
+
+--find all the fields for the table associated with the form
+{%- set fields = fields(row['schemaname'], row['tablename'])  -%}
+
+--find the core fields and how they are referenced in the specific form 
+{%- set form_core_fields = form_core_fields_names(row['form_id']) -%}
+{%- set form_question_names = form_core_fields['question_name'] | list -%}
+{%- set core_question_names = form_core_fields['core_question_name'] | list -%}
+
+--- final query 
 select 
-s.form_name,
-s.type,
-s.timing,
-s.country,
-s.project_code,
-s.type_2,
-cq.*
-from {{ref('stg_survey_master')}} s 
-left join core_questions cq on s.form_id::int = cq.form_id::int   
-where s.type = '{{survey_type}}'
+{{row['form_id']}}::varchar as form_id, 
+    {% if '_id' in fields %} 
+    _id::bigint as submission_id,
+    {% else -%}
+    id::bigint as submission_id,
+    {%- endif %}
+    -- if _index in the actual table, add index if not add null
+    {% if '_index' in fields %}
+    _index::int as submission_index,
+    {% else -%}
+    NULL::int as submission_index,
+    {%- endif %}
+-- loop through all the core fields, select the field with the appropriate name if present
+{% for core_field in corefields %}
+    {%- if core_field in core_question_names %}
+        {%- set indexvalue = core_question_names.index(core_field) %} 
+        {{form_question_names[indexvalue]}}::varchar    -- finds the item of the list that correspond to a rule 
+    {%- else %}
+        NULL::varchar 
+    {%- endif %} 
+        as {{core_field}} 
+    {%- if not loop.last -%}
+    ,
+    {%- endif -%}    
+{% endfor %}
+-- appropriate from statement
+    from {{row['schemaname']}}."{{row['tablename']}}"
+{% if not loop.last %}
+    union all
+{%- endif -%}
+
+{% endfor %}
+{% endmacro %}
+
+
+{# Appendix -- other useful macro taken online #}
+-- get list
+    {%- set results = run_query( forms_location_table(survey_type) ) -%}
+
+
+    {{ log("results: " ~ results, True) }}
+
+    {# execute is a Jinja variable that returns True when dbt is in "execute" mode i.e. True when running dbt run but False during dbt compile. #}
+    {% if execute %}
+    {# agate.table.rows is agate.MappedSequence in which data that can be accessed either by numeric index or by key. #}
+    {% set results_list = results.rows %}
+    {% else %}
+    {% set results_list = [] %}
+    {% endif %}
+
+    {{ log("results_list: " ~ results_list, True) }}
+    {{ return(results_list) }}
 
 {% endmacro %}
