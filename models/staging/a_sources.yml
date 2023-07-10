@@ -29,7 +29,8 @@ sources:
         - name: vte_groups_legacy
         - name: land_area_legacy   
         - name: beneficiaries_list    
-        - name: sbm_beneficiary_list_1       
+        - name: sbm_beneficiary_list_1  
+        - name: sbm_mb6_r_ho_mis_endline__apr__jun2023     
 
     - name: onadata
       database: tree_aid
@@ -37,20 +38,6 @@ sources:
       tables: 
         - name: registry
           description: List of choice labels in Json format
-        - name: ta_rho_mis_gb8_endline_jan-mar2021
-          columns:
-          - name: id
-            description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
-        - name: tree_aid_rhomis_na6_endline
-          columns:
-          - name: id
-            description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
         - name: gb8_vte_edp_survey_apr-jun2022
           columns:
           - name: id
@@ -65,13 +52,237 @@ sources:
             tests:
                 - unique
                 - not_null
-        - name: beneficiary_list
-    - name: temp
-      database: tree_aid
-      schema: temp
-      tables:
-        - name: mc1_perimeter_land_use_survey_oct_dec21
-        - name: bb6_land_restoration_survey_apr_jun22
+        - name: a_village_tree_enterprise_co-op_mb2_mali
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null    
+        - name: a_vte_coop_assessment_gb1
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null    
+        - name: tree_aid_rhomis_bc4_apr-jun22_final
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null                   
+        - name: burkina_ta_bb1_v1_3_1_tablet
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null  
+        - name: burkina_ta_baseline_v1_3_webform
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null 
+        - name: ta_rho_mis_bb6_oct_dec21
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null 
+        - name: ta_rho_mis_bc1_endline_oct2020_final
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null     
+        - name: household_income_mtr_bc1
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null 
+        - name: voice_choice_control_mtr_bc1
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null     
+        - name: ta_rhomis_eco_q1_2022
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
+        - name: ethiopia_ea3_eb5_1_3_4
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null   
+        - name: ethiopia_meki_2_extra
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null  
+        - name: ethiopia_meki_2
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null     
+        - name: eb8_2019
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null   
+        - name: ta_rhomis_eb3eb8_2020
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null   
+        - name: ta_rhomis_gb8_endline_jan-mar2021_consolidated
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null      
+        - name: gb1_ta_baseline_v1_3_3
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null 
+        - name: tree_aid_rhomis_gb8_final
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null  
+        - name: ta_rhomis_gb1_2021
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null  
+        - name: ta_rho_mis_gc6_2021
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null   
+        - name: ta_rhomis_gc3_oct_2020
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null     
+        - name: mb2_baseline
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null                                               
+        - name: mb2_rhomis_endline_april2020
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null 
+        - name: tree_aid_rho_mis_mb6_2020
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null    
+        - name: mb6_income_agri_nrm_vcc_jan-mar22
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null  
+        - name: tree_aid_rhomis_na6_endline
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null    
+        - name: tree_aid_rhomis_2_0_niger_na4
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null     
+        - name: tree_aid_rhomis_na6_finale
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null   
+        - name: rhomis_treeaid_na4_endline_june2021_tele_final
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null    
+        - name: mc2_rho_mis_jul-sep22_final
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null    
+        - name: tree_aid_rho_mis_bc3_oct-dec2022_final
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null   
+        - name: mc3_rho_mis_oct-dec22_final
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null  
+        - name: ec0_mini_rho_mis_jan-mar2023_final
+          columns:
+          - name: id
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null                                                                       
 
     - name: csv
       database: tree_aid
