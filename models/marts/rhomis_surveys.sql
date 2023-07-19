@@ -98,7 +98,11 @@ case
 {% endfor %}  as severely_disabled,   
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.biological_methods,'[',''),']',''),'"',''),',',''),' '),1) as biological_methods_count,
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count,
-array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count
+array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count,
+CASE 
+    when rd.respondentsex in ('F','female','f','Female') then 'Female'
+    when rd.respondentsex in ('M','male','m','Male') then 'Male'
+end as gender --BAO gender to limit measures in Akuko
 from rhomis_data rd
 )
 ---Selecting the relevant fields
@@ -122,7 +126,8 @@ cf.gully_methods,
 cf.gully_methods_count,
 cf.soil_water_cons,
 cf.soil_water_cons_count,
-cf.respondentsex,
+cf.gender,
+--cf.respondentsex, BAO replace this with gender to limit measures in Akuko
 cf.respondent_ntfp,
 case 
   when beneficiary_control in ('Y','yes','y','Yes') then 'Yes'
@@ -130,12 +135,14 @@ case
 else 'Yes' end as beneficiary_control,
 cf.hdds_good_season,
 --cf.hdds_bad_season,
-cf.total_income_per_year,
-cf.total_income_with_ntfp_per_year,
-cf.ntfp_income_per_year,
-cf.crop_income_per_year,
-cf.livestock_income_per_year,
-cf.off_farm_income_per_year,
+-- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.total_income_per_year as total_income_per_year,
+-- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.total_income_with_ntfp_per_year as total_income_with_ntfp_per_year,
+-- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.ntfp_income_per_year as ntfp_income_per_year,
+-- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.crop_income_per_year as crop_income_per_year,
+-- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.livestock_income_per_year as livestock_income_per_year,
+-- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.off_farm_income_per_year as off_farm_income_per_year,
+-- TDB [Test] - BAO Request from TreeAid to maintain records with an income > 50000 but nullify these income fields so they don't skew income analysis
+-- Need to review lcu/total income calculation
 cf.value_crop_consumed_lcu_per_hh_per_year,
 cf.value_livestock_products_consumed_lcu_per_hh_per_year,
 cf.value_farm_products_consumed_lcu_per_hh_per_year,
@@ -160,10 +167,15 @@ cf.disability_score,
 cf.severely_disabled,
 extract('Year' from cf.date_assessment::date) as assessment_year,
 date_trunc('year',cf.date_assessment::date) as assessment_year_date,
-cf.hdds_bad_season
+cf.hdds_bad_season,
+case -- add a test field to get test indicators BAO
+    when ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) then false
+    else true
+end as test_check
 from calculated_fields cf
 where cf.form_id is not null -- filters forms that don't have survey definitions yet
-and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) 
+--and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) -- BAO add a test field to get test indicators
 and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
+-- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
 and (cf.hdds_good_season <='12' or cf.hdds_good_season is null)
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
