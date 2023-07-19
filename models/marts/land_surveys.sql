@@ -22,9 +22,18 @@ select
         initcap(replace(regexp_replace(ls.soil_water_cons,'[^a-zA-Z,,_]','','g'),'_',' ')) as soil_water_cons,
         initcap(replace(regexp_replace(ls.gully_methods,'[^a-zA-Z,,_]','','g'),'_',' ')) as gully_methods,
         ls.type_2,
-        'Yes' as beneficiary_control
+        'Yes' as beneficiary_control,
+        case -- add a test field to get test indicators BAO
+            when ((ls.test is null ) or (ls.test not in ('y', 'Y','yes','Yes')) ) then false
+            else true
+        end as test_check
     from land_survey ls
     where ls.form_id is not null -- filters forms that don't have survey definitions yet
-    and ((ls.test is null ) or (ls.test not in ('y', 'Y','yes','Yes')) )
+    --and ((ls.test is null ) or (ls.test not in ('y', 'Y','yes','Yes')) ) -- BAO add a test field to get test indicators
     union all
-    select form_name, country, project_code, form_id, legacy_id::int, region, province, commune, date_assessment, assessment_year::int,to_timestamp(assessment_year_date,'YYYY-MM-DD HH:MI:SS'), gps_shape_area_m2, gps_shape_area_ha::int, test, geoshape, biological_methods, soil_water_cons, gully_methods, type_2, beneficiary_control from {{ source('airbyte', 'land_area_legacy') }}
+    select form_name, country, project_code, form_id, legacy_id::int, region, province, commune, date_assessment, assessment_year::int,to_timestamp(assessment_year_date,'YYYY-MM-DD HH:MI:SS'), gps_shape_area_m2, gps_shape_area_ha::int, test, geoshape, biological_methods, soil_water_cons, gully_methods, type_2, beneficiary_control,
+    case -- add a test field to get test indicators BAO
+        when ((test is null ) or (test not in ('y', 'Y','yes','Yes')) ) then false
+        else true
+    end as test_check
+    from {{ source('airbyte', 'land_area_legacy') }}

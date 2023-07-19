@@ -23,10 +23,14 @@ select
  es.sales_turn_over_national_income,
  es.sales_turn_over_international_income,
  coalesce(es.sales_turn_over_local_income::INTEGER,0) + coalesce(es.sales_turn_over_national_income::INTEGER,0) + 
-    coalesce(es.sales_turn_over_international_income::INTEGER,0) as total_income,
+ coalesce(es.sales_turn_over_international_income::INTEGER,0) as total_income,
  es.test,
  es.group_costs_amount,
- 'Yes' as beneficiary_control
+ 'Yes' as beneficiary_control,
+ case -- add a test field to get test indicators BAO
+    when ((es.test is null ) or (es.test not in ('y', 'Y','yes','Yes')) ) then false
+    else true
+end as test_check
  from enterprise_surveys es
- where es.form_id is not null and 
- ((es.test is null) or (es.test not in ('y', 'Y','yes','Yes')))
+ where es.form_id is not null  
+ --and ((es.test is null) or (es.test not in ('y', 'Y','yes','Yes'))) -- BAO add a test field to get test indicators
