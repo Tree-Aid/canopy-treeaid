@@ -144,22 +144,3 @@ select
 {% endmacro %}
 
 
-{# Appendix -- other useful macro taken online #}
--- get list
-    {%- set results = run_query( forms_location_table(survey_type) ) -%}
-
-
-    {{ log("results: " ~ results, True) }}
-
-    {# execute is a Jinja variable that returns True when dbt is in "execute" mode i.e. True when running dbt run but False during dbt compile. #}
-    {% if execute %}
-    {# agate.table.rows is agate.MappedSequence in which data that can be accessed either by numeric index or by key. #}
-    {% set results_list = results.rows %}
-    {% else %}
-    {% set results_list = [] %}
-    {% endif %}
-
-    {{ log("results_list: " ~ results_list, True) }}
-    {{ return(results_list) }}
-
-{% endmacro %}
