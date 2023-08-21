@@ -185,6 +185,12 @@ extract('Year' from cf.date_assessment::date) as assessment_year,
 date_trunc('year',cf.date_assessment::date) as assessment_year_date,
 assessment_quarter_date,
 qa.max_quarter_date,
+ Case
+         when extract(month from max_quarter_date) in (1,2,3) then Concat('Jan - Mar ',extract('Year' from max_quarter_date))
+         when extract(month from max_quarter_date) in (4,5,6) then Concat('Apr - Jun ',extract('Year' from max_quarter_date))
+         when extract(month from max_quarter_date) in (7,8,9) then Concat('Jul - Sep ',extract('Year' from max_quarter_date))
+         when extract(month from max_quarter_date) in (10,11,12) then Concat('Oct - Dec ',extract('Year' from max_quarter_date))
+end as max_quarter_name,
 cf.hdds_bad_season,
 case -- add a test field to get test indicators BAO
     when ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) then false
@@ -196,5 +202,5 @@ where cf.form_id is not null -- filters forms that don't have survey definitions
 --and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) -- BAO add a test field to get test indicators
 and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
 -- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
-and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) --and cf.form_id='697818' for quarter date QA
+and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'

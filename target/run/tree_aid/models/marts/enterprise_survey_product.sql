@@ -2,7 +2,7 @@
   
     
 
-  create  table "tree_aid"."dbt_jane"."enterprise_survey_product__dbt_tmp"
+  create  table "tree_aid"."dbt_bokidi"."enterprise_survey_product__dbt_tmp"
   
   
     as
@@ -4874,7 +4874,7 @@ s.country,
 s.project_code,
 s.type_2,
 cq.*
-from "tree_aid"."dbt_jane"."stg_survey_master" s 
+from "tree_aid"."dbt_bokidi"."stg_survey_master" s 
 left join core_questions cq on s.form_id::int = cq.form_id::int   
 where s.type = 'Enterprise survey'
 
@@ -4907,7 +4907,7 @@ se.sales_international_income,
 es.group_costs_amount,
 es.group_vte
 from sales_elements se
-inner join "tree_aid"."dbt_jane"."enterprise_surveys" es on se.submission_id=es.submission_id
+inner join "tree_aid"."dbt_bokidi"."enterprise_surveys" es on se.submission_id=es.submission_id
 where se.submission_id is not null and 
 se.product_element is not null and (es.test is null or es.test not in ('y', 'Y','yes','Yes'))
 ),
@@ -4937,7 +4937,7 @@ se.sales_international_income,
 es.group_costs_amount,
 es.group_vte
 from sales_elements se
-left join "tree_aid"."dbt_jane"."enterprise_surveys" es on  
+left join "tree_aid"."dbt_bokidi"."enterprise_surveys" es on  
     se.form_id::int = es.form_id::int and  se.parent_index =es.submission_index 
 where se.submission_id is null and 
 se.product_element is not null and (es.test is null or es.test not in ('y', 'Y','yes','Yes'))

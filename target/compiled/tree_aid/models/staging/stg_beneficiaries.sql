@@ -50,5 +50,5 @@ select
     beneficiary_yob::text,
     beneficiary_age::text,
     unique_id
-from "tree_aid"."dbt_jane"."stg_beneficiaries_form_data"
+from "tree_aid"."dbt_bokidi"."stg_beneficiaries_form_data"
 )
