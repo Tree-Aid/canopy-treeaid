@@ -202,5 +202,5 @@ where cf.form_id is not null -- filters forms that don't have survey definitions
 --and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) -- BAO add a test field to get test indicators
 and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
 -- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
-and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) and cf.form_id='697818' --for quarter date QA
+and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) -- and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
