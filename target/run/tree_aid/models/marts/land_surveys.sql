@@ -2,7 +2,7 @@
   
     
 
-  create  table "tree_aid"."dbt_bokidi"."land_surveys__dbt_tmp"
+  create  table "tree_aid"."dbt_jane"."land_surveys__dbt_tmp"
   
   
     as
@@ -826,48 +826,6 @@ select
 
 --find all the fields for the table associated with the form--find the core fields and how they are referenced in the specific form--- final query 
 select 
-696156::varchar as form_id, 
-     
-    _id::bigint as submission_id,
-    
-    -- if _index in the actual table, add index if not add null
-    NULL::int as submission_index,
--- loop through all the core fields, select the field with the appropriate name if present
- 
-        "group_survey/group_b__information_01/region"::varchar    -- finds the item of the list that correspond to a rule 
-        as region, 
-        "group_survey/group_b__formation_02/province"::varchar    -- finds the item of the list that correspond to a rule 
-        as province, 
-        "group_survey/group_b__formation_02/district"::varchar    -- finds the item of the list that correspond to a rule 
-        as commune, 
-        "group_survey/date_assessment"::varchar    -- finds the item of the list that correspond to a rule 
-        as date_assessment, 
-        "group_survey/group_g__olygon/calculate_area"::varchar    -- finds the item of the list that correspond to a rule 
-        as gps_shape_area, 
-        "group_survey/group_n__al/biological_methods"::varchar    -- finds the item of the list that correspond to a rule 
-        as biological_methods, 
-        test::varchar    -- finds the item of the list that correspond to a rule 
-        as test, 
-        "group_survey/group_gps/geoshape"::varchar    -- finds the item of the list that correspond to a rule 
-        as geoshape, 
-        "group_survey/group_n__il_water_cons_methods"::varchar    -- finds the item of the list that correspond to a rule 
-        as soil_water_cons, 
-        "group_survey/group_n__biological_proportion"::varchar    -- finds the item of the list that correspond to a rule 
-        as biological_proportion, 
-        "group_survey/group_n__water_cons_proportion"::varchar    -- finds the item of the list that correspond to a rule 
-        as soil_water_cons_proportion, 
-        "group_survey/group_n__p_gully/gully_methods"::varchar    -- finds the item of the list that correspond to a rule 
-        as gully_methods, 
-        "group_survey/group_n__ully/gully_proportion"::varchar    -- finds the item of the list that correspond to a rule 
-        as gully_proportion
--- appropriate from statement
-    from airbyte."sbm_bc3_land_restoration_survey_2022"
-
-    union all
-
-
---find all the fields for the table associated with the form--find the core fields and how they are referenced in the specific form--- final query 
-select 
 696611::varchar as form_id, 
     id::bigint as submission_id,
     -- if _index in the actual table, add index if not add null
@@ -955,7 +913,7 @@ s.country,
 s.project_code,
 s.type_2,
 cq.*
-from "tree_aid"."dbt_bokidi"."stg_survey_master" s 
+from "tree_aid"."dbt_jane"."stg_survey_master" s 
 left join core_questions cq on s.form_id::int = cq.form_id::int   
 where s.type = 'Land survey'
 
