@@ -2,16 +2,15 @@
 with rhomis_data as 
 (select 
 *
-from "tree_aid"."dbt_bokidi"."stg_rhomis_data" rd 
-left join "tree_aid"."dbt_bokidi"."stg_rhomis_indicators" ri on rd.form_id::int = ri.id_rhomis_dataset::int and rd.row_id = ri.id_hh
+from "tree_aid"."dbt_jane"."stg_rhomis_data" rd 
+left join "tree_aid"."dbt_jane"."stg_rhomis_indicators" ri on rd.form_id::int = ri.id_rhomis_dataset::int and rd.row_id = ri.id_hh
 ),
 
 ----Calculating the fields relevant for indicator building
 calculated_fields as 
 (
 select
-*,
-count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter_date::date,rd.form_id) as quarter_count,
+*, 
    (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as total_income_per_year,
   ((rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp)) as total_income_with_ntfp_per_year,
   (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) as ntfp_income_per_year,
@@ -336,15 +335,6 @@ CASE
     when rd.respondentsex in ('M','male','m','Male') then 'Male'
 end as gender --BAO gender to limit measures in Akuko
 from rhomis_data rd
- ),
- quarter_aggregate as(
-    select distinct
-    cf.form_id,
-case 
-    when quarter_count>=max(quarter_count) OVER (PARTITION BY cf.form_id) then cf.assessment_quarter_date
-else null
-end as max_quarter_date
-from calculated_fields cf
 )
 ---Selecting the relevant fields
 select 
@@ -414,18 +404,15 @@ cf.disability_score,
 cf.severely_disabled,
 extract('Year' from cf.date_assessment::date) as assessment_year,
 date_trunc('year',cf.date_assessment::date) as assessment_year_date,
-assessment_quarter_date,
-qa.max_quarter_date,
 cf.hdds_bad_season,
 case -- add a test field to get test indicators BAO
     when ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) then false
     else true
 end as test_check
 from calculated_fields cf
-left join quarter_aggregate qa on qa.form_id=cf.form_id and qa.max_quarter_date is not null
 where cf.form_id is not null -- filters forms that don't have survey definitions yet
 --and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) -- BAO add a test field to get test indicators
 and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
 -- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
-and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) --and cf.form_id='697818' for quarter date QA
+and (cf.hdds_good_season <='12' or cf.hdds_good_season is null)
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
