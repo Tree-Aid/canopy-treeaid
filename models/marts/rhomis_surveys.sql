@@ -29,10 +29,15 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   (rd.off_farm_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
   case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty,
   case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) + (rd.value_crop_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_livestock_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_farm_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_ntfp_consumed/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty_TVA_incl, 
-  case when rd.foodavailability / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline, 
-    rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
+  case when rd.foodavailability / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline,
+  case when (rd.foodavailability + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
+    rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline_potential,
+  rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
     nullif(coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
     as proportion_ntfp_in_diet,
+  (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income*(3650/121.58)) / 
+    nullif(coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_income*(3650/121.58)::float,0),0)
+    as proportion_ntfp_in_diet_potential,
   coalesce ((case when rd.hfias_status='' then null else rd.hfias_status end), 
   (case when rd.fies_score::float >= 0 and rd.fies_score::float <=1 then 'FoodSecure'
     when rd.fies_score::float > 1 and rd.fies_score::float <=3 then 'MildlyFI'
@@ -171,7 +176,9 @@ cf.nr_months_food_shortage,
 cf.extreme_poverty,
 cf.extreme_poverty_TVA_incl, -- GN added	
 cf.below_calline,
+cf.below_calline_potential,
 cf.proportion_ntfp_in_diet,
+cf.proportion_ntfp_in_diet_potential,
 cf.food_insecurity_status,
 cf.uses_nrm_techniques,
 cf.uses_bio_techniques, -- GN added
