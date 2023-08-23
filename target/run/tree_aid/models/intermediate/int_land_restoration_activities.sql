@@ -1,11 +1,11 @@
 
-  create view "tree_aid"."dbt_jane"."int_land_restoration_activities__dbt_tmp"
+  create view "tree_aid"."dbt_bokidi"."int_land_restoration_activities__dbt_tmp"
     
     
   as (
     with land_data as 
  (
- select * from "tree_aid"."dbt_jane"."land_surveys"
+ select * from "tree_aid"."dbt_bokidi"."land_surveys"
  ),
  nrm_category as
  (

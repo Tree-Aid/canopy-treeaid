@@ -13,7 +13,7 @@ date_assessment,
 initcap(replace(replace(replace(replace(biological_methods,'[',''),']',''),'"',''),',','')) as biological_methods,
 initcap(replace(replace(replace(replace(soil_water_cons,'[',''),']',''),'"',''),',','')) as soil_water_cons,
 initcap(replace(replace(replace(replace(gully_methods,'[',''),']',''),'"',''),',','')) as gully_methods 
-from "tree_aid"."dbt_jane"."stg_rhomis_data"
+from "tree_aid"."dbt_bokidi"."stg_rhomis_data"
 where form_id is not null -- filters forms that don't have survey definitions yet
 and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
  ),

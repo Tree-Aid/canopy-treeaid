@@ -1,5 +1,5 @@
 
-  create view "tree_aid"."dbt_jane"."stg_rhomis_data__dbt_tmp"
+  create view "tree_aid"."dbt_bokidi"."stg_rhomis_data__dbt_tmp"
     
     
   as (
@@ -3367,117 +3367,119 @@ select
 --find all the fields for the table associated with the form--find the core fields and how they are referenced in the specific form--- final query 
 select 
 697818::varchar as form_id, 
-    id::bigint as submission_id,
+     
+    _id::bigint as submission_id,
+    
     -- if _index in the actual table, add index if not add null
     NULL::int as submission_index,
 -- loop through all the core fields, select the field with the appropriate name if present
  
-        region::varchar    -- finds the item of the list that correspond to a rule 
+        "SECTION_META/Location/region"::varchar    -- finds the item of the list that correspond to a rule 
         as region, 
-        province::varchar    -- finds the item of the list that correspond to a rule 
+        "SECTION_META/Location/province"::varchar    -- finds the item of the list that correspond to a rule 
         as province, 
-        district::varchar    -- finds the item of the list that correspond to a rule 
+        "SECTION_META/Location/district"::varchar    -- finds the item of the list that correspond to a rule 
         as commune, 
-        starttime_auto::varchar    -- finds the item of the list that correspond to a rule 
+        "SECTION_META/metadata/starttime_auto"::varchar    -- finds the item of the list that correspond to a rule 
         as date_assessment, 
-        nrm_practice_grp_biological_methods::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/nrm_pract__rp/biological_methods"::varchar    -- finds the item of the list that correspond to a rule 
         as biological_methods, 
-        forest_gov_module_population_needs_met::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/forest_go__/population_needs_met"::varchar    -- finds the item of the list that correspond to a rule 
         as population_needs_met, 
-        vcc_grp_voice_hh_food::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/v__e_group/voice_hh_food"::varchar    -- finds the item of the list that correspond to a rule 
         as voice_hh_food, 
-        vcc_grp_voice_hh_spending::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/v__oup/voice_hh_spending"::varchar    -- finds the item of the list that correspond to a rule 
         as voice_hh_spending, 
-        vcc_grp_voice_hh_crops::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/v___group/voice_hh_crops"::varchar    -- finds the item of the list that correspond to a rule 
         as voice_hh_crops, 
-        vcc_grp_voice_hh_confidence::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/v__p/voice_hh_confidence"::varchar    -- finds the item of the list that correspond to a rule 
         as voice_hh_confidence, 
-        vcc_grp_voice_comm_speaking::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/v__p/voice_comm_speaking"::varchar    -- finds the item of the list that correspond to a rule 
         as voice_comm_speaking, 
-        vcc_grp_voice_comm_meetings::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/v__p/voice_comm_meetings"::varchar    -- finds the item of the list that correspond to a rule 
         as voice_comm_meetings, 
-        vcc_grp_voice_comm_activities::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/v__voice_comm_activities"::varchar    -- finds the item of the list that correspond to a rule 
         as voice_comm_activities, 
-        disability_grp_seeing::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disability_grp/dis_grp1/seeing"::varchar    -- finds the item of the list that correspond to a rule 
         as seeing, 
-        disability_grp_seeing_others::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disabilit__is_grp1/seeing_others"::varchar    -- finds the item of the list that correspond to a rule 
         as seeing_others, 
-        disability_grp_hearing::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disability_grp/dis_grp2/hearing"::varchar    -- finds the item of the list that correspond to a rule 
         as hearing, 
-        disability_grp_hearing_others::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disabilit__s_grp2/hearing_others"::varchar    -- finds the item of the list that correspond to a rule 
         as hearing_others, 
-        disability_grp_walking::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disability_grp/dis_grp3/walking"::varchar    -- finds the item of the list that correspond to a rule 
         as walking, 
-        disability_grp_walking_others::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disabilit__s_grp3/walking_others"::varchar    -- finds the item of the list that correspond to a rule 
         as walking_others, 
-        disability_grp_memory::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disability_grp/dis_grp4/memory"::varchar    -- finds the item of the list that correspond to a rule 
         as memory, 
-        disability_grp_memory_others::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disabilit__is_grp4/memory_others"::varchar    -- finds the item of the list that correspond to a rule 
         as memory_others, 
-        disability_grp_self_care::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disabilit__rp/dis_grp5/self_care"::varchar    -- finds the item of the list that correspond to a rule 
         as self_care, 
-        disability_grp_self_care_others::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disabilit__grp5/self_care_others"::varchar    -- finds the item of the list that correspond to a rule 
         as self_care_others, 
-        disability_grp_language::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disability_grp/dis_grp6/language"::varchar    -- finds the item of the list that correspond to a rule 
         as language, 
-        disability_grp_language_others::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/disabilit___grp6/language_others"::varchar    -- finds the item of the list that correspond to a rule 
         as language_others,
         NULL::varchar 
         as test, 
-        forest_gov_module_access_equality::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/forest_go__v_grp/access_equality"::varchar    -- finds the item of the list that correspond to a rule 
         as access_equality, 
-        forest_gov_module_management_member::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/forest_go__ols/management_member"::varchar    -- finds the item of the list that correspond to a rule 
         as management_member, 
-        forest_gov_module_access_permission::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/forest_go__ion/access_permission"::varchar    -- finds the item of the list that correspond to a rule 
         as access_permission, 
-        forest_gov_module_village_engagement::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/forest_go__rp/village_engagement"::varchar    -- finds the item of the list that correspond to a rule 
         as village_engagement, 
-        nrm_practice_grp_soil_water_cons::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/nrm_practice_grp/soil_water_cons"::varchar    -- finds the item of the list that correspond to a rule 
         as soil_water_cons, 
-        nrm_practice_grp_gully_control::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/nrm_practice_grp/gully_control"::varchar    -- finds the item of the list that correspond to a rule 
         as gully_methods, 
-        vcc_grp_choice_hh_income_women::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__hoice_hh_income_women"::varchar    -- finds the item of the list that correspond to a rule 
         as choice_hh_income_women, 
-        vcc_grp_control_hh_farm_land::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__/control_hh_farm_land"::varchar    -- finds the item of the list that correspond to a rule 
         as control_hh_farm_land, 
-        vcc_grp_control_hh_comm_land::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__/control_hh_comm_land"::varchar    -- finds the item of the list that correspond to a rule 
         as control_hh_comm_land, 
-        vcc_grp_control_hh_assets::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__oup/control_hh_assets"::varchar    -- finds the item of the list that correspond to a rule 
         as control_hh_assets, 
-        vcc_grp_control_hh_livestock::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__/control_hh_livestock"::varchar    -- finds the item of the list that correspond to a rule 
         as control_hh_livestock, 
-        vcc_grp_control_hh_trees::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__roup/control_hh_trees"::varchar    -- finds the item of the list that correspond to a rule 
         as control_hh_trees, 
-        vcc_grp_control_hh_savings::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__up/control_hh_savings"::varchar    -- finds the item of the list that correspond to a rule 
         as control_hh_savings, 
-        vcc_grp_control_comm_resources::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__ontrol_comm_resources"::varchar    -- finds the item of the list that correspond to a rule 
         as control_comm_resources, 
-        vcc_grp_choice_comm_market::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__up/choice_comm_market"::varchar    -- finds the item of the list that correspond to a rule 
         as choice_comm_market, 
-        vcc_grp_choice_comm_committee::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__choice_comm_committee"::varchar    -- finds the item of the list that correspond to a rule 
         as choice_comm_committee, 
-        vcc_grp_control_comm_leadership::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__ntrol_comm_leadership"::varchar    -- finds the item of the list that correspond to a rule 
         as control_comm_leadership, 
-        vcc_grp_control_comm_by_laws::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__/control_comm_by_laws"::varchar    -- finds the item of the list that correspond to a rule 
         as control_comm_by_laws, 
-        forest_gov_module_forest_management_tools_yn::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/forest_go__t_management_tools_yn"::varchar    -- finds the item of the list that correspond to a rule 
         as forest_management_tools_yn, 
-        forest_gov_module_protection_actions_yn::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/forest_go__protection_actions_yn"::varchar    -- finds the item of the list that correspond to a rule 
         as protection_actions_yn, 
-        forest_gov_module_protection_actions_village::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/forest_go__ction_actions_village"::varchar    -- finds the item of the list that correspond to a rule 
         as village_protection, 
-        section_household_info_respondentsex::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/SECTION_H__Details/respondentsex"::varchar    -- finds the item of the list that correspond to a rule 
         as respondentsex, 
-        vcc_grp_choice_hh_training::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__up/choice_hh_training"::varchar    -- finds the item of the list that correspond to a rule 
         as choice_hh_training, 
-        vcc_grp_choice_hh_decisions::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/vcc_grp/c__p/choice_hh_decisions"::varchar    -- finds the item of the list that correspond to a rule 
         as choice_hh_decisions, 
-        respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/respondent_ntfp"::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
-        section_household_info_beneficiary_yn::varchar    -- finds the item of the list that correspond to a rule 
+        "survey_grp/SECTION_H__ry_grp/beneficiary_yn"::varchar    -- finds the item of the list that correspond to a rule 
         as beneficiary_control
 -- appropriate from statement
-    from onadata."mc2_rho_mis_jul-sep22_final"
+    from airbyte."sbm_mc2_r_ho_mis__jul__sep22_final"
 
     union all
 
@@ -4085,7 +4087,7 @@ s.country,
 s.project_code,
 s.type_2,
 cq.*
-from "tree_aid"."dbt_jane"."stg_survey_master" s 
+from "tree_aid"."dbt_bokidi"."stg_survey_master" s 
 left join core_questions cq on s.form_id::int = cq.form_id::int   
 where s.type = 'Rhomis'
 
@@ -4093,6 +4095,7 @@ where s.type = 'Rhomis'
 )
 select 
 row_number() over (partition by form_name order by submission_id) as row_id, 
+date_trunc('quarter',date_assessment::date) as assessment_quarter_date,
 * 
 from rhomis_data
   );

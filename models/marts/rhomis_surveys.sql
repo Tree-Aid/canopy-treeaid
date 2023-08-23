@@ -7,6 +7,9 @@
 
 {%- set disability_fields= ['seeing','hearing','walking','memory','self_care','language'] -%}
 
+{%- set income_fields = ['total_income_per_year', 'total_income_with_ntfp_per_year', 'ntfp_income_per_year', 'crop_income_per_year',
+'livestock_income_per_year','off_farm_income_per_year' ]-%}
+
 --  Joining rhomis data with already calculated rhomis indicators
 with rhomis_data as 
 (select 
@@ -150,20 +153,19 @@ case
 else 'Yes' end as beneficiary_control,
 cf.hdds_good_season,
 --cf.hdds_bad_season,
-cf.total_income_per_year,
-cf.total_income_with_ntfp_per_year,
-cf.ntfp_income_per_year,
-cf.crop_income_per_year,
-cf.livestock_income_per_year,
-cf.off_farm_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.total_income_per_year as total_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.total_income_with_ntfp_per_year as total_income_with_ntfp_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.ntfp_income_per_year as ntfp_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.crop_income_per_year as crop_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.livestock_income_per_year as livestock_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.off_farm_income_per_year as off_farm_income_per_year,
--- TDB [Test] - BAO Request from TreeAid to maintain records with an income > 50000 but nullify these income fields so they don't skew income analysis
--- Need to review lcu/total income calculation
+-- cf.total_income_per_year,
+-- cf.total_income_with_ntfp_per_year,
+-- cf.ntfp_income_per_year,
+-- cf.crop_income_per_year,
+-- cf.livestock_income_per_year,
+-- cf.off_farm_income_per_year,
+{% for field in income_fields %}  
+    case when cf.total_income_with_ntfp_per_year > 50000 then null else cf.{{field}} end as {{field}},
+{% if not loop.last -%}
+    +
+  {%- endif -%}
+{% endfor %}
+-- BAO Request from TreeAid to maintain records with an income > 50000 but nullify these income fields so they don't skew income analysis
 cf.value_crop_consumed_lcu_per_hh_per_year,
 cf.value_livestock_products_consumed_lcu_per_hh_per_year,
 cf.value_farm_products_consumed_lcu_per_hh_per_year,
@@ -207,7 +209,7 @@ from calculated_fields cf
 left join quarter_aggregate qa on qa.form_id=cf.form_id and qa.max_quarter_date is not null
 where cf.form_id is not null -- filters forms that don't have survey definitions yet
 --and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) -- BAO add a test field to get test indicators
-and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
+and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) -- and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
 -- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
 and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) -- and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'

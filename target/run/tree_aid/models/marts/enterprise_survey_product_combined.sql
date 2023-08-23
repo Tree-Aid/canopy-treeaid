@@ -2,7 +2,7 @@
   
     
 
-  create  table "tree_aid"."dbt_jane"."enterprise_survey_product_combined__dbt_tmp"
+  create  table "tree_aid"."dbt_bokidi"."enterprise_survey_product_combined__dbt_tmp"
   
   
     as
@@ -30,7 +30,7 @@ sales_national_income,
 sales_international_income,
 coalesce(sales_local_income::float,0) + coalesce(sales_national_income::float,0) + coalesce(sales_international_income::float,0) as total_income,
 group_costs_amount
-from "tree_aid"."dbt_jane"."enterprise_survey_product"
+from "tree_aid"."dbt_bokidi"."enterprise_survey_product"
 
 union all
 
@@ -56,6 +56,6 @@ sales_turn_over_national_income,
 sales_turn_over_international_income,
 total_income,
 group_costs_amount
-from "tree_aid"."dbt_jane"."enterprise_surveys"
+from "tree_aid"."dbt_bokidi"."enterprise_surveys"
   );
   

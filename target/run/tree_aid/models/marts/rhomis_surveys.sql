@@ -2,7 +2,7 @@
   
     
 
-  create  table "tree_aid"."dbt_jane"."rhomis_surveys__dbt_tmp"
+  create  table "tree_aid"."dbt_bokidi"."rhomis_surveys__dbt_tmp"
   
   
     as
@@ -12,15 +12,16 @@
 with rhomis_data as 
 (select 
 *
-from "tree_aid"."dbt_jane"."stg_rhomis_data" rd 
-left join "tree_aid"."dbt_jane"."stg_rhomis_indicators" ri on rd.form_id::int = ri.id_rhomis_dataset::int and rd.row_id = ri.id_hh
+from "tree_aid"."dbt_bokidi"."stg_rhomis_data" rd 
+left join "tree_aid"."dbt_bokidi"."stg_rhomis_indicators" ri on rd.form_id::int = ri.id_rhomis_dataset::int and rd.row_id = ri.id_hh
 ),
 
 ----Calculating the fields relevant for indicator building
 calculated_fields as 
 (
 select
-*, 
+*,
+count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter_date::date,rd.form_id) as quarter_count,
    (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as total_income_per_year,
   ((rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp)) as total_income_with_ntfp_per_year,
   (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) as ntfp_income_per_year,
@@ -29,10 +30,15 @@ select
   (rd.off_farm_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
   case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty,
   case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) + (rd.value_crop_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_livestock_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_farm_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_ntfp_consumed/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty_TVA_incl, 
-  case when rd.foodavailability / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline, 
-    rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
+  case when rd.foodavailability / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline,
+  case when (rd.foodavailability + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
+    rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline_potential,
+  rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
     nullif(coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
     as proportion_ntfp_in_diet,
+  (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income*(3650/121.58)) / 
+    nullif(coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_income*(3650/121.58)::float,0),0)
+    as proportion_ntfp_in_diet_potential,
   coalesce ((case when rd.hfias_status='' then null else rd.hfias_status end), 
   (case when rd.fies_score::float >= 0 and rd.fies_score::float <=1 then 'FoodSecure'
     when rd.fies_score::float > 1 and rd.fies_score::float <=3 then 'MildlyFI'
@@ -345,6 +351,15 @@ CASE
     when rd.respondentsex in ('M','male','m','Male') then 'Male'
 end as gender --BAO gender to limit measures in Akuko
 from rhomis_data rd
+ ),
+ quarter_aggregate as(
+    select distinct
+    cf.form_id,
+case 
+    when quarter_count>=max(quarter_count) OVER (PARTITION BY cf.form_id) then cf.assessment_quarter_date
+else null
+end as max_quarter_date
+from calculated_fields cf
 )
 ---Selecting the relevant fields
 select 
@@ -402,7 +417,9 @@ cf.nr_months_food_shortage,
 cf.extreme_poverty,
 cf.extreme_poverty_TVA_incl, -- GN added	
 cf.below_calline,
+cf.below_calline_potential,
 cf.proportion_ntfp_in_diet,
+cf.proportion_ntfp_in_diet_potential,
 cf.food_insecurity_status,
 cf.uses_nrm_techniques,
 cf.uses_bio_techniques, -- GN added
@@ -414,17 +431,26 @@ cf.disability_score,
 cf.severely_disabled,
 extract('Year' from cf.date_assessment::date) as assessment_year,
 date_trunc('year',cf.date_assessment::date) as assessment_year_date,
+assessment_quarter_date,
+qa.max_quarter_date,
+ Case
+         when extract(month from max_quarter_date) in (1,2,3) then Concat('Jan - Mar ',extract('Year' from max_quarter_date))
+         when extract(month from max_quarter_date) in (4,5,6) then Concat('Apr - Jun ',extract('Year' from max_quarter_date))
+         when extract(month from max_quarter_date) in (7,8,9) then Concat('Jul - Sep ',extract('Year' from max_quarter_date))
+         when extract(month from max_quarter_date) in (10,11,12) then Concat('Oct - Dec ',extract('Year' from max_quarter_date))
+end as max_quarter_name,
 cf.hdds_bad_season,
 case -- add a test field to get test indicators BAO
     when ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) then false
     else true
 end as test_check
 from calculated_fields cf
+left join quarter_aggregate qa on qa.form_id=cf.form_id and qa.max_quarter_date is not null
 where cf.form_id is not null -- filters forms that don't have survey definitions yet
 --and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) -- BAO add a test field to get test indicators
 and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
 -- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
-and (cf.hdds_good_season <='12' or cf.hdds_good_season is null)
+and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) -- and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
   );
   

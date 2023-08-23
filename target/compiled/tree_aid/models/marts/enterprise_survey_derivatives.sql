@@ -8241,7 +8241,7 @@ s.country,
 s.project_code,
 s.type_2,
 cq.*
-from "tree_aid"."dbt_jane"."stg_survey_master" s 
+from "tree_aid"."dbt_bokidi"."stg_survey_master" s 
 left join core_questions cq on s.form_id::int = cq.form_id::int   
 where s.type = 'Enterprise survey'
 
@@ -8270,7 +8270,7 @@ extract('Year' from "es".date_assessment::date) as assessment_year,
 d.product_derivative,
 d.sales_turn_over_derivatives
 from repeat_group_data d
-inner join "tree_aid"."dbt_jane"."enterprise_surveys" es on d.submission_id=es.submission_id
+inner join "tree_aid"."dbt_bokidi"."enterprise_surveys" es on d.submission_id=es.submission_id
 where d.submission_id is not null and 
 d.product_derivative is not null and (es.test is null or es.test not in ('y', 'Y','yes','Yes'))
 ),
@@ -8296,7 +8296,7 @@ extract('Year' from "es".date_assessment::date) as assessment_year,
 d.product_derivative,
 d.sales_turn_over_derivatives
 from repeat_group_data d
-left join "tree_aid"."dbt_jane"."enterprise_surveys" es on  
+left join "tree_aid"."dbt_bokidi"."enterprise_surveys" es on  
     d.form_id::int = es.form_id::int and  d.parent_index =es.submission_index 
 where d.submission_id is null and 
 d.product_derivative is not null and (es.test is null or es.test not in ('y', 'Y','yes','Yes'))
