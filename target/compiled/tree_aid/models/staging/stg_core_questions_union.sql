@@ -12,11 +12,11 @@ select
     s.type,
     s.timing,
     s.type_2
-from "tree_aid"."dbt_jane"."stg_survey_master" s 
+from "tree_aid"."dbt_bokidi"."stg_survey_master" s 
 inner join pg_catalog.pg_tables pt on trim(replace(lower(s.form_id_string), '-', '_')) = trim(replace(lower(pt.tablename), '-', '_'))  
     and pt.schemaname in ('onadata','airbyte') and pt.tableowner = 'tree_aid'
-left join "tree_aid"."dbt_jane"."stg_survey_definitions_master" sd  on s.form_id::int = sd.form_id::int and sd.core_question_id is not null
-inner join "tree_aid"."dbt_jane"."stg_core_questions_master" cq on sd.core_question_id = cq.id and cq.repeat_group_name is null 
+left join "tree_aid"."dbt_bokidi"."stg_survey_definitions_master" sd  on s.form_id::int = sd.form_id::int and sd.core_question_id is not null
+inner join "tree_aid"."dbt_bokidi"."stg_core_questions_master" cq on sd.core_question_id = cq.id and cq.repeat_group_name is null 
 
 union 
 
@@ -31,9 +31,9 @@ select
     s.type,
     s.timing,
     s.type_2
-from "tree_aid"."dbt_jane"."stg_survey_master" s 
-left join "tree_aid"."dbt_jane"."stg_survey_definitions_master" sd  on s.form_id::int = sd.form_id::int and sd.core_question_id is not null
-inner join "tree_aid"."dbt_jane"."stg_core_questions_master" cq on sd.core_question_id = cq.id and repeat_group_name is not null 
+from "tree_aid"."dbt_bokidi"."stg_survey_master" s 
+left join "tree_aid"."dbt_bokidi"."stg_survey_definitions_master" sd  on s.form_id::int = sd.form_id::int and sd.core_question_id is not null
+inner join "tree_aid"."dbt_bokidi"."stg_core_questions_master" cq on sd.core_question_id = cq.id and repeat_group_name is not null 
 inner join pg_catalog.pg_tables pt on 
     position( replace(lower(s.form_id_string), '-', '_') in replace(lower(pt.tablename), '-', '_') ) >0  --messy matching. Checking if the tablename contains the 'form_id_string' but also the 'repeat_group_name'
     and pt.schemaname in ('onadata','airbyte') and pt.tableowner = 'tree_aid'

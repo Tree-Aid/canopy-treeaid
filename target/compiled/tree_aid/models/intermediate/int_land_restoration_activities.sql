@@ -1,6 +1,6 @@
 with land_data as 
  (
- select * from "tree_aid"."dbt_jane"."land_surveys"
+ select * from "tree_aid"."dbt_bokidi"."land_surveys"
  ),
  nrm_category as
  (

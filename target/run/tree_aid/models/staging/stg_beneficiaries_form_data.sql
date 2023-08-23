@@ -1,5 +1,5 @@
 
-  create view "tree_aid"."dbt_jane"."stg_beneficiaries_form_data__dbt_tmp"
+  create view "tree_aid"."dbt_bokidi"."stg_beneficiaries_form_data__dbt_tmp"
     
     
   as (
