@@ -75,16 +75,30 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
 {% for field in vcc_fields %}
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
   else null end,0)   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
   {% if not loop.last -%}
     +
   {%- endif -%}
 {% endfor %}
   ) / 21.0 as vcc_score,
+ ( 
+{% for field in vcc_fields %}
+  coalesce(
+  case
+    when {{field}} = 'none' then 1
+    when {{field}} = 'little' then 2
+    when {{field}} = 'moderate' then 3 
+    when {{field}} = 'more_than' then 4 
+ else null end,0)   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
+  {% if not loop.last -%}
+    +
+  {%- endif -%}
+{% endfor %}
+  ) / 21.0 as vcc_score_all,
 
 {% for field in disability_fields %}  
 coalesce(
@@ -111,7 +125,12 @@ array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water
 CASE 
     when rd.respondentsex in ('F','female','f','Female') then 'Female'
     when rd.respondentsex in ('M','male','m','Male') then 'Male'
-end as gender --BAO gender to limit measures in Akuko
+end as gender, --BAO gender to limit measures in Akuko
+case 
+when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') then 'Female'
+when rd.respondent_ntfp in ('senior_woman','young_woman') then 'Female'
+else 'Male'
+end as vcc_gender
 from rhomis_data rd
  ),
  quarter_aggregate as(
@@ -145,6 +164,7 @@ cf.gully_methods_count,
 cf.soil_water_cons,
 cf.soil_water_cons_count,
 cf.gender,
+cf.vcc_gender,
 --cf.respondentsex, BAO replace this with gender to limit measures in Akuko
 cf.respondent_ntfp,
 case 
@@ -188,6 +208,7 @@ cf.uses_swc_techniques, -- GN added
 cf.uses_gully_techniques, -- GN added
 cf.governance_score,
 cf.vcc_score,
+cf.vcc_score_all,
 cf.disability_score,
 cf.severely_disabled,
 extract('Year' from cf.date_assessment::date) as assessment_year,
