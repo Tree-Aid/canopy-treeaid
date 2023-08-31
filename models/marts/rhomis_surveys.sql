@@ -115,7 +115,12 @@ array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water
 CASE 
     when rd.respondentsex in ('F','female','f','Female') then 'Female'
     when rd.respondentsex in ('M','male','m','Male') then 'Male'
-end as gender --BAO gender to limit measures in Akuko
+end as gender, --BAO gender to limit measures in Akuko
+case 
+when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') then 'Female'
+when rd.respondent_ntfp in ('senior_woman','young_woman') then 'Female'
+else 'Male'
+end as vcc_gender
 from rhomis_data rd
  ),
  quarter_aggregate as(
@@ -149,6 +154,7 @@ cf.gully_methods_count,
 cf.soil_water_cons,
 cf.soil_water_cons_count,
 cf.gender,
+cf.vcc_gender,
 --cf.respondentsex, BAO replace this with gender to limit measures in Akuko
 cf.respondent_ntfp,
 case 
