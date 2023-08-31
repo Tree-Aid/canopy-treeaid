@@ -75,10 +75,14 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
 {% for field in vcc_fields %}
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
+    when {{field}} = 'none' then 1
+    when {{field}} = 'little' then 2
+    when {{field}} = 'moderate' then 3 
+    when {{field}} = 'more_than' then 4 
+--   when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
+--   when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
+--   when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 3 
+--   when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
   else null end,0)   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
   {% if not loop.last -%}
     +
