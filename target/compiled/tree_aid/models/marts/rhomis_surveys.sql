@@ -102,173 +102,344 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
 
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'more_than' then 4 
   else null end,0)   
   +
   coalesce(
   case
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'none' then 1
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'little' then 2
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'moderate' then 3 
-  when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'more_than' then 4 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'none' then 1
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'little' then 2
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'more_than' then 4 
   else null end,0)   
   
   ) / 21.0 as vcc_score,
+ ( 
+
+  coalesce(
+  case
+    when voice_hh_food = 'none' then 1
+    when voice_hh_food = 'little' then 2
+    when voice_hh_food = 'moderate' then 3 
+    when voice_hh_food = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when voice_hh_spending = 'none' then 1
+    when voice_hh_spending = 'little' then 2
+    when voice_hh_spending = 'moderate' then 3 
+    when voice_hh_spending = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when voice_hh_crops = 'none' then 1
+    when voice_hh_crops = 'little' then 2
+    when voice_hh_crops = 'moderate' then 3 
+    when voice_hh_crops = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when voice_hh_confidence = 'none' then 1
+    when voice_hh_confidence = 'little' then 2
+    when voice_hh_confidence = 'moderate' then 3 
+    when voice_hh_confidence = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when voice_comm_speaking = 'none' then 1
+    when voice_comm_speaking = 'little' then 2
+    when voice_comm_speaking = 'moderate' then 3 
+    when voice_comm_speaking = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when voice_comm_meetings = 'none' then 1
+    when voice_comm_meetings = 'little' then 2
+    when voice_comm_meetings = 'moderate' then 3 
+    when voice_comm_meetings = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when voice_comm_activities = 'none' then 1
+    when voice_comm_activities = 'little' then 2
+    when voice_comm_activities = 'moderate' then 3 
+    when voice_comm_activities = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when choice_hh_training = 'none' then 1
+    when choice_hh_training = 'little' then 2
+    when choice_hh_training = 'moderate' then 3 
+    when choice_hh_training = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when choice_hh_decisions = 'none' then 1
+    when choice_hh_decisions = 'little' then 2
+    when choice_hh_decisions = 'moderate' then 3 
+    when choice_hh_decisions = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when choice_hh_income_women = 'none' then 1
+    when choice_hh_income_women = 'little' then 2
+    when choice_hh_income_women = 'moderate' then 3 
+    when choice_hh_income_women = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when choice_comm_market = 'none' then 1
+    when choice_comm_market = 'little' then 2
+    when choice_comm_market = 'moderate' then 3 
+    when choice_comm_market = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when choice_comm_committee = 'none' then 1
+    when choice_comm_committee = 'little' then 2
+    when choice_comm_committee = 'moderate' then 3 
+    when choice_comm_committee = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when control_hh_farm_land = 'none' then 1
+    when control_hh_farm_land = 'little' then 2
+    when control_hh_farm_land = 'moderate' then 3 
+    when control_hh_farm_land = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when control_hh_comm_land = 'none' then 1
+    when control_hh_comm_land = 'little' then 2
+    when control_hh_comm_land = 'moderate' then 3 
+    when control_hh_comm_land = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when control_hh_assets = 'none' then 1
+    when control_hh_assets = 'little' then 2
+    when control_hh_assets = 'moderate' then 3 
+    when control_hh_assets = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when control_hh_livestock = 'none' then 1
+    when control_hh_livestock = 'little' then 2
+    when control_hh_livestock = 'moderate' then 3 
+    when control_hh_livestock = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when control_hh_trees = 'none' then 1
+    when control_hh_trees = 'little' then 2
+    when control_hh_trees = 'moderate' then 3 
+    when control_hh_trees = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when control_hh_savings = 'none' then 1
+    when control_hh_savings = 'little' then 2
+    when control_hh_savings = 'moderate' then 3 
+    when control_hh_savings = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when control_comm_resources = 'none' then 1
+    when control_comm_resources = 'little' then 2
+    when control_comm_resources = 'moderate' then 3 
+    when control_comm_resources = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when control_comm_leadership = 'none' then 1
+    when control_comm_leadership = 'little' then 2
+    when control_comm_leadership = 'moderate' then 3 
+    when control_comm_leadership = 'more_than' then 4 
+ else null end,0)   
+  +
+  coalesce(
+  case
+    when control_comm_by_laws = 'none' then 1
+    when control_comm_by_laws = 'little' then 2
+    when control_comm_by_laws = 'moderate' then 3 
+    when control_comm_by_laws = 'more_than' then 4 
+ else null end,0)   
+  
+  ) / 21.0 as vcc_score_all,
 
   
 coalesce(
@@ -339,7 +510,12 @@ array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water
 CASE 
     when rd.respondentsex in ('F','female','f','Female') then 'Female'
     when rd.respondentsex in ('M','male','m','Male') then 'Male'
-end as gender --BAO gender to limit measures in Akuko
+end as gender, --BAO gender to limit measures in Akuko
+case 
+when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') then 'Female'
+when rd.respondent_ntfp in ('senior_woman','young_woman') then 'Female'
+else 'Male'
+end as vcc_gender
 from rhomis_data rd
  ),
  quarter_aggregate as(
@@ -373,6 +549,7 @@ cf.gully_methods_count,
 cf.soil_water_cons,
 cf.soil_water_cons_count,
 cf.gender,
+cf.vcc_gender,
 --cf.respondentsex, BAO replace this with gender to limit measures in Akuko
 cf.respondent_ntfp,
 case 
@@ -381,20 +558,26 @@ case
 else 'Yes' end as beneficiary_control,
 cf.hdds_good_season,
 --cf.hdds_bad_season,
-cf.total_income_per_year,
-cf.total_income_with_ntfp_per_year,
-cf.ntfp_income_per_year,
-cf.crop_income_per_year,
-cf.livestock_income_per_year,
-cf.off_farm_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.total_income_per_year as total_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.total_income_with_ntfp_per_year as total_income_with_ntfp_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.ntfp_income_per_year as ntfp_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.crop_income_per_year as crop_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.livestock_income_per_year as livestock_income_per_year,
--- case when (cf.total_income_with_ntfp_per_year >'50000') then null else cf.off_farm_income_per_year as off_farm_income_per_year,
--- TDB [Test] - BAO Request from TreeAid to maintain records with an income > 50000 but nullify these income fields so they don't skew income analysis
--- Need to review lcu/total income calculation
+-- cf.total_income_per_year,
+-- cf.total_income_with_ntfp_per_year,
+-- cf.ntfp_income_per_year,
+-- cf.crop_income_per_year,
+-- cf.livestock_income_per_year,
+-- cf.off_farm_income_per_year,
+  
+    case when cf.total_income_with_ntfp_per_year > 50000 then null else cf.total_income_per_year end as total_income_per_year,
++  
+    case when cf.total_income_with_ntfp_per_year > 50000 then null else cf.total_income_with_ntfp_per_year end as total_income_with_ntfp_per_year,
++  
+    case when cf.total_income_with_ntfp_per_year > 50000 then null else cf.ntfp_income_per_year end as ntfp_income_per_year,
++  
+    case when cf.total_income_with_ntfp_per_year > 50000 then null else cf.crop_income_per_year end as crop_income_per_year,
++  
+    case when cf.total_income_with_ntfp_per_year > 50000 then null else cf.livestock_income_per_year end as livestock_income_per_year,
++  
+    case when cf.total_income_with_ntfp_per_year > 50000 then null else cf.off_farm_income_per_year end as off_farm_income_per_year,
+
+-- BAO Request from TreeAid to maintain records with an income > 50000 but nullify these income fields so they don't skew income analysis
 cf.value_crop_consumed_lcu_per_hh_per_year,
 cf.value_livestock_products_consumed_lcu_per_hh_per_year,
 cf.value_farm_products_consumed_lcu_per_hh_per_year,
@@ -417,6 +600,7 @@ cf.uses_swc_techniques, -- GN added
 cf.uses_gully_techniques, -- GN added
 cf.governance_score,
 cf.vcc_score,
+cf.vcc_score_all,
 cf.disability_score,
 cf.severely_disabled,
 extract('Year' from cf.date_assessment::date) as assessment_year,
@@ -438,7 +622,7 @@ from calculated_fields cf
 left join quarter_aggregate qa on qa.form_id=cf.form_id and qa.max_quarter_date is not null
 where cf.form_id is not null -- filters forms that don't have survey definitions yet
 --and ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) -- BAO add a test field to get test indicators
-and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
+and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) -- and (cf.total_income_with_ntfp_per_year <='50000' or cf.total_income_with_ntfp_per_year is null)
 -- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
 and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) -- and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
