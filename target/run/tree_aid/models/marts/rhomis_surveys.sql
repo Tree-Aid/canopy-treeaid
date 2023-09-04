@@ -114,7 +114,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_food = 'more_than' then 4 
   else null end,0)   
   +
@@ -122,7 +123,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_spending = 'more_than' then 4 
   else null end,0)   
   +
@@ -130,7 +132,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_crops = 'more_than' then 4 
   else null end,0)   
   +
@@ -138,7 +141,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_hh_confidence = 'more_than' then 4 
   else null end,0)   
   +
@@ -146,7 +150,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_speaking = 'more_than' then 4 
   else null end,0)   
   +
@@ -154,7 +159,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_meetings = 'more_than' then 4 
   else null end,0)   
   +
@@ -162,7 +168,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and voice_comm_activities = 'more_than' then 4 
   else null end,0)   
   +
@@ -170,7 +177,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_training = 'more_than' then 4 
   else null end,0)   
   +
@@ -178,7 +186,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_decisions = 'more_than' then 4 
   else null end,0)   
   +
@@ -186,7 +195,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_hh_income_women = 'more_than' then 4 
   else null end,0)   
   +
@@ -194,7 +204,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_market = 'more_than' then 4 
   else null end,0)   
   +
@@ -202,7 +213,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and choice_comm_committee = 'more_than' then 4 
   else null end,0)   
   +
@@ -210,7 +222,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_farm_land = 'more_than' then 4 
   else null end,0)   
   +
@@ -218,7 +231,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_comm_land = 'more_than' then 4 
   else null end,0)   
   +
@@ -226,7 +240,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_assets = 'more_than' then 4 
   else null end,0)   
   +
@@ -234,7 +249,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_livestock = 'more_than' then 4 
   else null end,0)   
   +
@@ -242,7 +258,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_trees = 'more_than' then 4 
   else null end,0)   
   +
@@ -250,7 +267,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_hh_savings = 'more_than' then 4 
   else null end,0)   
   +
@@ -258,7 +276,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_resources = 'more_than' then 4 
   else null end,0)   
   +
@@ -266,7 +285,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_leadership = 'more_than' then 4 
   else null end,0)   
   +
@@ -274,7 +294,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'none' then 1
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'moderate' then 3 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'moderate' then 2 
+    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'equal' then 3 
     when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and control_comm_by_laws = 'more_than' then 4 
   else null end,0)   
   
@@ -285,7 +306,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when voice_hh_food = 'none' then 1
     when voice_hh_food = 'little' then 2
-    when voice_hh_food = 'moderate' then 3 
+    when voice_hh_food = 'moderate' then 2 
+    when voice_hh_food = 'equal' then 3 
     when voice_hh_food = 'more_than' then 4 
  else null end,0)   
   +
@@ -293,7 +315,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when voice_hh_spending = 'none' then 1
     when voice_hh_spending = 'little' then 2
-    when voice_hh_spending = 'moderate' then 3 
+    when voice_hh_spending = 'moderate' then 2 
+    when voice_hh_spending = 'equal' then 3 
     when voice_hh_spending = 'more_than' then 4 
  else null end,0)   
   +
@@ -301,7 +324,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when voice_hh_crops = 'none' then 1
     when voice_hh_crops = 'little' then 2
-    when voice_hh_crops = 'moderate' then 3 
+    when voice_hh_crops = 'moderate' then 2 
+    when voice_hh_crops = 'equal' then 3 
     when voice_hh_crops = 'more_than' then 4 
  else null end,0)   
   +
@@ -309,7 +333,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when voice_hh_confidence = 'none' then 1
     when voice_hh_confidence = 'little' then 2
-    when voice_hh_confidence = 'moderate' then 3 
+    when voice_hh_confidence = 'moderate' then 2 
+    when voice_hh_confidence = 'equal' then 3 
     when voice_hh_confidence = 'more_than' then 4 
  else null end,0)   
   +
@@ -317,7 +342,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when voice_comm_speaking = 'none' then 1
     when voice_comm_speaking = 'little' then 2
-    when voice_comm_speaking = 'moderate' then 3 
+    when voice_comm_speaking = 'moderate' then 2 
+    when voice_comm_speaking = 'equal' then 3 
     when voice_comm_speaking = 'more_than' then 4 
  else null end,0)   
   +
@@ -325,7 +351,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when voice_comm_meetings = 'none' then 1
     when voice_comm_meetings = 'little' then 2
-    when voice_comm_meetings = 'moderate' then 3 
+    when voice_comm_meetings = 'moderate' then 2 
+    when voice_comm_meetings = 'equal' then 3 
     when voice_comm_meetings = 'more_than' then 4 
  else null end,0)   
   +
@@ -333,7 +360,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when voice_comm_activities = 'none' then 1
     when voice_comm_activities = 'little' then 2
-    when voice_comm_activities = 'moderate' then 3 
+    when voice_comm_activities = 'moderate' then 2 
+    when voice_comm_activities = 'equal' then 3 
     when voice_comm_activities = 'more_than' then 4 
  else null end,0)   
   +
@@ -341,7 +369,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when choice_hh_training = 'none' then 1
     when choice_hh_training = 'little' then 2
-    when choice_hh_training = 'moderate' then 3 
+    when choice_hh_training = 'moderate' then 2 
+    when choice_hh_training = 'equal' then 3 
     when choice_hh_training = 'more_than' then 4 
  else null end,0)   
   +
@@ -349,7 +378,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when choice_hh_decisions = 'none' then 1
     when choice_hh_decisions = 'little' then 2
-    when choice_hh_decisions = 'moderate' then 3 
+    when choice_hh_decisions = 'moderate' then 2 
+    when choice_hh_decisions = 'equal' then 3 
     when choice_hh_decisions = 'more_than' then 4 
  else null end,0)   
   +
@@ -357,7 +387,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when choice_hh_income_women = 'none' then 1
     when choice_hh_income_women = 'little' then 2
-    when choice_hh_income_women = 'moderate' then 3 
+    when choice_hh_income_women = 'moderate' then 2 
+    when choice_hh_income_women = 'equal' then 3 
     when choice_hh_income_women = 'more_than' then 4 
  else null end,0)   
   +
@@ -365,7 +396,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when choice_comm_market = 'none' then 1
     when choice_comm_market = 'little' then 2
-    when choice_comm_market = 'moderate' then 3 
+    when choice_comm_market = 'moderate' then 2 
+    when choice_comm_market = 'equal' then 3 
     when choice_comm_market = 'more_than' then 4 
  else null end,0)   
   +
@@ -373,7 +405,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when choice_comm_committee = 'none' then 1
     when choice_comm_committee = 'little' then 2
-    when choice_comm_committee = 'moderate' then 3 
+    when choice_comm_committee = 'moderate' then 2 
+    when choice_comm_committee = 'equal' then 3 
     when choice_comm_committee = 'more_than' then 4 
  else null end,0)   
   +
@@ -381,7 +414,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when control_hh_farm_land = 'none' then 1
     when control_hh_farm_land = 'little' then 2
-    when control_hh_farm_land = 'moderate' then 3 
+    when control_hh_farm_land = 'moderate' then 2 
+    when control_hh_farm_land = 'equal' then 3 
     when control_hh_farm_land = 'more_than' then 4 
  else null end,0)   
   +
@@ -389,7 +423,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when control_hh_comm_land = 'none' then 1
     when control_hh_comm_land = 'little' then 2
-    when control_hh_comm_land = 'moderate' then 3 
+    when control_hh_comm_land = 'moderate' then 2 
+    when control_hh_comm_land = 'equal' then 3 
     when control_hh_comm_land = 'more_than' then 4 
  else null end,0)   
   +
@@ -397,7 +432,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when control_hh_assets = 'none' then 1
     when control_hh_assets = 'little' then 2
-    when control_hh_assets = 'moderate' then 3 
+    when control_hh_assets = 'moderate' then 2 
+    when control_hh_assets = 'equal' then 3 
     when control_hh_assets = 'more_than' then 4 
  else null end,0)   
   +
@@ -405,7 +441,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when control_hh_livestock = 'none' then 1
     when control_hh_livestock = 'little' then 2
-    when control_hh_livestock = 'moderate' then 3 
+    when control_hh_livestock = 'moderate' then 2 
+    when control_hh_livestock = 'equal' then 3 
     when control_hh_livestock = 'more_than' then 4 
  else null end,0)   
   +
@@ -413,7 +450,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when control_hh_trees = 'none' then 1
     when control_hh_trees = 'little' then 2
-    when control_hh_trees = 'moderate' then 3 
+    when control_hh_trees = 'moderate' then 2 
+    when control_hh_trees = 'equal' then 3 
     when control_hh_trees = 'more_than' then 4 
  else null end,0)   
   +
@@ -421,7 +459,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when control_hh_savings = 'none' then 1
     when control_hh_savings = 'little' then 2
-    when control_hh_savings = 'moderate' then 3 
+    when control_hh_savings = 'moderate' then 2 
+    when control_hh_savings = 'equal' then 3 
     when control_hh_savings = 'more_than' then 4 
  else null end,0)   
   +
@@ -429,7 +468,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when control_comm_resources = 'none' then 1
     when control_comm_resources = 'little' then 2
-    when control_comm_resources = 'moderate' then 3 
+    when control_comm_resources = 'moderate' then 2 
+    when control_comm_resources = 'equal' then 3 
     when control_comm_resources = 'more_than' then 4 
  else null end,0)   
   +
@@ -437,7 +477,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when control_comm_leadership = 'none' then 1
     when control_comm_leadership = 'little' then 2
-    when control_comm_leadership = 'moderate' then 3 
+    when control_comm_leadership = 'moderate' then 2 
+    when control_comm_leadership = 'equal' then 3 
     when control_comm_leadership = 'more_than' then 4 
  else null end,0)   
   +
@@ -445,7 +486,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   case
     when control_comm_by_laws = 'none' then 1
     when control_comm_by_laws = 'little' then 2
-    when control_comm_by_laws = 'moderate' then 3 
+    when control_comm_by_laws = 'moderate' then 2 
+    when control_comm_by_laws = 'equal' then 3 
     when control_comm_by_laws = 'more_than' then 4 
  else null end,0)   
   

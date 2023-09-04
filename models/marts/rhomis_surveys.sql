@@ -120,7 +120,7 @@ case
 {% if not loop.last -%}
     +
   {%- endif -%}
-{% endfor %}  as severely_disabled,   
+{% endfor %}  as severely_disabled, 
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.biological_methods,'[',''),']',''),'"',''),',',''),' '),1) as biological_methods_count,
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count,
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count,
@@ -213,6 +213,12 @@ cf.vcc_score,
 cf.vcc_score_all,
 cf.disability_score,
 cf.severely_disabled,
+cf.seeing,
+cf.hearing,
+cf.walking,
+cf.memory,
+cf.self_care,
+language,
 extract('Year' from cf.date_assessment::date) as assessment_year,
 date_trunc('year',cf.date_assessment::date) as assessment_year_date,
 assessment_quarter_date,
