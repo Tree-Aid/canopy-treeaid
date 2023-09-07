@@ -555,7 +555,7 @@ coalesce(
 case 
   when language in ('lot_difficulty', 'impossible') then 1
   else null end,0)
-  as severely_disabled,   
+  as severely_disabled, 
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.biological_methods,'[',''),']',''),'"',''),',',''),' '),1) as biological_methods_count,
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count,
 array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count,
@@ -655,6 +655,12 @@ cf.vcc_score,
 cf.vcc_score_all,
 cf.disability_score,
 cf.severely_disabled,
+cf.seeing,
+cf.hearing,
+cf.walking,
+cf.memory,
+cf.self_care,
+cf.language as language_disability,
 extract('Year' from cf.date_assessment::date) as assessment_year,
 date_trunc('year',cf.date_assessment::date) as assessment_year_date,
 assessment_quarter_date,
