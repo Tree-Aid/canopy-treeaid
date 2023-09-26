@@ -4,7 +4,7 @@ with rhomis_data as
 *
 from "tree_aid"."dbt_bokidi"."stg_rhomis_data" rd 
 left join "tree_aid"."dbt_bokidi"."stg_rhomis_indicators" ri on rd.form_id::int = ri.id_rhomis_dataset::int and rd.row_id = ri.id_hh
-),
+) ,
 
 ----Calculating the fields relevant for indicator building
 calculated_fields as 
@@ -20,31 +20,42 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   (rd.off_farm_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
   case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty,
   case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) + (rd.value_crop_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_livestock_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_farm_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_ntfp_consumed/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty_TVA_incl, 
-  case when rd.foodavailability / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline,
-  case when (rd.foodavailability + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
-    rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500 then true else false end as below_calline_potential,
-  rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
-    nullif(coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0)
+  case when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and 
+  (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500)
+  or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500) then true else false end as below_calline,
+  case when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and 
+  (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
+   rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500)
+  or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
+   rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500) then true else false end as below_calline_potential,
+  case when rd.crop_consumed_calories_kcal_per_hh_per_year is null
+  then rd.ntfp_consumed_calories_kcal_per_hh_per_year / nullif(coalesce(rd.foodavailability::float,0),0)
+  else rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
+    nullif(coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0) end
     as proportion_ntfp_in_diet,
-  (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income*(3650/121.58)) / 
-    nullif(coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_income*(3650/121.58)::float,0),0)
+  case when rd.crop_consumed_calories_kcal_per_hh_per_year is null 
+  then (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income*(3650/121.58)) / nullif(coalesce(rd.foodavailability::float,0) + coalesce(rd.ntfp_income*(3650/121.58)::float,0)
+    + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) + rd.crop_income_lcu_per_year*(3650/121.58),0)
+  else (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income*(3650/121.58)) / 
+    nullif(coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_income*(3650/121.58)::float,0)
+    + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) + rd.crop_income_lcu_per_year*(3650/121.58),0) end
     as proportion_ntfp_in_diet_potential,
   coalesce ((case when rd.hfias_status='' then null else rd.hfias_status end), 
-  (case when rd.fies_score::float >= 0 and rd.fies_score::float <=1 then 'FoodSecure'
-    when rd.fies_score::float > 1 and rd.fies_score::float <=3 then 'MildlyFI'
-    when rd.fies_score::float >3 and rd.fies_score::float <=5 then 'ModeratelyFI'
-    when rd.fies_score::float >5 and rd.fies_score::float <=8 then 'SeverelyFI'
+  (case when rd.fies_score::float >= 0 and rd.fies_score::float <=1 then 'Food Secure'
+    when rd.fies_score::float > 1 and rd.fies_score::float <=3 then 'Mildly Food Insecure'
+    when rd.fies_score::float >3 and rd.fies_score::float <=5 then 'Moderately Food Insecure'
+    when rd.fies_score::float >5 and rd.fies_score::float <=8 then 'Severely Food Insecure'
     else null end)) as food_insecurity_status,
 --    case when 
 --      length(rd.biological_methods) + length(rd.gully_methods) + length(rd.soil_water_cons) >0 then true else false end
 --      as uses_nrm_techniques,
-    case when (case when biological_methods is null or biological_methods in ('None') then 0 else length(biological_methods) end) + (case when gully_methods is null or gully_methods in ('None') then 0 else length(gully_methods) end) + (case when soil_water_cons is null or soil_water_cons in ('None') then 0 else length(soil_water_cons) end) >0 then true else false end
+    case when (case when biological_methods is null or biological_methods in ('None') or biological_methods  = '["None"]' then 0 else length(biological_methods) end) + (case when gully_methods is null or gully_methods in ('None') or gully_methods  = '["None"]' then 0 else length(gully_methods) end) + (case when soil_water_cons is null or soil_water_cons in ('None') or soil_water_cons  = '["None"]' then 0 else length(soil_water_cons) end) >0 then true else false end
       as uses_nrm_techniques,
-    case when (case when biological_methods is null or biological_methods in ('None') then 0 else length(biological_methods) end) >0 then true else false end
+    case when (case when biological_methods is null or biological_methods in ('None') or biological_methods  = '["None"]' then 0 else length(biological_methods) end) >0 then true else false end
       as uses_bio_techniques,
-    case when (case when soil_water_cons is null or soil_water_cons in ('None') then 0 else length(soil_water_cons) end) >0 then true else false end
+    case when (case when soil_water_cons is null or soil_water_cons in ('None') or soil_water_cons  = '["None"]' then 0 else length(soil_water_cons) end) >0 then true else false end
       as uses_swc_techniques,
-    case when (case when gully_methods is null or gully_methods in ('None') then 0 else length(gully_methods) end) >0 then true else false end
+    case when (case when gully_methods is null or gully_methods in ('None') or gully_methods  = '["None"]' then 0 else length(gully_methods) end) >0 then true else false end
       as uses_gully_techniques,
  (     
 
@@ -546,9 +557,9 @@ case
   when language in ('lot_difficulty', 'impossible') then 1
   else null end,0)
   as severely_disabled, 
-array_length(regexp_split_to_array(replace(replace(replace(replace(rd.biological_methods,'[',''),']',''),'"',''),',',''),' '),1) as biological_methods_count,
-array_length(regexp_split_to_array(replace(replace(replace(replace(rd.gully_methods,'[',''),']',''),'"',''),',',''),' '),1) as gully_methods_count,
-array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) as soil_water_cons_count,
+case when biological_methods is null or biological_methods in ('None') or biological_methods  = '["None"]' then 0 else array_length(regexp_split_to_array(replace(replace(replace(replace(rd.biological_methods,'[',''),']',''),'"',''),',',''),' '),1) end as biological_methods_count,
+case when gully_methods is null or gully_methods in ('None') or gully_methods  = '["None"]' then 0 else array_length(regexp_split_to_array(replace(replace(replace(replace(rd.gully_methods,'[',''),']',''),'"',''),',',''),' '),1) end as gully_methods_count,
+case when rd.soil_water_cons is null or rd.soil_water_cons in ('None') or rd.soil_water_cons  = '["None"]' then 0 else array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) end as soil_water_cons_count,
 CASE 
     when rd.respondentsex in ('F','female','f','Female') then 'Female'
     when rd.respondentsex in ('M','male','m','Male') then 'Male'
@@ -560,7 +571,7 @@ else 'Male'
 end as vcc_gender
 from rhomis_data rd
  ),
- quarter_aggregate as(
+quarter_aggregate as(
     select distinct
     cf.form_id,
 case 
@@ -651,6 +662,7 @@ cf.walking,
 cf.memory,
 cf.self_care,
 cf.language as language_disability,
+cf.survey_length_minutes,
 extract('Year' from cf.date_assessment::date) as assessment_year,
 date_trunc('year',cf.date_assessment::date) as assessment_year_date,
 assessment_quarter_date,
@@ -662,6 +674,10 @@ qa.max_quarter_date,
          when extract(month from max_quarter_date) in (10,11,12) then Concat('Oct - Dec ',extract('Year' from max_quarter_date))
 end as max_quarter_name,
 cf.hdds_bad_season,
+cf.quality_rapport,
+cf.quality_reliability,
+cf.quality_rapport_resp2,
+cf.quality_reliability_resp2,
 case -- add a test field to get test indicators BAO
     when ((cf.test is null ) or (cf.test not in ('y', 'Y','yes','Yes')) ) then false
     else true

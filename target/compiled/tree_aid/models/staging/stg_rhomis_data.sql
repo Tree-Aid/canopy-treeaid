@@ -132,7 +132,15 @@ select
         NULL::varchar 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ethiopia_meki_2"
 
@@ -252,7 +260,15 @@ select
         NULL::varchar 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ethiopia_meki_2_extra"
 
@@ -372,7 +388,15 @@ select
         NULL::varchar 
         as respondent_ntfp, 
         beneficiary::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."mb2_baseline"
 
@@ -492,7 +516,15 @@ select
         NULL::varchar 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."burkina_ta_baseline_v1_3_webform"
 
@@ -612,7 +644,15 @@ select
         NULL::varchar 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."gb1_ta_baseline_v1_3_3"
 
@@ -730,7 +770,15 @@ select
         NULL::varchar 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."burkina_ta_bb1_v1_3_1_tablet"
 
@@ -850,7 +898,15 @@ select
         NULL::varchar 
         as respondent_ntfp, 
         beneficiary::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ethiopia_ea3_eb5_1_3_4"
 
@@ -970,7 +1026,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_ta::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."tree_aid_rhomis_2_0_niger_na4"
 
@@ -1088,7 +1152,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        Additional_respondents::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."eb8_2019"
 
@@ -1208,7 +1280,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."tree_aid_rhomis_gb8_final"
 
@@ -1328,7 +1408,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."household_income_mtr_bc1"
 
@@ -1446,7 +1534,15 @@ select
         NULL::varchar 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control,
+        NULL::varchar 
+        as quality_rapport,
+        NULL::varchar 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."voice_choice_control_mtr_bc1"
 
@@ -1566,7 +1662,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_ta::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."tree_aid_rhomis_na6_finale"
 
@@ -1684,7 +1788,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_control::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        section_quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        section_quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        section_quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        section_quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."tree_aid_rho_mis_mb6_2020"
 
@@ -1804,7 +1916,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_yn::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."mb2_rhomis_endline_april2020"
 
@@ -1922,7 +2042,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ta_rho_mis_bc1_endline_oct2020_final"
 
@@ -2042,7 +2170,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_yn::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ta_rhomis_gc3_oct_2020"
 
@@ -2162,7 +2298,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_yn::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ta_rhomis_eb3eb8_2020"
 
@@ -2282,7 +2426,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_yn::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ta_rhomis_gb1_2021"
 
@@ -2400,7 +2552,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_yn::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."bb6_gouvernance_forestière_vccx2_fev2021"
 
@@ -2520,7 +2680,15 @@ select
         NULL::varchar 
         as respondent_ntfp, 
         beneficiary_ta::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."rhomis_treeaid_na4_endline_june2021_tele_final"
 
@@ -2638,7 +2806,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_TA::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."tree_aid_rhomis_na6_endline"
 
@@ -2756,7 +2932,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_control::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        section_quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        section_quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        section_quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        section_quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ta_rho_mis_gc6_2021"
 
@@ -2874,7 +3058,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_yn::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ta_rho_mis_bb6_oct_dec21"
 
@@ -2992,7 +3184,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control,
+        NULL::varchar 
+        as quality_rapport,
+        NULL::varchar 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."mb6_income_agri_nrm_vcc_jan-mar22"
 
@@ -3112,7 +3312,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_yn::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ta_rhomis_eco_q1_2022"
 
@@ -3232,7 +3440,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ta_rhomis_gb8_endline_jan-mar2021_consolidated"
 
@@ -3352,7 +3568,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp,
         NULL::varchar 
-        as beneficiary_control
+        as beneficiary_control, 
+        quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."tree_aid_rhomis_bc4_apr-jun22_final"
 
@@ -3472,7 +3696,15 @@ select
         "survey_grp/respondent_ntfp"::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         "survey_grp/SECTION_H__ry_grp/beneficiary_yn"::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        "survey_grp/SECTION/e__dback/quality_rapport"::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        "survey_grp/SECTION/e__k/quality_reliability"::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        "survey_grp/SECTION/e__quality_rapport_resp2"::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        "survey_grp/SECTION/e__ity_reliability_resp2"::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from airbyte."sbm_mc2_r_ho_mis__jul__sep22_final"
 
@@ -3590,7 +3822,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_control::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        section_quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        section_quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        section_quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        section_quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."mc3_rho_mis_oct-dec22_final"
 
@@ -3708,7 +3948,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_control::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        section_quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        section_quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        section_quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        section_quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."tree_aid_rho_mis_bc3_oct-dec2022_final"
 
@@ -3826,7 +4074,15 @@ select
         respondent_ntfp::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         beneficiary_control::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control, 
+        section_food_security_quality_rapport::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport, 
+        section_food_security_quality_reliability::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability, 
+        section_food_security_quality_rapport_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_rapport_resp2, 
+        section_food_security_quality_reliability_resp2::varchar    -- finds the item of the list that correspond to a rule 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."ec0_mini_rho_mis_jan-mar2023_final"
 
@@ -3946,7 +4202,15 @@ select
         "survey_grp/respondent_ntfp"::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         "SECTION_META/Location2/beneficiary_control"::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control,
+        NULL::varchar 
+        as quality_rapport,
+        NULL::varchar 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from airbyte."sbm_mb6_r_ho_mis_endline__apr__jun2023"
 
@@ -4066,7 +4330,15 @@ select
         "survey_grp/respondent_ntfp"::varchar    -- finds the item of the list that correspond to a rule 
         as respondent_ntfp, 
         "SECTION_META/Location2/beneficiary_control"::varchar    -- finds the item of the list that correspond to a rule 
-        as beneficiary_control
+        as beneficiary_control,
+        NULL::varchar 
+        as quality_rapport,
+        NULL::varchar 
+        as quality_reliability,
+        NULL::varchar 
+        as quality_rapport_resp2,
+        NULL::varchar 
+        as quality_reliability_resp2
 -- appropriate from statement
     from onadata."sbm_mb6_r_ho_mis_endline__apr__jun2023"
 

@@ -19,9 +19,13 @@ with initial_agg as (
         ((count(distinct submission_id) filter (where below_calline = 'true'))::FLOAT / nullif(count(distinct submission_id)::float,0))*100 as below_calorie_line,
         ((count(distinct submission_id) filter (where below_calline_potential = 'true'))::FLOAT / nullif(count(distinct submission_id)::float,0))*100 as below_calorie_line_potential,
         avg(proportion_ntfp_in_diet*100) as proportion_ntfp_in_diet,
-        avg(proportion_ntfp_in_diet_potential*100) as proportion_ntfp_in_diet_potential
+        avg(proportion_ntfp_in_diet_potential*100) as proportion_ntfp_in_diet_potential,
+        ((count(distinct submission_id) filter (where uses_nrm_techniques='true'))::FLOAT / nullif(count(distinct submission_id)::float,0))*100 as proportion_uses_nrm_techniques,
+        ((count(distinct submission_id) filter (where uses_bio_techniques='true'))::FLOAT / nullif(count(distinct submission_id)::float,0))*100 as proportion_uses_bio_techniques,
+        ((count(distinct submission_id) filter (where uses_swc_techniques='true'))::FLOAT / nullif(count(distinct submission_id)::float,0))*100 as proportion_uses_swc_techniques,
+        ((count(distinct submission_id) filter (where uses_gully_techniques='true'))::FLOAT / nullif(count(distinct submission_id)::float,0))*100 as proportion_uses_gully_techniques
     from {{ ref('rhomis_surveys') }}
-    where test_check = 'False' 
+    where test_check = 'False'
     group by 1,2,3 -- ,4
 
 ), indicator_nesting as (
@@ -46,7 +50,11 @@ with initial_agg as (
             'below_calorie_line',
             'below_calorie_line_potential',
             'proportion_ntfp_in_diet',
-            'proportion_ntfp_in_diet_potential']) AS rhomis_indicator,
+            'proportion_ntfp_in_diet_potential',
+            'proportion_uses_nrm_techniques',
+            'proportion_uses_bio_techniques',
+            'proportion_uses_swc_techniques',
+            'proportion_uses_gully_techniques']) AS rhomis_indicator,
         unnest(array[
             mean_total_income_with_ntfp_per_year,
             median_total_income_with_ntfp_per_year,
@@ -63,7 +71,11 @@ with initial_agg as (
             below_calorie_line, 
             below_calorie_line_potential,
             proportion_ntfp_in_diet, 
-            proportion_ntfp_in_diet_potential]) AS indicator_value
+            proportion_ntfp_in_diet_potential,
+            proportion_uses_nrm_techniques,
+            proportion_uses_bio_techniques,
+            proportion_uses_swc_techniques,
+            proportion_uses_gully_techniques]) AS indicator_value
     from initial_agg
 ), baseline as(
     select
