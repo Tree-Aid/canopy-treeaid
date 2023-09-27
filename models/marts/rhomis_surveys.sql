@@ -31,8 +31,8 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   (rd.livestock_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as livestock_income_per_year,
   (rd.off_farm_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
   case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty,
-  case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) + (rd.value_crop_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_livestock_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_farm_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_ntfp_consumed/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty_TVA_incl, 
-  case when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and 
+  case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) + (rd.value_crop_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_livestock_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_ntfp_consumed/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty_TVA_incl, 
+  case when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and rd.farm_products_consumed_calories_kcal_per_hh_per_year is null and 
   (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500)
   or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500) then true else false end as below_calline,
   case when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and 
