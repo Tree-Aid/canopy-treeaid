@@ -1,9 +1,30 @@
-with initial_agg as (
+with year_details as (
     select
-        country,
-        project_code,
+    project_code,
+    start_date,
+    end_date,
+    generate_series(right(start_date, 4)::int,right(end_date, 4)::int,1)::varchar as years
+    from {{source('airbyte', 'projects')}}
+
+),
+project_years as (
+    select
+    project_code,
+    start_date,
+    end_date,
+    string_agg(years::varchar, ', ') as overall_years
+    from year_details
+    group by 1, 2, 3
+),
+initial_agg as (
+    select
+        r.country,
+        r.project_code,
         -- beneficiary_control,
         timing,
+        min(right(p.start_date, 4)) as start_year,
+        max(right(p.end_date, 4)) as end_year,
+        p.overall_years as year,
         avg(coalesce(total_income_with_ntfp_per_year,0)) as mean_total_income_with_ntfp_per_year,
         percentile_cont(0.5) within group (order by coalesce(total_income_with_ntfp_per_year,0)) as median_total_income_with_ntfp_per_year,
         avg(coalesce(ntfp_income_per_year,0)) as mean_ntfp_income_per_year,
@@ -24,9 +45,10 @@ with initial_agg as (
         ((count(distinct submission_id) filter (where uses_bio_techniques='true'))::FLOAT / nullif(count(distinct submission_id)::float,0))*100 as proportion_uses_bio_techniques,
         ((count(distinct submission_id) filter (where uses_swc_techniques='true'))::FLOAT / nullif(count(distinct submission_id)::float,0))*100 as proportion_uses_swc_techniques,
         ((count(distinct submission_id) filter (where uses_gully_techniques='true'))::FLOAT / nullif(count(distinct submission_id)::float,0))*100 as proportion_uses_gully_techniques
-    from {{ ref('rhomis_surveys') }}
+    from {{ ref('rhomis_surveys') }} r
+    left join project_years p on p.project_code = r.project_code
     where test_check = 'False'
-    group by 1,2,3 -- ,4
+    group by 1,2,3,6
 
 ), indicator_nesting as (
     select
@@ -34,6 +56,16 @@ with initial_agg as (
         project_code,
         -- beneficiary_control,
         timing,
+        start_year,
+        end_year,
+        year,
+        case 
+            when end_year::int < 2017 then 'Pre 2017'
+            when start_year::int >= 2017 and end_year::int <= 2022  then '2017 - 2022'
+            when (start_year::int > 2017 and start_year::int < 2022) and end_year::int > 2022 then '2017 - 2022, 2022 - 2027'
+            when start_year::int >= 2022 and (end_year::int between 2022 and 2027) then '2022 - 2027'
+            else null
+        end as strategic_period,
         unnest(array[
             'mean_total_income',
             'median_total_income',
@@ -82,6 +114,10 @@ with initial_agg as (
         country,
         project_code,
         -- beneficiary_control,
+        start_year,
+        end_year,
+        year,
+        strategic_period,
         rhomis_indicator,
         indicator_value as baseline_results
     from indicator_nesting
@@ -110,6 +146,10 @@ select
     b.country,
     b.project_code,
     -- b.beneficiary_control,
+    b.start_year,
+    b.end_year,
+    b.year,
+    b.strategic_period,
     b.rhomis_indicator,
     baseline_results,
     midline_results,

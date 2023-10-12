@@ -53,19 +53,38 @@ union all
 select * from soil_water
 union all 
 select * from gully
- )
- select 
-form_name,
+ ),
+total_agg as (
+select 
 form_id,
-nrm.submission_id,
 project_code,
+count(distinct concat(form_id, nrm.submission_id, category)) filter (where category = 'Biological methods') as bio_total,
+count(distinct concat(form_id, nrm.submission_id, category)) filter (where category = 'Soil and water conservation') as swc_total,
+count(distinct concat(form_id, nrm.submission_id, category)) filter (where category = 'Gully control') as gully_total
+from nrm
+left join land_mngt lm on lm.submission_id=nrm.submission_id
+group by 1,2
+ )
+
+select 
+form_name,
+nrm.form_id,
+nrm.submission_id,
+nrm.project_code,
 country,
 region,
 province,
 commune,
 date_assessment,
 category,
+case 
+ when category = 'Biological methods' then bio_total
+ when category = 'Soil and water conservation' then swc_total
+ when category = 'Gully control' then gully_total
+ else null end as total_submissions,
 replace(technique,'_',' ') as technique
 from nrm
 left join land_mngt lm on lm.submission_id=nrm.submission_id
+left join total_agg tg on tg.form_id=nrm.form_id and tg.project_code = nrm.project_code
+where nrm.project_code = 'MB6'
   );
