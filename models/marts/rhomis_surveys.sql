@@ -138,6 +138,7 @@ case when rd.soil_water_cons is null or rd.soil_water_cons in ('None') or rd.soi
 CASE 
     when rd.respondentsex in ('F','female','f','Female') then 'Female'
     when rd.respondentsex in ('M','male','m','Male') then 'Male'
+    else 'Unknown' 
 end as gender, --BAO gender to limit measures in Akuko
 case 
 when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') then 'Female'
@@ -258,4 +259,6 @@ and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) --
 -- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
 and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) -- and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
+
+--- ADD in filter for MB6 midline
 
