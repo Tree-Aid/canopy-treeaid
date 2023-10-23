@@ -23,6 +23,14 @@ sources:
             tests:
                 - unique
                 - not_null
+        - name: rhomis_indicators
+          description: List of all rhomis indicators and responses
+          columns:
+          - name: id_hh
+            description: "The primary key for this table"
+            tests:
+                - unique
+                - not_null
         - name: projects
         - name: trees_planted_legacy
         - name: country_hh_size
