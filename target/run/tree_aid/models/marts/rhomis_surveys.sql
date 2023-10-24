@@ -701,6 +701,6 @@ and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) --
 -- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
 and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) -- and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
--- and cf.form_id <> 636755 -- BAO removing MB6 midline
+and cf.form_id <> '636755' -- BAO removing MB6 midline
   );
   
