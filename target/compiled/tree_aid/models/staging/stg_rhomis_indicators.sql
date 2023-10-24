@@ -54,5 +54,6 @@ ntfp_income::float,
 value_ntfp_consumed::float,
 ntfp_consumed_calories_kcal_per_hh_per_year::float,
 firewood_consumed_kgs_per_hh_per_day::float,
-nr_months_food_shortage::float
+nr_months_food_shortage::float,
+beneficiary_gender
 from "tree_aid"."airbyte"."rhomis_indicators"

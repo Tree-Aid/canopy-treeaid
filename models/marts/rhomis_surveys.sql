@@ -86,11 +86,11 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
 {% for field in vcc_fields %}
   coalesce(
   case
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 2 
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'equal' then 3 
-    when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
+    when (rd.respondentsex in ('F','female','f','Female') or rd.beneficiary_gender in ('F','female','f','Female')) and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'none' then 1
+    when (rd.respondentsex in ('F','female','f','Female') or rd.beneficiary_gender in ('F','female','f','Female')) and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'little' then 2
+    when (rd.respondentsex in ('F','female','f','Female') or rd.beneficiary_gender in ('F','female','f','Female')) and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'moderate' then 2 
+    when (rd.respondentsex in ('F','female','f','Female') or rd.beneficiary_gender in ('F','female','f','Female')) and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'equal' then 3 
+    when (rd.respondentsex in ('F','female','f','Female') or rd.beneficiary_gender in ('F','female','f','Female')) and rd.respondent_ntfp in ('same_person') or rd.respondent_ntfp in ('senior_woman','young_woman') and {{field}} = 'more_than' then 4 
   else null end,0)   {# assumes no fields are missing. if any field in the set is missing, skips the entire household #}
   {% if not loop.last -%}
     +
@@ -136,8 +136,8 @@ case when biological_methods is null or biological_methods in ('None') or biolog
 case when gully_methods is null or gully_methods in ('None') or gully_methods  = '["None"]' then 0 else array_length(regexp_split_to_array(replace(replace(replace(replace(rd.gully_methods,'[',''),']',''),'"',''),',',''),' '),1) end as gully_methods_count,
 case when rd.soil_water_cons is null or rd.soil_water_cons in ('None') or rd.soil_water_cons  = '["None"]' then 0 else array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) end as soil_water_cons_count,
 CASE 
-    when rd.respondentsex in ('F','female','f','Female') then 'Female'
-    when rd.respondentsex in ('M','male','m','Male') then 'Male'
+    when rd.respondentsex in ('F','female','f','Female') or rd.beneficiary_gender in ('F','female','f','Female') then 'Female'
+    when rd.respondentsex in ('M','male','m','Male') or rd.beneficiary_gender in ('M','male','m','Male') then 'Male'
     else 'Unknown' 
 end as gender, --BAO gender to limit measures in Akuko
 case 
