@@ -52,20 +52,30 @@ value_livestock_prod__d_lcu_per_hh_per_year::float as value_livestock_products_c
 value_farm_products___d_lcu_per_hh_per_year::float as value_farm_products_consumed_lcu_per_hh_per_year,
 crop_consumed_calories_kcal_per_hh_per_year::float,
 farm_products_consum___kcal_per_hh_per_year::float as farm_products_consumed_calories_kcal_per_hh_per_year,
+livestock_consumed_c___kcal_per_hh_per_year::float as livestock_consumed_calories_kcal_per_hh_per_year,
 staple_crop,
 staple_crop_kcal_per_lcu::float,
 foodavailability::float,
 proportion_of_value_controlled_female_youth::float,
 proportion_of_value_controlled_female_adult::float,
+proportion_of_value_controlled_female_head::float,
 proportion_of_value_controlled_male_youth::float,
 proportion_of_value_controlled_male_adult::float,
+proportion_of_value_controlled_male_head::float,
 id,
 ntfp_income::float,
 value_ntfp_consumed::float,
 ntfp_consumed_calories_kcal_per_hh_per_year::float,
 firewood_consumed_kgs_per_hh_per_day::float,
 nr_months_food_shortage::float,
-beneficiary_gender
+beneficiary_gender,
+total_income_w_ntfp_usd_per_year::float,
+crop_income_usd_per_year::float,
+livestock_income_usd_per_year::float,
+off_farm_income_usd_per_year::float,
+value_crop_consumed_usd_per_hh_per_year::float,	
+value_livestock_prod__d_usd_per_hh_per_year::float as value_livestock_products_consumed_usd_per_hh_per_year,	
+value_farm_products___d_usd_per_hh_per_year::float as value_farm_products_consumed_usd_per_hh_per_year
 from "tree_aid"."airbyte"."rhomis_indicators"
   );
   
