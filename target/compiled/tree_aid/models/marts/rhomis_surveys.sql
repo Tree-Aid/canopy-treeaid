@@ -12,28 +12,41 @@ calculated_fields as
 select
 *,
 count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter_date::date,rd.form_id) as quarter_count,
-   (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as total_income_per_year,
-  ((rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp)) as total_income_with_ntfp_per_year,
-  (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) as ntfp_income_per_year,
-  (rd.crop_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as crop_income_per_year,
-  (rd.livestock_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as livestock_income_per_year,
-  (rd.off_farm_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) as off_farm_income_per_year,
-  case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty,
-  case when (rd.total_income_lcu_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.ntfp_income/rd.currency_conversion_lcu_to_ppp) + (rd.value_crop_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_livestock_products_consumed_lcu_per_hh_per_year/rd.currency_conversion_lcu_to_ppp) + (rd.value_ntfp_consumed/rd.currency_conversion_lcu_to_ppp) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true else false end as extreme_poverty_TVA_incl, 
-  case when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and rd.farm_products_consumed_calories_kcal_per_hh_per_year is null and 
-  (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500)
-  or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500) then true else false end as below_calline,
-  case when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and 
-  (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
-   rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500)
-  or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
-   rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500) then true else false end as below_calline_potential,
-  case when rd.crop_consumed_calories_kcal_per_hh_per_year is null
-  then rd.ntfp_consumed_calories_kcal_per_hh_per_year / nullif(coalesce(rd.foodavailability::float,0),0)
-  else rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
-    nullif(coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0) end
-    as proportion_ntfp_in_diet,
-  case when rd.crop_consumed_calories_kcal_per_hh_per_year is null 
+   (rd.crop_income_usd_per_year + rd.livestock_income_usd_per_year + rd.off_farm_income_usd_per_year) as total_income_per_year,
+  (rd.crop_income_usd_per_year + rd.livestock_income_usd_per_year + rd.off_farm_income_usd_per_year + rd.ntfp_income_usd) as total_income_with_ntfp_per_year,
+  rd.ntfp_income_usd as ntfp_income_per_year,
+  rd.crop_income_usd_per_year as crop_income_per_year,
+  rd.livestock_income_usd_per_year as livestock_income_per_year,
+  rd.off_farm_income_usd_per_year as off_farm_income_per_year,
+  case 
+    when (rd.crop_income_usd_per_year + rd.livestock_income_usd_per_year + rd.off_farm_income_usd_per_year + rd.ntfp_income_usd) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true 
+    else false 
+    end as extreme_poverty,
+  case 
+    when (rd.crop_income_usd_per_year + rd.livestock_income_usd_per_year + rd.off_farm_income_usd_per_year + rd.ntfp_income_usd + rd.value_crop_consumed_usd_per_hh_per_year + rd.value_livestock_products_consumed_usd_per_hh_per_year + rd.value_ntfp_consumed_usd) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true 
+    else false 
+    end as extreme_poverty_TVA_incl, 
+  case 
+    when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and rd.farm_products_consumed_calories_kcal_per_hh_per_year is null and 
+    (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500)
+    or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500) then true 
+    else false 
+    end as below_calline,
+  case 
+    when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and 
+    (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
+    rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500)
+    or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
+    rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500) then true 
+    else false 
+    end as below_calline_potential,
+  case 
+    when rd.crop_consumed_calories_kcal_per_hh_per_year is null then rd.ntfp_consumed_calories_kcal_per_hh_per_year / nullif(coalesce(rd.foodavailability::float,0),0)
+    else rd.ntfp_consumed_calories_kcal_per_hh_per_year / 
+    nullif(coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0),0) 
+    end as proportion_ntfp_in_diet,
+  case 
+    when rd.crop_consumed_calories_kcal_per_hh_per_year is null 
   then (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income*(3650/121.58)) / nullif(coalesce(rd.foodavailability::float,0) + coalesce(rd.ntfp_income*(3650/121.58)::float,0)
     + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) + rd.crop_income_lcu_per_year*(3650/121.58),0)
   else (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income*(3650/121.58)) / 
