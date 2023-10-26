@@ -45,6 +45,8 @@ farm_products_consum___kcal_per_hh_per_year::float as farm_products_consumed_cal
 livestock_consumed_c___kcal_per_hh_per_year::float as livestock_consumed_calories_kcal_per_hh_per_year,
 staple_crop,
 staple_crop_kcal_per_lcu::float,
+staple_crop_price_lcu_per_kg::float,
+staple_crop_kcal_per_kg::float,
 foodavailability::float,
 proportion_of_value_controlled_female_youth::float,
 proportion_of_value_controlled_female_adult::float,
@@ -60,10 +62,48 @@ firewood_consumed_kgs_per_hh_per_day::float,
 nr_months_food_shortage::float,
 beneficiary_gender,
 total_income_w_ntfp_usd_per_year::float,
-crop_income_usd_per_year::float,
-livestock_income_usd_per_year::float,
-off_farm_income_usd_per_year::float,
-value_crop_consumed_usd_per_hh_per_year::float,	
-value_livestock_prod__d_usd_per_hh_per_year::float as value_livestock_products_consumed_usd_per_hh_per_year,	
-value_farm_products___d_usd_per_hh_per_year::float as value_farm_products_consumed_usd_per_hh_per_year
+case 
+    when year::int <= 2022 and crop_income_usd_per_year is null then crop_income_usd_per_year::float 
+    when year::int <= 2022 then crop_income_usd_per_year::float 
+    else crop_income_lcu_per_year::float/currency_conversion_lcu_to_ppp::float 
+    end as crop_income_usd_per_year,
+case 
+    when year::int <= 2022 and livestock_income_usd_per_year is null then livestock_income_lcu_per_year::float/currency_conversion_lcu_to_ppp::float
+    when year::int <= 2022 then livestock_income_usd_per_year::float
+    else livestock_income_lcu_per_year::float/currency_conversion_lcu_to_ppp::float 
+    end as livestock_income_usd_per_year,
+case 
+    when year::int <= 2022 and off_farm_income_usd_per_year is null then off_farm_income_lcu_per_year::float/currency_conversion_lcu_to_ppp::float
+    when year::int <= 2022 then off_farm_income_usd_per_year::float
+    else off_farm_income_lcu_per_year::float/currency_conversion_lcu_to_ppp::float  
+    end as off_farm_income_usd_per_year,
+case 
+    when year::int <= 2022 and value_crop_consumed_usd_per_hh_per_year is null then value_crop_consumed_lcu_per_hh_per_year::float/currency_conversion_lcu_to_ppp::float
+    when year::int <= 2022 then value_crop_consumed_usd_per_hh_per_year::float
+    else value_crop_consumed_lcu_per_hh_per_year::float/currency_conversion_lcu_to_ppp::float 
+    end as value_crop_consumed_usd_per_hh_per_year,	
+case 
+    when year::int <= 2022 and value_livestock_prod__d_usd_per_hh_per_year is null then value_livestock_prod__d_lcu_per_hh_per_year::float/currency_conversion_lcu_to_ppp::float 
+    when year::int <= 2022 then value_livestock_prod__d_usd_per_hh_per_year::float
+    else value_livestock_prod__d_lcu_per_hh_per_year::float/currency_conversion_lcu_to_ppp::float 
+    end as value_livestock_products_consumed_usd_per_hh_per_year,	
+case 
+    when year::int <= 2022 and value_farm_products___d_usd_per_hh_per_year is null then value_farm_products___d_lcu_per_hh_per_year::float/currency_conversion_lcu_to_ppp::float
+    when year::int <= 2022 then value_farm_products___d_usd_per_hh_per_year::float
+    else value_farm_products___d_lcu_per_hh_per_year::float/currency_conversion_lcu_to_ppp::float 
+    end as value_farm_products_consumed_usd_per_hh_per_year,
+case 
+    when year::int <= 2022 and ntfp_income_usd is null then ntfp_income::float/currency_conversion_lcu_to_ppp::float
+    when year::int <= 2022 then ntfp_income_usd::float
+    else ntfp_income::float/currency_conversion_lcu_to_ppp::float 
+    end ntfp_income_usd,	
+case 
+    when year::int <= 2022 and value_ntfp_consumed_usd is null then value_ntfp_consumed::float/currency_conversion_lcu_to_ppp::float
+    when year::int <= 2022 then value_ntfp_consumed_usd::float
+    else value_ntfp_consumed::float/currency_conversion_lcu_to_ppp::float 
+    end value_ntfp_consumed_usd,
+case 
+    when staple_crop_kcal_per_lcu is null then staple_crop_kcal_per_kg::float/(staple_crop_price_lcu_per_kg::float/currency_conversion_lcu_to_ppp::float)
+    else staple_crop_kcal_per_lcu::float*currency_conversion_lcu_to_ppp::float
+    end as staple_crop_kcal_per_ppp
 from "tree_aid"."airbyte"."rhomis_indicators"

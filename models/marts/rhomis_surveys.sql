@@ -46,10 +46,10 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
     end as below_calline,
   case 
     when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and 
-    (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
-    rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500)
-    or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) +
-    rd.crop_income_lcu_per_year*(3650/121.58) + rd.ntfp_income*(3650/121.58)) / (rd.hh_size_mae * 365) < 2500) then true 
+    (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_usd_per_year*staple_crop_kcal_per_ppp + rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp +
+    rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / (rd.hh_size_mae * 365) < 2500)
+    or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_usd_per_year*staple_crop_kcal_per_ppp + rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp +
+    rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / (rd.hh_size_mae * 365) < 2500) then true 
     else false 
     end as below_calline_potential,
   case 
@@ -59,11 +59,11 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
     end as proportion_ntfp_in_diet,
   case 
     when rd.crop_consumed_calories_kcal_per_hh_per_year is null 
-  then (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income*(3650/121.58)) / nullif(coalesce(rd.foodavailability::float,0) + coalesce(rd.ntfp_income*(3650/121.58)::float,0)
-    + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) + rd.crop_income_lcu_per_year*(3650/121.58),0)
-  else (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income*(3650/121.58)) / 
-    nullif(coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_income*(3650/121.58)::float,0)
-    + rd.off_farm_income_lcu_per_year*(3650/121.58) + rd.livestock_income_lcu_per_year*(3650/121.58) + rd.crop_income_lcu_per_year*(3650/121.58),0) end
+  then (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / nullif(coalesce(rd.foodavailability::float,0) + coalesce(rd.ntfp_income_usd*staple_crop_kcal_per_ppp::float,0)
+    + rd.off_farm_income_usd_per_year*staple_crop_kcal_per_ppp + rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp + rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp,0)
+  else (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / 
+    nullif(coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_income_usd*staple_crop_kcal_per_ppp::float,0)
+    + rd.off_farm_income_usd_per_year*staple_crop_kcal_per_ppp + rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp + rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp,0) end
     as proportion_ntfp_in_diet_potential,
   coalesce ((case when rd.hfias_status='' then null else rd.hfias_status end), 
   (case when rd.fies_score::float >= 0 and rd.fies_score::float <=1 then 'Food Secure'
