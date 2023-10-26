@@ -1,17 +1,17 @@
 
-  create view "tree_aid"."dbt_bokidi"."int_filter_values__dbt_tmp"
+  create view "tree_aid"."dbt_jane"."int_filter_values__dbt_tmp"
     
     
   as (
     with filter_values as
 (
-select country, project_code, assessment_year, assessment_year_date, beneficiary_control from "tree_aid"."dbt_bokidi"."enterprise_surveys"
+select country, project_code, assessment_year, assessment_year_date, beneficiary_control from "tree_aid"."dbt_jane"."enterprise_surveys"
 union all
-select country, project_code, assessment_year, assessment_year_date, beneficiary_control from "tree_aid"."dbt_bokidi"."land_surveys"
+select country, project_code, assessment_year, assessment_year_date, beneficiary_control from "tree_aid"."dbt_jane"."land_surveys"
 union all
-select  country,project_code, assessment_year, assessment_year_date, beneficiary_control from "tree_aid"."dbt_bokidi"."rhomis_surveys"
+select  country,project_code, assessment_year, assessment_year_date, beneficiary_control from "tree_aid"."dbt_jane"."rhomis_surveys"
 union all
-select  country,project as project_code, assessment_year, assessment_year_date,beneficiary_control from "tree_aid"."dbt_bokidi"."beneficiaries"
+select  country,project as project_code, assessment_year, assessment_year_date,beneficiary_control from "tree_aid"."dbt_jane"."beneficiaries"
 )
 select 
 country,

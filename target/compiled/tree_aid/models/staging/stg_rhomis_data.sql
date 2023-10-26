@@ -4354,7 +4354,7 @@ s.country,
 s.project_code,
 s.type_2,
 cq.*
-from "tree_aid"."dbt_bokidi"."stg_survey_master" s 
+from "tree_aid"."dbt_jane"."stg_survey_master" s 
 left join core_questions cq on s.form_id::int = cq.form_id::int   
 where s.type = 'Rhomis'
 
