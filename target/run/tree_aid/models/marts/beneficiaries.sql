@@ -2,7 +2,7 @@
   
     
 
-  create  table "tree_aid"."dbt_bokidi"."beneficiaries__dbt_tmp"
+  create  table "tree_aid"."dbt_jane"."beneficiaries__dbt_tmp"
   
   
     as
@@ -18,6 +18,6 @@
       when sb.year ='n/a' then null else concat(year,'-','01','-01')::date 
    end as assessment_year_date,
    'Yes' as beneficiary_control 
-from "tree_aid"."dbt_bokidi"."stg_beneficiaries" sb
+from "tree_aid"."dbt_jane"."stg_beneficiaries" sb
   );
   

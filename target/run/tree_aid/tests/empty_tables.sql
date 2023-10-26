@@ -10,19 +10,19 @@ with data as
 select 
 submission_id,
 form_name
-from "tree_aid"."dbt_bokidi"."rhomis_surveys"
+from "tree_aid"."dbt_jane"."rhomis_surveys"
 union all 
 ----Enterprise surveys
 select 
 submission_id,
 form_name
-from "tree_aid"."dbt_bokidi"."enterprise_surveys"
+from "tree_aid"."dbt_jane"."enterprise_surveys"
 union all
 ---Land surveys
 select 
 submission_id,
 form_name
-from "tree_aid"."dbt_bokidi"."land_surveys"
+from "tree_aid"."dbt_jane"."land_surveys"
 )
 select * from data
 group by 1,2 

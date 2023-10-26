@@ -2,7 +2,7 @@
   
     
 
-  create  table "tree_aid"."dbt_bokidi"."land_surveys_planted__dbt_tmp"
+  create  table "tree_aid"."dbt_jane"."land_surveys_planted__dbt_tmp"
   
   
     as
@@ -18587,7 +18587,7 @@ s.country,
 s.project_code,
 s.type_2,
 cq.*
-from "tree_aid"."dbt_bokidi"."stg_survey_master" s 
+from "tree_aid"."dbt_jane"."stg_survey_master" s 
 left join core_questions cq on s.form_id::int = cq.form_id::int   
 where s.type = 'Land survey'
 
@@ -18617,7 +18617,7 @@ d.number_regenerated,
 ls.type_2,
 TRUE as odk_source 
 from data d
-inner join "tree_aid"."dbt_bokidi"."land_surveys" ls on d.submission_id=ls.submission_id
+inner join "tree_aid"."dbt_jane"."land_surveys" ls on d.submission_id=ls.submission_id
 where ls.test not in ('y', 'Y','yes','Yes') or ls.test is null
 -- Gemma to add union to new sources once they have been created (e.g. trees_planted_legacy, using dbt union)
 -- select * , FALSE as odk_source
