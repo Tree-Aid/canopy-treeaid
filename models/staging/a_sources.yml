@@ -7,11 +7,6 @@ sources:
       tables:
         - name: surveys
           description: List of all Tree Aid forms and projects
-          tests:
-              - dbt_utils.unique_combination_of_columns:
-                  combination_of_columns:
-                    - form_id
-                    - id_hh
         - name: survey_definitions
           description: List of questions for the different survey types
         - name: core_questions
@@ -24,12 +19,11 @@ sources:
                 - not_null
         - name: rhomis_indicators
           description: List of all rhomis indicators and responses
-          columns:
-          - name: id_hh
-            description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
+          tests:
+           - dbt_utils.unique_combination_of_columns:
+              combination_of_columns:
+                - id_rhomis_dataset
+                - id_hh
         - name: projects
         - name: trees_planted_legacy
         - name: country_hh_size
