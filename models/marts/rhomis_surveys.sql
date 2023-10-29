@@ -8,7 +8,9 @@
 {%- set disability_fields= ['seeing','hearing','walking','memory','self_care','language'] -%}
 
 {%- set income_fields = ['total_income_per_year', 'total_income_with_ntfp_per_year', 'ntfp_income_per_year', 'crop_income_per_year',
-'livestock_income_per_year','off_farm_income_per_year' ]-%}
+'livestock_income_per_year','off_farm_income_per_year', 'value_crop_consumed_lcu_per_hh_per_year',
+'value_livestock_products_consumed_lcu_per_hh_per_year', 'value_farm_products_consumed_lcu_per_hh_per_year', 'extreme_poverty',
+'extreme_poverty_TVA_incl' ]-%}
 
 --  Joining rhomis data with already calculated rhomis indicators
 with rhomis_data as 
@@ -16,7 +18,7 @@ with rhomis_data as
 *
 from {{ref('stg_rhomis_data')}} rd 
 left join {{ref('stg_rhomis_indicators')}} ri on rd.form_id::int = ri.id_rhomis_dataset::int and rd.row_id::int = ri.id_hh::int
-) ,
+),
 
 ----Calculating the fields relevant for indicator building
 calculated_fields as 
@@ -24,32 +26,32 @@ calculated_fields as
 select
 *,
 count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter_date::date,rd.form_id) as quarter_count,
-   (rd.crop_income_usd_per_year + rd.livestock_income_usd_per_year + rd.off_farm_income_usd_per_year) as total_income_per_year,
-  (rd.crop_income_usd_per_year + rd.livestock_income_usd_per_year + rd.off_farm_income_usd_per_year + rd.ntfp_income_usd) as total_income_with_ntfp_per_year,
-  rd.ntfp_income_usd as ntfp_income_per_year,
-  rd.crop_income_usd_per_year as crop_income_per_year,
-  rd.livestock_income_usd_per_year as livestock_income_per_year,
-  rd.off_farm_income_usd_per_year as off_farm_income_per_year,
+   (COALESCE(rd.crop_income_usd_per_year, 0) + COALESCE(rd.livestock_income_usd_per_year, 0) + COALESCE(rd.off_farm_income_usd_per_year, 0)) as total_income_per_year,
+  (COALESCE(rd.crop_income_usd_per_year, 0) + COALESCE(rd.livestock_income_usd_per_year, 0) + COALESCE(rd.off_farm_income_usd_per_year, 0) + COALESCE(rd.ntfp_income_usd, 0)) as total_income_with_ntfp_per_year,
+  COALESCE(rd.ntfp_income_usd, 0) as ntfp_income_per_year,
+  COALESCE(rd.crop_income_usd_per_year, 0) as crop_income_per_year,
+  COALESCE(rd.livestock_income_usd_per_year, 0) as livestock_income_per_year,
+  COALESCE(rd.off_farm_income_usd_per_year, 0) as off_farm_income_per_year,
   case 
-    when (rd.crop_income_usd_per_year + rd.livestock_income_usd_per_year + rd.off_farm_income_usd_per_year + rd.ntfp_income_usd) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true 
+    when (COALESCE(rd.crop_income_usd_per_year, 0) + COALESCE(rd.livestock_income_usd_per_year, 0) + COALESCE(rd.off_farm_income_usd_per_year, 0) + COALESCE(rd.ntfp_income_usd, 0)) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true 
     else false 
     end as extreme_poverty,
   case 
-    when (rd.crop_income_usd_per_year + rd.livestock_income_usd_per_year + rd.off_farm_income_usd_per_year + rd.ntfp_income_usd + rd.value_crop_consumed_usd_per_hh_per_year + rd.value_livestock_products_consumed_usd_per_hh_per_year + rd.value_ntfp_consumed_usd) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true 
+    when (COALESCE(rd.crop_income_usd_per_year, 0) + COALESCE(rd.livestock_income_usd_per_year, 0) + COALESCE(rd.off_farm_income_usd_per_year, 0) + COALESCE(rd.ntfp_income_usd, 0) + COALESCE(rd.value_crop_consumed_usd_per_hh_per_year, 0) + COALESCE(rd.value_livestock_products_consumed_usd_per_hh_per_year, 0) + COALESCE(rd.value_ntfp_consumed_usd, 0)) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true 
     else false 
     end as extreme_poverty_TVA_incl, 
   case 
     when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and rd.farm_products_consumed_calories_kcal_per_hh_per_year is null and 
-    (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500)
-    or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year) / (rd.hh_size_mae * 365) < 2500) then true 
+    (rd.foodavailability + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year,0)) / nullif((rd.hh_size_mae * 365),0) < 2500)
+    or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year,0)) / nullif((rd.hh_size_mae * 365),0) < 2500) then true 
     else false 
     end as below_calline,
   case 
-    when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and 
-    (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_usd_per_year*staple_crop_kcal_per_ppp + rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp +
-    rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / (rd.hh_size_mae * 365) < 2500)
-    or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.off_farm_income_usd_per_year*staple_crop_kcal_per_ppp + rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp +
-    rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / (rd.hh_size_mae * 365) < 2500) then true 
+    when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and rd.farm_products_consumed_calories_kcal_per_hh_per_year is null and 
+    (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp +
+    coalesce(rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp + coalesce(rd.ntfp_income_usd,0)*staple_crop_kcal_per_ppp) / nullif((rd.hh_size_mae * 365),0) < 2500))
+    or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp +
+    coalesce(rd.crop_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.ntfp_income_usd,0)*staple_crop_kcal_per_ppp) / nullif((rd.hh_size_mae * 365),0) < 2500) then true 
     else false 
     end as below_calline_potential,
   case 
@@ -59,11 +61,11 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
     end as proportion_ntfp_in_diet,
   case 
     when rd.crop_consumed_calories_kcal_per_hh_per_year is null 
-  then (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / nullif(coalesce(rd.foodavailability::float,0) + coalesce(rd.ntfp_income_usd*staple_crop_kcal_per_ppp::float,0)
-    + rd.off_farm_income_usd_per_year*staple_crop_kcal_per_ppp + rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp + rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp,0)
+  then (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / nullif(coalesce(rd.foodavailability::float,0) + coalesce(rd.ntfp_income_usd,0)*staple_crop_kcal_per_ppp::float,0)
+    + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp + coalesce(rd.crop_income_usd_per_year,0)*staple_crop_kcal_per_ppp,0)
   else (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / 
     nullif(coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_income_usd*staple_crop_kcal_per_ppp::float,0)
-    + rd.off_farm_income_usd_per_year*staple_crop_kcal_per_ppp + rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp + rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp,0) end
+    + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.crop_income_usd_per_year,0)*staple_crop_kcal_per_ppp,0) end
     as proportion_ntfp_in_diet_potential,
   coalesce ((case when rd.hfias_status='' then null else rd.hfias_status end), 
   (case when rd.fies_score::float >= 0 and rd.fies_score::float <=1 then 'Food Secure'
@@ -207,23 +209,20 @@ cf.hdds_good_season,
 -- cf.livestock_income_per_year,
 -- cf.off_farm_income_per_year,
 {% for field in income_fields %}  
-    case when cf.total_income_with_ntfp_per_year > 50000 then null else cf.{{field}} end as {{field}},
-{% if not loop.last -%}
-    +
-  {%- endif -%}
+  case when cf.total_income_with_ntfp_per_year > 50000 then null else cf.{{field}} end as {{field}},
 {% endfor %}
 -- BAO Request from TreeAid to maintain records with an income > 50000 but nullify these income fields so they don't skew income analysis
-cf.value_crop_consumed_lcu_per_hh_per_year,
-cf.value_livestock_products_consumed_lcu_per_hh_per_year,
-cf.value_farm_products_consumed_lcu_per_hh_per_year,
+-- cf.value_crop_consumed_lcu_per_hh_per_year,
+-- cf.value_livestock_products_consumed_lcu_per_hh_per_year,
+-- cf.value_farm_products_consumed_lcu_per_hh_per_year,
 cf.crop_consumed_calories_kcal_per_hh_per_year,
 cf.farm_products_consumed_calories_kcal_per_hh_per_year,
 cf.value_ntfp_consumed,
 cf.ntfp_consumed_calories_kcal_per_hh_per_year,
 cf.firewood_consumed_kgs_per_hh_per_day,
 cf.nr_months_food_shortage,
-cf.extreme_poverty,
-cf.extreme_poverty_TVA_incl, -- GN added	
+-- cf.extreme_poverty,
+-- cf.extreme_poverty_TVA_incl, -- GN added	
 cf.below_calline,
 cf.below_calline_potential,
 cf.proportion_ntfp_in_diet,
@@ -272,5 +271,5 @@ and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) --
 -- TBD - BAO removing filter to keep records with these data points and instead null the income fields above
 and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) -- and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
-and cf.form_id <> '636755' -- BAO removing MB6 midline
+and cf.form_id <> '636755' -- BAO removing MB6 midline 
 
