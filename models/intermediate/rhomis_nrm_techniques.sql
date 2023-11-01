@@ -81,5 +81,4 @@ replace(technique,'_',' ') as technique
 from nrm
 left join land_mngt lm on lm.submission_id=nrm.submission_id
 left join total_agg tg on tg.form_id=nrm.form_id and tg.project_code = nrm.project_code
-where nrm.project_code = 'MB6'
 
