@@ -10,7 +10,7 @@
 {%- set income_fields = ['total_income_per_year', 'total_income_with_ntfp_per_year', 'ntfp_income_per_year', 'crop_income_per_year',
 'livestock_income_per_year','off_farm_income_per_year', 'value_crop_consumed_lcu_per_hh_per_year',
 'value_livestock_products_consumed_lcu_per_hh_per_year', 'value_farm_products_consumed_lcu_per_hh_per_year', 'extreme_poverty',
-'extreme_poverty_TVA_incl' ]-%}
+'extreme_poverty_TVA_incl', 'below_calline_potential', 'proportion_ntfp_in_diet_potential' ]-%}
 
 --  Joining rhomis data with already calculated rhomis indicators
 with rhomis_data as 
@@ -50,7 +50,7 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
     when (rd.crop_consumed_calories_kcal_per_hh_per_year is null and rd.farm_products_consumed_calories_kcal_per_hh_per_year is null and 
     (rd.foodavailability + rd.ntfp_consumed_calories_kcal_per_hh_per_year + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp +
     coalesce(rd.crop_income_usd_per_year*staple_crop_kcal_per_ppp + coalesce(rd.ntfp_income_usd,0)*staple_crop_kcal_per_ppp) / nullif((rd.hh_size_mae * 365),0) < 2500))
-    or ((rd.crop_consumed_calories_kcal_per_hh_per_year + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp +
+    or ((coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year,0) + rd.farm_products_consumed_calories_kcal_per_hh_per_year + rd.ntfp_consumed_calories_kcal_per_hh_per_year + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp +
     coalesce(rd.crop_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.ntfp_income_usd,0)*staple_crop_kcal_per_ppp) / nullif((rd.hh_size_mae * 365),0) < 2500) then true 
     else false 
     end as below_calline_potential,
@@ -61,11 +61,11 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
     end as proportion_ntfp_in_diet,
   case 
     when rd.crop_consumed_calories_kcal_per_hh_per_year is null 
-  then (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / nullif(coalesce(rd.foodavailability::float,0) + coalesce(rd.ntfp_income_usd,0)*staple_crop_kcal_per_ppp::float,0)
-    + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year*staple_crop_kcal_per_ppp + coalesce(rd.crop_income_usd_per_year,0)*staple_crop_kcal_per_ppp,0)
-  else (rd.ntfp_consumed_calories_kcal_per_hh_per_year + rd.ntfp_income_usd*staple_crop_kcal_per_ppp) / 
+  then (coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year,0) + coalesce(rd.ntfp_income_usd,0)*staple_crop_kcal_per_ppp) / nullif(coalesce(rd.foodavailability::float,0) + coalesce(rd.ntfp_income_usd,0)*staple_crop_kcal_per_ppp::float
+    + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.crop_income_usd_per_year,0)*staple_crop_kcal_per_ppp, 0)
+  else (coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year,0) + coalesce(rd.ntfp_income_usd,0)*staple_crop_kcal_per_ppp) / 
     nullif(coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_income_usd*staple_crop_kcal_per_ppp::float,0)
-    + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.crop_income_usd_per_year,0)*staple_crop_kcal_per_ppp,0) end
+    + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.crop_income_usd_per_year,0)*staple_crop_kcal_per_ppp, 0) end
     as proportion_ntfp_in_diet_potential,
   coalesce ((case when rd.hfias_status='' then null else rd.hfias_status end), 
   (case when rd.fies_score::float >= 0 and rd.fies_score::float <=1 then 'Food Secure'
@@ -151,14 +151,14 @@ case when biological_methods is null or biological_methods in ('None') or biolog
 case when gully_methods is null or gully_methods in ('None') or gully_methods  = '["None"]' then 0 else array_length(regexp_split_to_array(replace(replace(replace(replace(rd.gully_methods,'[',''),']',''),'"',''),',',''),' '),1) end as gully_methods_count,
 case when rd.soil_water_cons is null or rd.soil_water_cons in ('None') or rd.soil_water_cons  = '["None"]' then 0 else array_length(regexp_split_to_array(replace(replace(replace(replace(rd.soil_water_cons,'[',''),']',''),'"',''),',',''),' '),1) end as soil_water_cons_count,
 CASE 
-    when rd.respondentsex in ('F','female','f','Female') or rd.beneficiary_gender in ('F','female','f','Female') then 'Female'
-    when rd.respondentsex in ('M','male','m','Male') or rd.beneficiary_gender in ('M','male','m','Male') then 'Male'
-    else 'Unknown' 
+    when rd.respondentsex in ('F','female','f','Female') or rd.beneficiary_gender in ('F','female','f','Female') then '1. Female'
+    when rd.respondentsex in ('M','male','m','Male') or rd.beneficiary_gender in ('M','male','m','Male') then '2. Male'
+    else '3. Unknown' 
 end as gender, --BAO gender to limit measures in Akuko
 case 
-when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') then 'Female'
+when rd.respondentsex in ('F','female','f','Female') and rd.respondent_ntfp in ('same_person') then '1. Female'
 when rd.respondent_ntfp in ('senior_woman','young_woman') then 'Female'
-else 'Male'
+else '2. Male'
 end as vcc_gender
 from rhomis_data rd
  ),
@@ -224,9 +224,9 @@ cf.nr_months_food_shortage,
 -- cf.extreme_poverty,
 -- cf.extreme_poverty_TVA_incl, -- GN added	
 cf.below_calline,
-cf.below_calline_potential,
+-- cf.below_calline_potential,
 cf.proportion_ntfp_in_diet,
-cf.proportion_ntfp_in_diet_potential,
+-- cf.proportion_ntfp_in_diet_potential,
 cf.food_insecurity_status,
 cf.uses_nrm_techniques,
 cf.uses_bio_techniques, -- GN added
