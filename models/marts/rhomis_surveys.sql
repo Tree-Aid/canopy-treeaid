@@ -67,7 +67,11 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
     nullif(coalesce(rd.crop_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.farm_products_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_consumed_calories_kcal_per_hh_per_year::float,0) + coalesce(rd.ntfp_income_usd*staple_crop_kcal_per_ppp::float,0)
     + coalesce(rd.off_farm_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.livestock_income_usd_per_year,0)*staple_crop_kcal_per_ppp + coalesce(rd.crop_income_usd_per_year,0)*staple_crop_kcal_per_ppp, 0) end
     as proportion_ntfp_in_diet_potential,
-  coalesce ((case when rd.hfias_status='' then null else rd.hfias_status end), 
+  coalesce ((case when rd.hfias_status='' then null 
+        when rd.hfias_status = 'FoodSecure' then 'Food Secure'
+        when rd.hfias_status = 'MildlyFI' then 'Mildly Food Insecure'
+        when rd.hfias_status = 'ModeratelyFI' then 'Moderately Food Insecure'
+        when rd.hfias_status = 'SeverelyFI' then 'Severely Food Insecure' else rd.hfias_status end), 
   (case when rd.fies_score::float >= 0 and rd.fies_score::float <=1 then 'Food Secure'
     when rd.fies_score::float > 1 and rd.fies_score::float <=3 then 'Mildly Food Insecure'
     when rd.fies_score::float >3 and rd.fies_score::float <=5 then 'Moderately Food Insecure'
@@ -272,4 +276,3 @@ and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) --
 and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) -- and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
 and cf.form_id <> '636755' -- BAO removing MB6 midline 
-
