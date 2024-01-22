@@ -41,7 +41,7 @@ sources:
         - name: sbm_bc3_land_restoration_survey_2022
         - name: sbm_bc7_r_ho_mis__baseline__sept2023_vf
         - name: sbm_bb6_r_ho_mis__endline__oct-_dec2023_vf
-        - name: sbm_ta_r_ho_mis_gc6__oct-_dec2023_draft
+        - name: sbm_ta_r_ho_mis_gc6__oct__dec2023_draft
 
     - name: onadata
       database: tree_aid
