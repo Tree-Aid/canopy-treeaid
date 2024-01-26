@@ -63,7 +63,7 @@ nr_months_food_shortage::float,
 beneficiary_gender,
 total_income_w_ntfp_usd_per_year::float,
 case 
-    when year::int <= 2022 and crop_income_usd_per_year is null then crop_income_usd_per_year::float 
+    when year::int <= 2022 and crop_income_usd_per_year is null then crop_income_lcu_per_year::float/currency_conversion_lcu_to_ppp::float 
     when year::int <= 2022 then crop_income_usd_per_year::float 
     else crop_income_lcu_per_year::float/currency_conversion_lcu_to_ppp::float 
     end as crop_income_usd_per_year,
