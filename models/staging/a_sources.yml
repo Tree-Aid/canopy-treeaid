@@ -42,6 +42,8 @@ sources:
         - name: sbm_bc7_r_ho_mis__baseline__sept2023_vf
         - name: sbm_bb6_r_ho_mis__endline__oct__dec2023_vf
         - name: sbm_ta_r_ho_mis_gc6__oct__dec2023_draft
+        - name: sbm_bc4_r_ho_mis__mi__e__oct__dec2023_final
+
 
     - name: onadata
       database: tree_aid
