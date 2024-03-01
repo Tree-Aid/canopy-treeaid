@@ -25,6 +25,7 @@ initial_agg as (
         min(right(p.start_date, 4)) as start_year,
         max(right(p.end_date, 4)) as end_year,
         p.overall_years as year,
+        count(distinct r.id_hh) as total_hh,
         avg(coalesce(total_income_with_ntfp_per_year,0)) as mean_total_income_with_ntfp_per_year,
         percentile_cont(0.5) within group (order by coalesce(total_income_with_ntfp_per_year,0)) as median_total_income_with_ntfp_per_year,
         avg(coalesce(ntfp_income_per_year,0)) as mean_ntfp_income_per_year,
@@ -67,6 +68,7 @@ initial_agg as (
             else null
         end as strategic_period,
         unnest(array[
+            'total_households',
             'mean_total_income',
             'median_total_income',
             'mean_ntfp_income',
@@ -88,6 +90,7 @@ initial_agg as (
             'proportion_uses_swc_techniques',
             'proportion_uses_gully_techniques']) AS rhomis_indicator,
         unnest(array[
+            total_hh,
             mean_total_income_with_ntfp_per_year,
             median_total_income_with_ntfp_per_year,
             mean_ntfp_income_per_year,
