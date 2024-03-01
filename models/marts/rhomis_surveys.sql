@@ -177,7 +177,8 @@ from calculated_fields cf
 )
 ---Selecting the relevant fields
 select 
-cf.row_id,	
+cf.row_id,
+cf.id_hh,	
 cf.form_name,
 cf.timing,
 cf.year,
@@ -280,3 +281,4 @@ and (cf.nr_months_food_shortage <='12' or cf.nr_months_food_shortage is null) --
 and (cf.hdds_good_season <='12' or cf.hdds_good_season is null) -- and cf.form_id='697818' --for quarter date QA
 ---and firewood_consumed_kgs_per_hh_per_day <='25'
 and cf.form_id <> '636755' -- BAO removing MB6 midline 
+-- and cf.form_id = '298153'

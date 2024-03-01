@@ -12,3 +12,18 @@ row_number() over (partition by form_name order by submission_id) as row_id,
 date_trunc('quarter',date_assessment::date) as assessment_quarter_date,
 * 
 from rhomis_data
+where form_id::int = 770127 and project_code = 'BB6' and region not in ('HAUTS_BASSINS', '')
+union
+select 
+row_number() over (partition by form_name order by submission_id) as row_id, 
+date_trunc('quarter',date_assessment::date) as assessment_quarter_date,
+* 
+from rhomis_data
+where form_id::int = 298153 and project_code = 'BB6' and region not in ('HAUTS_BASSINS', '')
+union
+select 
+row_number() over (partition by form_name order by submission_id) as row_id, 
+date_trunc('quarter',date_assessment::date) as assessment_quarter_date,
+* 
+from rhomis_data
+where project_code <> 'BB6' and form_id::int not in (298153, 770127)
