@@ -3,7 +3,8 @@ with year_details as (
     project_code,
     start_date,
     end_date,
-    generate_series(right(start_date, 4)::int,right(end_date, 4)::int,1)::varchar as years
+    generate_series(right(start_date, 4)::int,right(end_date, 4)::int,1)::varchar as years,
+    total_hh
     from {{source('airbyte', 'projects')}}
 
 ),
@@ -12,9 +13,10 @@ project_years as (
     project_code,
     start_date,
     end_date,
+    total_hh,
     string_agg(years::varchar, ', ') as overall_years
     from year_details
-    group by 1, 2, 3
+    group by 1, 2, 3, 4
 ),
 initial_agg as (
     select
@@ -22,10 +24,10 @@ initial_agg as (
         r.project_code,
         -- beneficiary_control,
         timing,
+        p.total_hh,
         min(right(p.start_date, 4)) as start_year,
         max(right(p.end_date, 4)) as end_year,
         p.overall_years as year,
-        count(distinct r.id_hh) as total_hh,
         avg(coalesce(total_income_with_ntfp_per_year,0)) as mean_total_income_with_ntfp_per_year,
         percentile_cont(0.5) within group (order by coalesce(total_income_with_ntfp_per_year,0)) as median_total_income_with_ntfp_per_year,
         avg(coalesce(ntfp_income_per_year,0)) as mean_ntfp_income_per_year,
@@ -49,7 +51,7 @@ initial_agg as (
     from {{ ref('rhomis_surveys') }} r
     left join project_years p on p.project_code = r.project_code
     where test_check = 'False'
-    group by 1,2,3,6
+    group by 1,2,3,4,7
 
 ), indicator_nesting as (
     select
@@ -57,6 +59,7 @@ initial_agg as (
         project_code,
         -- beneficiary_control,
         timing,
+        total_hh,
         start_year,
         end_year,
         year,
@@ -68,7 +71,6 @@ initial_agg as (
             else null
         end as strategic_period,
         unnest(array[
-            'total_households',
             'mean_total_income',
             'median_total_income',
             'mean_ntfp_income',
@@ -90,7 +92,6 @@ initial_agg as (
             'proportion_uses_swc_techniques',
             'proportion_uses_gully_techniques']) AS rhomis_indicator,
         unnest(array[
-            total_hh,
             mean_total_income_with_ntfp_per_year,
             median_total_income_with_ntfp_per_year,
             mean_ntfp_income_per_year,
@@ -117,6 +118,7 @@ initial_agg as (
         country,
         project_code,
         -- beneficiary_control,
+        total_hh,
         start_year,
         end_year,
         year,
@@ -130,6 +132,7 @@ initial_agg as (
         country,
         project_code,
         -- beneficiary_control,
+        total_hh,
         rhomis_indicator,
         indicator_value as midline_results
     from indicator_nesting
@@ -139,6 +142,7 @@ initial_agg as (
         country,
         project_code,
         -- beneficiary_control,
+        total_hh,
         rhomis_indicator,
         indicator_value as endline_results
     from indicator_nesting
@@ -149,6 +153,7 @@ select
     b.country,
     b.project_code,
     -- b.beneficiary_control,
+    b.total_hh,
     b.start_year,
     b.end_year,
     b.year,
