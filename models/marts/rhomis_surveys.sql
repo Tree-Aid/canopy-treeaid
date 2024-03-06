@@ -33,11 +33,11 @@ count(rd.assessment_quarter_date::date) OVER (PARTITION BY rd.assessment_quarter
   COALESCE(rd.livestock_income_usd_per_year, 0) as livestock_income_per_year,
   COALESCE(rd.off_farm_income_usd_per_year, 0) as off_farm_income_per_year,
   case 
-    when (COALESCE(rd.crop_income_usd_per_year, 0) + COALESCE(rd.livestock_income_usd_per_year, 0) + COALESCE(rd.off_farm_income_usd_per_year, 0) + COALESCE(rd.ntfp_income_usd, 0)) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true 
+    when ((COALESCE(rd.crop_income_usd_per_year, 0) + COALESCE(rd.livestock_income_usd_per_year, 0) + COALESCE(rd.off_farm_income_usd_per_year, 0) + COALESCE(rd.ntfp_income_usd, 0)) / nullif(rd.hh_size_mae, 0))/365 <= 1.90 then true 
     else false 
     end as extreme_poverty,
   case 
-    when (COALESCE(rd.crop_income_usd_per_year, 0) + COALESCE(rd.livestock_income_usd_per_year, 0) + COALESCE(rd.off_farm_income_usd_per_year, 0) + COALESCE(rd.ntfp_income_usd, 0) + COALESCE(rd.value_crop_consumed_usd_per_hh_per_year, 0) + COALESCE(rd.value_livestock_products_consumed_usd_per_hh_per_year, 0) + COALESCE(rd.value_ntfp_consumed_usd, 0)) / nullif((rd.hh_size_mae * 365),0) <= 1.90 then true 
+    when ((COALESCE(rd.crop_income_usd_per_year, 0) + COALESCE(rd.livestock_income_usd_per_year, 0) + COALESCE(rd.off_farm_income_usd_per_year, 0) + COALESCE(rd.ntfp_income_usd, 0) + COALESCE(rd.value_crop_consumed_usd_per_hh_per_year, 0) + COALESCE(rd.value_livestock_products_consumed_usd_per_hh_per_year, 0) + COALESCE(rd.value_ntfp_consumed_usd, 0)) / nullif(rd.hh_size_mae, 0))/365 <= 1.90 then true 
     else false 
     end as extreme_poverty_TVA_incl, 
   case 
