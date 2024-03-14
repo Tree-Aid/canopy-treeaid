@@ -6,6 +6,14 @@
 with rhomis_data as 
 (
 {{survey_type_table('Rhomis')}} 
+), bb1_correction as
+(
+select 
+    row_number() over (partition by form_name order by submission_id) as row_id, 
+    date_trunc('quarter',date_assessment::date) as assessment_quarter_date,
+    *
+from rhomis_data
+where form_id::int = 298153 and project_code = 'BB6' and region not in ('HAUTS_BASSINS', '')
 )
 select 
 row_number() over (partition by form_name order by submission_id) as row_id, 
@@ -15,11 +23,9 @@ from rhomis_data
 where form_id::int = 770127 and project_code = 'BB6' and region not in ('HAUTS_BASSINS', '')
 union
 select 
-row_number() over (partition by form_name order by submission_id) as row_id, 
-date_trunc('quarter',date_assessment::date) as assessment_quarter_date,
-* 
-from rhomis_data
-where form_id::int = 298153 and project_code = 'BB6' and region not in ('HAUTS_BASSINS', '')
+b.*
+from bb1_correction b
+join {{ref('stg_rhomis_indicators')}} ri on b.form_id::int = ri.id_rhomis_dataset::int and b.row_id::int = ri.id_hh::int
 union
 select 
 row_number() over (partition by form_name order by submission_id) as row_id, 
