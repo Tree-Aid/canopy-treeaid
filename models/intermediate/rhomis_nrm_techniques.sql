@@ -21,7 +21,7 @@ and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
  (
     select 
     submission_id,
-    'Biological methods' as category,
+    '1. Biological methods' as category,
     unnest(string_to_array(biological_methods,' ')) as technique
     from nrm
  ),
@@ -29,7 +29,7 @@ and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
  (
     select 
     submission_id,
-    'Soil and water conservation' as category,
+    '2. Soil and water conservation' as category,
     unnest(string_to_array(soil_water_cons,' ')) as technique
     from nrm
  ),
@@ -37,7 +37,7 @@ and ((test is null ) or (test not in ('y', 'Y','yes','Yes')) )
  (
   select 
     submission_id,
-    'Gully control' as category,
+    '3. Gully control' as category,
     unnest(string_to_array(gully_methods,' ')) as technique
     from nrm  
  ),
@@ -48,19 +48,37 @@ union all
 select * from soil_water
 union all 
 select * from gully
- )
- select 
-form_name,
+ ),
+total_agg as (
+select 
 form_id,
-nrm.submission_id,
 project_code,
+count(distinct concat(form_id, nrm.submission_id, category)) filter (where category = '1. Biological methods') as bio_total,
+count(distinct concat(form_id, nrm.submission_id, category)) filter (where category = '2. Soil and water conservation') as swc_total,
+count(distinct concat(form_id, nrm.submission_id, category)) filter (where category = '3. Gully control') as gully_total
+from nrm
+left join land_mngt lm on lm.submission_id=nrm.submission_id
+group by 1,2
+ )
+
+select 
+form_name,
+nrm.form_id,
+nrm.submission_id,
+nrm.project_code,
 country,
 region,
 province,
 commune,
 date_assessment,
 category,
+case 
+ when category = '1. Biological methods' then bio_total
+ when category = '2. Soil and water conservation' then swc_total
+ when category = '3. Gully control' then gully_total
+ else null end as total_submissions,
 replace(technique,'_',' ') as technique
 from nrm
 left join land_mngt lm on lm.submission_id=nrm.submission_id
+left join total_agg tg on tg.form_id=nrm.form_id and tg.project_code = nrm.project_code
 
